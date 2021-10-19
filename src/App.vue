@@ -1,7 +1,11 @@
 <template>
   <q-layout
     view="hHh Lpr lFf"
-    style="font-family: Roboto, sans-serif; font-size: 14px"
+    style="
+      font-family: Roboto, sans-serif;
+      font-size: 14px;
+      background-color: #000000;
+    "
   >
     <q-header elevated class="glossy">
       <q-toolbar style="gap: 20px">
@@ -18,16 +22,51 @@
         <div>
           <a href="" style="text-decoration: none; color: white">Contact us</a>
         </div>
-        <div style="color: yellow">Zalogowano jako</div>
       </q-toolbar>
     </q-header>
 
     <q-page-container>
       <div
-        style="float: right; margin-right: 20px; margin-top: 50px; width: 550px"
+        class="row"
+        style="
+          float: right;
+          margin-right: 75px;
+          margin-top: 50px;
+          display: flex;
+          justify-content: space-around;
+        "
+      >
+        <div class="col-xs-12 col-sm-6 col-md-4">
+          <img
+            src="@/assets/pilka-nozna.jpeg"
+            width="200"
+            height="300"
+            style="border-radius: 50%"
+          />
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4">
+          <img
+            src="@/assets/koszykowka.jpeg"
+            width="200"
+            height="300"
+            style="border-radius: 50%"
+          />
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4">
+          <img
+            src="@/assets/tenis-ziemny.jpeg"
+            width="200"
+            height="300"
+            style="border-radius: 50%"
+          />
+        </div>
+      </div>
+      <div
+        style="margin-left: 2rem; margin-top: 50px; width: 550px; color: white"
+        class="row"
       >
         <div class="q-mt-md q-gutter-md">
-          <div>
+          <div col-xs-12 col-sm-6 col-md-4>
             <q-icon
               name="favorite"
               class="text-primary"
@@ -41,7 +80,7 @@
               >Follow your favourite teams</span
             >
           </div>
-          <div>
+          <div col-xs-12 col-sm-6 col-md-4>
             <q-icon
               name="sports"
               class="text-primary"
@@ -55,7 +94,7 @@
               >Get live results</span
             >
           </div>
-          <div>
+          <div col-xs-12 col-sm-6 col-md-4>
             <q-icon
               name="edit"
               class="text-primary"
@@ -69,7 +108,7 @@
               >Edit your choices</span
             >
           </div>
-          <div>
+          <div col-xs-12 col-sm-6 col-md-4>
             <q-icon
               name="play_arrow"
               class="text-primary"
@@ -85,7 +124,6 @@
           </div>
         </div>
       </div>
-
       <login-register />
     </q-page-container>
   </q-layout>
