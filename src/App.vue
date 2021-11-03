@@ -1,149 +1,128 @@
 <template>
   <q-layout
-    view="hHh Lpr lFf"
-    style="
+      view="hHh Lpr lFf"
+      style="
       font-family: Roboto, sans-serif;
       font-size: 14px;
-      background-color: #000000;
     "
+      class="bg-grey-9"
   >
-    <q-header elevated class="glossy">
+    <q-header elevated class="bg-light-blue-14">
       <q-toolbar style="gap: 20px">
         <q-toolbar-title>
-          <img alt="App logo" src="@/assets/logo.png" />
+          <img alt="App logo" src="@/assets/logo.png"/>
         </q-toolbar-title>
 
         <div>
-          <a href="" style="text-decoration: none; color: white">Home</a>
+          <q-toggle
+              v-model="value"
+              color="grey-9"
+              class="text-weight-bold text-grey-9"
+          >Dark Mode</q-toggle>
         </div>
         <div>
-          <a href="" style="text-decoration: none; color: white">About</a>
+
+          <q-btn class="text-weight-bold" icon-right="home" color="grey-9" flat no-caps>Home</q-btn>
         </div>
         <div>
-          <a href="" style="text-decoration: none; color: white">Contact us</a>
+          <q-btn class="text-weight-bold" icon-right="people" color="grey-9" flat no-caps>About Us</q-btn>
+        </div>
+        <div>
+          <q-btn-dropdown flat dropdown-icon="menu" color="grey-9">
+            <q-list>
+              <q-item clickable @click="click">
+                <q-item-section>
+                  <q-item-label>FAQ</q-item-label>
+                </q-item-section>
+                <q-item-section avatar>
+                  <q-icon name="question_answer"/>
+                </q-item-section>
+              </q-item>
+              <q-item clickable @click="click">
+                <q-item-section>
+                  <q-item-label>Kontakt</q-item-label>
+                </q-item-section>
+                <q-item-section avatar>
+                  <q-icon name="contact_support"/>
+                </q-item-section>
+              </q-item>
+              <q-item clickable @click="click">
+                <q-item-section>
+                  <q-item-label>Opinie</q-item-label>
+                </q-item-section>
+                <q-item-section avatar>
+                  <q-icon name="grade"/>
+                </q-item-section>
+              </q-item>
+              <q-separator spaced/>
+              <span class="material-icons">copyright</span>
+              <span style="font-size: 10px">   Sense Score</span>
+            </q-list>
+          </q-btn-dropdown>
         </div>
       </q-toolbar>
     </q-header>
 
     <q-page-container>
       <div
-        class="row"
-        style="
-          float: right;
-          margin-right: 75px;
-          margin-top: 50px;
-          display: flex;
-          justify-content: space-around;
-        "
+          class="row items-center"
+          style="text-align: center; position: absolute;
+        width: 100%;
+        top: 50%;
+        transform: translateY(-50%);"
       >
-        <div class="col-xs-12 col-sm-6 col-md-4">
-          <img
-            src="@/assets/pilka-nozna.jpeg"
-            width="200"
-            height="300"
-            style="border-radius: 50%"
-          />
-        </div>
-        <div class="col-xs-12 col-sm-6 col-md-4">
-          <img
-            src="@/assets/koszykowka.jpeg"
-            width="200"
-            height="300"
-            style="border-radius: 50%"
-          />
-        </div>
-        <div class="col-xs-12 col-sm-6 col-md-4">
-          <img
-            src="@/assets/tenis-ziemny.jpeg"
-            width="200"
-            height="300"
-            style="border-radius: 50%"
-          />
-        </div>
-      </div>
-      <div
-        style="margin-left: 2rem; margin-top: 50px; width: 550px; color: white"
-        class="row"
-      >
-        <div class="q-mt-md q-gutter-md">
-          <div col-xs-12 col-sm-6 col-md-4>
-            <q-icon
-              name="favorite"
-              class="text-primary"
-              style="font-size: 4rem"
-            /><span
-              style="
-                margin-left: 10px;
-                font-size: 1.5rem;
-                text-transform: uppercase;
-              "
-              >Follow your favourite teams</span
-            >
+        <div class="col">
+          <div class="big-desc">
+            <h1 class="text-light-blue-14">YOUR LEAGUE</h1>
+            <h1 class="text-light-blue-14">YOUR MATCH</h1>
+            <div class="row justify-center">
+              <LoginPopUp/>
+              <LoginPopUp/>
+            </div>
+
+
+            <div class="description-left text-center text-light-blue-14">
+              Sense Score jest serwisem w którym możesz zarządzać swoimi
+              ulubionymi zespołami sportowymi oraz zagrać w wirtualną grę
+              bukmacherską.
+            </div>
           </div>
-          <div col-xs-12 col-sm-6 col-md-4>
-            <q-icon
-              name="sports"
-              class="text-primary"
-              style="font-size: 4rem"
-            /><span
-              style="
-                margin-left: 10px;
-                font-size: 1.5rem;
-                text-transform: uppercase;
-              "
-              >Get live results</span
-            >
-          </div>
-          <div col-xs-12 col-sm-6 col-md-4>
-            <q-icon
-              name="edit"
-              class="text-primary"
-              style="font-size: 4rem"
-            /><span
-              style="
-                margin-left: 10px;
-                font-size: 1.5rem;
-                text-transform: uppercase;
-              "
-              >Edit your choices</span
-            >
-          </div>
-          <div col-xs-12 col-sm-6 col-md-4>
-            <q-icon
-              name="play_arrow"
-              class="text-primary"
-              style="font-size: 4rem"
-            /><span
-              style="
-                margin-left: 10px;
-                font-size: 1.5rem;
-                text-transform: uppercase;
-              "
-              >Try our bookmaker's game</span
-            >
+        </div>
+        <div class="col">
+          <div class="big-desc-1 text-center items-center">
+            <Tablet/> <!-- Tu trzeba zaimplementowac animacje -->
+
           </div>
         </div>
       </div>
-      <login-register />
+
+      <!--<login-register />-->
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
-import { ref } from "vue";
-import LoginRegister from "./components/login-register.component.vue";
-
+import { ref } from 'vue'
+import LoginPopUp from '@/components/loginPopUp'
+import Tablet from '@/components/Tablet'
 export default {
-  name: "LayoutDefault",
-
-  components: {
-    LoginRegister,
+  name: 'LayoutDefault',
+  components:{
+    Tablet,
+    LoginPopUp,
   },
-
-  setup() {
+  setup () {
     return {
       leftDrawerOpen: ref(false),
-    };
+      value: ref (true)
+    }
   },
-};
+}
 </script>
+<style>
+.description-left {
+  color: white;
+  max-width: 400px;
+  margin: 40px auto;
+}
+</style>

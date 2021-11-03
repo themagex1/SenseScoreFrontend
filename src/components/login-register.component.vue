@@ -34,79 +34,9 @@
             label="Sign in"
             icon="login"
             flat
-            @click="card = true"
+            @click="login"
           ></q-btn>
-          <q-dialog v-model="card" class="justify-center">
-            <q-card class="my-card flex flex-center column">
-              <div
-                class="text-h2 text-weight-bolder popUpText"
-                style="margin: 3vw"
-              >
-                SIGN IN
-              </div>
-              <!--Login form -->
-              <div id="q-app" style="min-height: 35vh; min-width: 50vh">
-                <div class="q-pa-md flex-center column">
-                  <q-form
-                    @submit="onSubmit"
-                    @reset="onReset"
-                    class="q-gutter-md column"
-                  >
-                    <q-input
-                      standout
-                      v-model="name"
-                      type="email"
-                      label="Your e-mail *"
-                      hint="Please type your e-mail"
-                      lazy-rules
-                      :rules="[
-                        (val) =>
-                          (val && val.length > 0) ||
-                          'You must type your e-mail',
-                      ]"
-                    ></q-input>
-                    <q-input
-                      standout
-                      v-model="password"
-                      type="password"
-                      label="Your password *"
-                      hint="Please type your password"
-                      lazy-rules
-                      :rules="[
-                        (val) =>
-                          (val && val.length > 5) ||
-                          'Your password must contain at least six characters',
-                      ]"
-                    ></q-input>
-                    <q-toggle
-                      v-model="accept"
-                      label="I accept the license and terms"
-                      checked-icon="check"
-                      color="green"
-                      unchecked-icon="clear"
-                    ></q-toggle>
-                    <div class="row flex-center" style="margin: 2vw">
-                      <q-btn
-                        outline
-                        label="Login"
-                        type="submit"
-                        color="black"
-                      ></q-btn>
-                      <q-btn
-                        label="Reset form"
-                        type="reset"
-                        color="primary"
-                        flat
-                        class="q-ml-sm"
-                      ></q-btn>
-                    </div>
-                  </q-form>
-                </div>
-              </div>
-
-              <q-separator />
-            </q-card>
-          </q-dialog>
+          <LoginPopUp/>
           <q-btn
             color="primary"
             text-color="white"
@@ -125,7 +55,7 @@
                 SIGN UP
               </div>
               <!--Register form -->
-              <div id="q-app" style="min-height: 35vh; min-width: 50vh">
+              <div  style="min-height: 35vh; min-width: 50vh">
                 <div class="q-pa-md flex-center column">
                   <q-form
                     @submit="onSubmit"
@@ -226,12 +156,17 @@
 <script>
 import { ref } from "vue";
 import { useQuasar } from "quasar";
+import LoginPopUp from '@/components/loginPopUp'
 
 export default {
   name: "LoginRegister",
-  components: {},
+  components: { LoginPopUp },
   data() {},
-  methods: {},
+  methods: {
+    login(){
+      this.$router.push('/login')
+    }
+  },
   setup() {
     const $q = useQuasar();
 
