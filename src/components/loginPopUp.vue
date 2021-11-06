@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md q-gutter-sm">
-    <q-btn label="LOGIN" color="light-blue-14" @click="card = true"/>
+    <q-btn label="LOGIN" color="light-blue-14" text-color="grey-9" @click="card = true"/>
     <q-dialog v-model="card" class="justify-center ">
       <q-card class="my-card flex flex-center column bg-light-blue-14">
         <div class="row flex-center">

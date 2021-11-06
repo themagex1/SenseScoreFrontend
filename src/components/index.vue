@@ -15,7 +15,7 @@
         <h1 class="text-light-blue-14">YOUR MATCH</h1>
         <div class="row justify-center">
           <LoginPopUp />
-          <LoginPopUp />
+
         </div>
 
         <div class="description-left text-center text-light-blue-14">
@@ -35,11 +35,10 @@
 
 <script>
 import LoginPopUp from "@/components/loginPopUp";
-import Tablet from "@/components/Tablet";
+
 export default {
   name: "index",
   components: {
-    Tablet,
     LoginPopUp,
   },
 };

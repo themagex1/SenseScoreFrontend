@@ -5,4 +5,4 @@ import quasarUserOptions from './quasar-user-options'
 import router from './router'
 
 
-createApp(App).use(Quasar, quasarUserOptions).use(router).use(Quasar, quasarUserOptions).mount('#app')
+createApp(App).use(router).use(Quasar, quasarUserOptions).mount('#app')
