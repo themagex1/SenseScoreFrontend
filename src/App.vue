@@ -4,7 +4,6 @@
       style="
       font-family: Roboto, sans-serif;
       font-size: 14px;
-
     "
       class="bg-grey-9"
   >
@@ -13,31 +12,28 @@
     <q-page-container>
       <router-view></router-view>
       <div
-          class="row items-center"
-          style="text-align: center; position: absolute;
-        width: 100%;
-        top: 50%;
-        transform: translateY(-50%);"
+          class="fit row wrap container"
+
       >
-        <div class="col">
+        <div class="col self-center column-1">
           <div class="big-desc">
-            <h1 class="text-light-blue-14 big-text">YOUR LEAGUE</h1>
-            <h1 class="text-light-blue-14 big-text">YOUR MATCH</h1>
+            <h1 class="text-light-blue-14 title">YOUR LEAGUE</h1>
+            <h1 class="text-light-blue-14 title">YOUR MATCH</h1>
             <div class="row justify-center">
               <LoginPopUp/>
-              <LoginPopUp/>
-            </div>
-
-
-            <div class="description-left text-center text-light-blue-14">
-              Sense Score jest serwisem w którym możesz zarządzać swoimi
-              ulubionymi zespołami sportowymi oraz zagrać w wirtualną grę
-              bukmacherską.
+              <RegisterPopUp/>
             </div>
           </div>
+
+          <div class="description__left text-center text-light-blue-14">
+            Sense Score jest serwisem w którym możesz zarządzać swoimi
+            ulubionymi zespołami sportowymi oraz zagrać w wirtualną grę
+            bukmacherską.
+          </div>
+
         </div>
-        <div class="col">
-          <div class="carousel-section text-center items-center">
+        <div class="col self-center column-2">
+          <div class="section__carousel text-center items-center">
             <q-carousel animated
                         v-model="slide"
                         arrows
@@ -61,12 +57,15 @@
           <div class="icon-description">
 
           </div>
-          <div class="imageMarquee"></div>
+
+        </div>
+        <div class="col column-3"
+             style="overflow: auto; min-width: 100%; max-width: 100%; position: fixed; left: 0px; bottom: 0px">
+          <div class="image__marquee self-end"></div>
+
         </div>
 
       </div>
-
-      <!--<login-register />-->
 
     </q-page-container>
 
@@ -77,10 +76,12 @@
 import { ref } from 'vue'
 import LoginPopUp from '@/components/loginPopUp'
 import MainPageHeader from '@/components/MainPageHeader'
+import RegisterPopUp from '@/components/registerPopUp'
 
 export default {
   name: 'LayoutDefault',
   components: {
+    RegisterPopUp,
     MainPageHeader,
     LoginPopUp,
   },
@@ -94,20 +95,27 @@ export default {
   },
 }
 </script>
-<style lang="scss">
+<style scoped lang="scss">
 @import 'quasar.variables';
 
-.description-left {
+.container {
+  margin: 5vh auto;
+}
+
+.description__left {
   color: white;
   max-width: 400px;
   margin: 40px auto;
 }
 
-.big-text {
-  font-size: 5rem;
+.title {
+  font-size: 7vw;
+  text-align: center;
+  font-family: "News of the World";
+  margin: 10vh auto;
 }
 
-.carousel-section {
+.section__carousel {
   margin-right: 5%;
   margin-left: 5%;
   border: 1.5em solid $light-blue-14;
@@ -116,16 +124,16 @@ export default {
 
 }
 
-.imageMarquee {
-  margin-right: 5%;
-  height: 20px; /* Any size you want */
+.image__marquee {
+  height: 50px; /* Any size you want */
   background-image: url(http://www.tedmontgomery.com/tutorial/bckgrnds/outrspc4.gif);
   animation: imageMovement 5s linear infinite;
-}
-
-@keyframes imageMovement {
-  100% {
-    background-position-x: 320px; /* width of the image */
+  @keyframes imageMovement {
+    100% {
+      background-position-x: 320px; /* width of the image */
+    }
   }
+
+
 }
 </style>

@@ -1,5 +1,4 @@
 <template>
-  <div class="q-pa-md">
 
     <q-header elevated class="bg-light-blue-14">
       <q-toolbar style="gap: 20px">
@@ -76,7 +75,6 @@
       </q-toolbar>
     </q-header>
 
-  </div>
 </template>
 
 <script>
