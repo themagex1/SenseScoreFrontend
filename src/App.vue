@@ -132,7 +132,7 @@ export default {
   animation: imageMovement 8s linear infinite;
   @keyframes imageMovement {
     100% {
-      background-position-x: 684px; /* width of the image */
+      background-position-x: 728px; /* width of the image */
     }
   }
 
