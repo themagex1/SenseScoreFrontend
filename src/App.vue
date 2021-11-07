@@ -25,7 +25,7 @@
             </div>
           </div>
 
-          <div class="description__left text-center text-light-blue-14">
+          <div class="description__left text-light-blue-14">
             Sense Score jest serwisem w którym możesz zarządzać swoimi
             ulubionymi zespołami sportowymi oraz zagrać w wirtualną grę
             bukmacherską.
@@ -61,7 +61,7 @@
         </div>
         <div class="col column-3"
              style="overflow: auto; min-width: 100%; max-width: 100%; position: fixed; left: 0px; bottom: 0px">
-          <div class="image__marquee self-end"></div>
+          <div class="image__marquee"></div>
 
         </div>
 
@@ -106,6 +106,8 @@ export default {
   color: white;
   max-width: 400px;
   margin: 40px auto;
+  font-family: "News of the World";
+  font-size: 1.1vw;
 }
 
 .title {
@@ -126,11 +128,11 @@ export default {
 
 .image__marquee {
   height: 50px; /* Any size you want */
-  background-image: url(http://www.tedmontgomery.com/tutorial/bckgrnds/outrspc4.gif);
-  animation: imageMovement 5s linear infinite;
+  background-image: url("../src/assets/soccersi.jpeg");
+  animation: imageMovement 8s linear infinite;
   @keyframes imageMovement {
     100% {
-      background-position-x: 320px; /* width of the image */
+      background-position-x: 684px; /* width of the image */
     }
   }
 
