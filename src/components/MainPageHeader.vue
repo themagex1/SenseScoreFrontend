@@ -20,7 +20,7 @@
           color="grey-9"
           flat
           no-caps
-          to="/favourites"
+          to="/home"
           >Home
         </q-btn>
       </div>
