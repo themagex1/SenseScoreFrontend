@@ -2,13 +2,32 @@
   <q-layout view="hHh lpR fFf">
     <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
       <div class="q-pa-md" style="max-width: 350px">
+        <q-btn
+          align="between"
+          class="btn-fixed-width"
+          color="blue"
+          label="Settings"
+          icon="settings"
+          style="width: 100%"
+        />
+      </div>
+      <div class="q-pa-md">
+        <q-btn
+          align="between"
+          class="btn-fixed-width"
+          color="blue"
+          label="Add favourites"
+          icon="add"
+          style="width: 100%"
+        />
+      </div>
+      <div class="q-pa-md" style="max-width: 350px">
         <q-list bordered class="rounded-borders">
           <q-expansion-item
             expand-separator
             icon="sports_esports"
             label="Favourite sports"
             header-class="text-blue"
-            default-opened
           >
             <q-item clickable v-ripple>
               <q-item-section avatar>
@@ -85,8 +104,15 @@
           </q-expansion-item>
         </q-list>
       </div>
-      <div class="q-pa-md q-gutter-sm">
-        <q-btn color="primary" icon="military_tech" label="Add favourites " />
+      <div class="q-pa-md">
+        <q-btn
+          align="between"
+          class="btn-fixed-width"
+          color="blue"
+          label="Coupons"
+          icon="payments"
+          style="width: 100%"
+        />
       </div>
     </q-drawer>
     <q-page-container>
@@ -126,120 +152,80 @@
             >
               <q-item-section>
                 <q-item-label>{{ sport.strSport }}</q-item-label>
-                <q-item-label caption>test</q-item-label>
               </q-item-section>
             </q-item>
           </q-expansion-item>
         </q-list>
       </div>
-      <div class="q-pa-md" style="max-width: 550px">
-        <q-list class="bg-white">
-          <q-item>
-            <q-item-section>
-              <q-item-label>Football | European Qualification</q-item-label>
-              <q-item-label caption lines="2">Poland - Andora</q-item-label>
-            </q-item-section>
+      <div class="q-pa-md">
+        <div class="q-gutter-y-md" style="max-width: 600px">
+          <q-card>
+            <q-tabs
+              v-model="tab"
+              dense
+              class="text-grey"
+              active-color="primary"
+              indicator-color="primary"
+              align="justify"
+              narrow-indicator
+            >
+              <q-tab
+                name="finished"
+                icon="check_circle_outline"
+                label="Finished"
+              />
+              <q-tab name="upcoming" icon="upcoming" label="Upcoming" />
+            </q-tabs>
 
-            <q-item-section side top>
-              <q-item-label caption>09.11</q-item-label>
-              <q-item-label>20:45</q-item-label>
-            </q-item-section>
-          </q-item>
+            <q-separator />
 
-          <q-separator spaced inset />
+            <q-tab-panels v-model="tab" animated>
+              <q-tab-panel name="finished">
+                <div class="q-pa-md" style="max-width: 630px">
+                  <q-list class="bg-white">
+                    <q-item v-for="match in lastMatches" :key="match.idEvent">
+                      <q-item-section>
+                        <q-item-label>{{ match.strLeague }}</q-item-label>
+                        <q-item-label caption lines="2">{{
+                          match.strEvent
+                        }}</q-item-label>
+                      </q-item-section>
+                      <q-item-section side top>
+                        <q-item-label caption>{{
+                          match.dateEvent
+                        }}</q-item-label>
+                        <q-item-label>{{ match.strTime }}</q-item-label>
+                      </q-item-section>
+                    </q-item>
+                    <q-separator spaced inset />
+                  </q-list>
+                </div>
+              </q-tab-panel>
 
-          <q-item>
-            <q-item-section>
-              <q-item-label>Football | European Qualification</q-item-label>
-              <q-item-label caption lines="2">Poland - Andora</q-item-label>
-            </q-item-section>
-            <q-item-section side top>
-              <q-item-label caption>09.11</q-item-label>
-              <q-item-label>20:45</q-item-label>
-            </q-item-section>
-          </q-item>
+              <q-tab-panel name="upcoming">
+                <div class="q-pa-md" style="max-width: 630px">
+                  <q-list class="bg-white">
+                    <q-item v-for="match in nextMatches" :key="match.idEvent">
+                      <q-item-section>
+                        <q-item-label>{{ match.strLeague }}</q-item-label>
+                        <q-item-label caption lines="2"
+                          >{{ match.strEvent }}
+                        </q-item-label>
+                      </q-item-section>
 
-          <q-separator spaced inset />
-
-          <q-item>
-            <q-item-section>
-              <q-item-label>Football | European Qualification</q-item-label>
-              <q-item-label caption lines="2">Poland - Andora</q-item-label>
-            </q-item-section>
-            <q-item-section side top>
-              <q-item-label caption>12.11</q-item-label>
-              <q-item-label>20:45</q-item-label>
-            </q-item-section>
-          </q-item>
-
-          <q-separator spaced inset />
-          <q-separator spaced inset />
-          <q-item>
-            <q-item-section>
-              <q-item-label>Hockey | NHL</q-item-label>
-              <q-item-label caption lines="2">Boston - Ottawa</q-item-label>
-            </q-item-section>
-
-            <q-item-section side top>
-              <q-item-label caption>10.11</q-item-label>
-              <q-item-label>01:30</q-item-label>
-            </q-item-section>
-          </q-item>
-
-          <q-separator spaced inset />
-
-          <q-item>
-            <q-item-section>
-              <q-item-label>Hockey | NHL</q-item-label>
-              <q-item-label caption lines="2">Boston - Ottawa</q-item-label>
-            </q-item-section>
-
-            <q-item-section side top>
-              <q-item-label caption>10.11</q-item-label>
-              <q-item-label>01:30</q-item-label>
-            </q-item-section>
-          </q-item>
-
-          <q-separator spaced inset />
-
-          <q-item>
-            <q-item-section>
-              <q-item-label>Hockey | NHL</q-item-label>
-              <q-item-label caption lines="2">Boston - Ottawa</q-item-label>
-            </q-item-section>
-
-            <q-item-section side top>
-              <q-item-label caption>10.11</q-item-label>
-              <q-item-label>01:30</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-separator spaced inset />
-          <q-separator spaced inset />
-          <q-item>
-            <q-item-section>
-              <q-item-label>Basketball | NBA</q-item-label>
-              <q-item-label caption lines="2">Utah - Atlanta</q-item-label>
-            </q-item-section>
-
-            <q-item-section side top>
-              <q-item-label caption>10.11</q-item-label>
-              <q-item-label>01:30</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-separator spaced inset />
-
-          <q-item>
-            <q-item-section>
-              <q-item-label>Basketball | NBA</q-item-label>
-              <q-item-label caption lines="1">Utah - Atlanta</q-item-label>
-            </q-item-section>
-
-            <q-item-section side top>
-              <q-item-label caption>10.11</q-item-label>
-              <q-item-label>01:30</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
+                      <q-item-section side top>
+                        <q-item-label caption>{{
+                          match.dateEvent
+                        }}</q-item-label>
+                        <q-item-label>{{ match.strTime }}</q-item-label>
+                      </q-item-section>
+                    </q-item>
+                  </q-list>
+                </div>
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
+        </div>
       </div>
     </q-page-container>
   </q-layout>
@@ -255,11 +241,13 @@ export default {
     return {
       leagues: [],
       sports: [],
+      lastMatches: [],
+      nextMatches: [],
+      tab: ref("finished"),
     };
   },
   setup() {
     const leftDrawerOpen = ref(false);
-
     return {
       leftDrawerOpen,
       toggleLeftDrawer() {
@@ -274,6 +262,12 @@ export default {
     axios
       .get("https://localhost:5001/api/SportDB/sports")
       .then((response) => (this.sports = response.data));
+    axios
+      .get("https://localhost:5001/api/SportDB/matches/lastbyteam/133602")
+      .then((response) => (this.lastMatches = response.data));
+    axios
+      .get("https://localhost:5001/api/SportDB/matches/nextbyteam/133602")
+      .then((response) => (this.nextMatches = response.data));
   },
 };
 </script>
