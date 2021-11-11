@@ -207,6 +207,9 @@
       </div>
       <div class="q-pa-md">
         <div class="q-gutter-y-md" style="max-width: 850px">
+          <h2 class="text-light-blue-14 title" style="text-align: center">
+            Your favourites' choices
+          </h2>
           <q-card>
             <q-tabs
               v-model="tab"
@@ -355,12 +358,12 @@ export default {
       tab1: ref("allleagues"),
       sportPage: 1,
       currentSportPage: 1,
-      totalSportPages: 10,
+      totalSportPages: 8,
       nextSportPage: null,
       page: 1,
       currentPage: 1,
       nextPage: null,
-      totalPages: 10,
+      totalPages: 12,
     };
   },
   methods: {
