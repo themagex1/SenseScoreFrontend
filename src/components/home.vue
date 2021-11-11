@@ -130,59 +130,79 @@
       </div>
     </q-drawer>
     <q-page-container>
-      <div
-        class="q-pa-md row"
-        style="max-width: 850px; float: right; display: flex"
-      >
-        <div>
-          <q-expansion-item
-            expand-separator
-            icon="plus"
-            label="All leagues"
-            header-class="text-white"
-            class="bg-blue"
-          >
-            <q-item
-              clickable
-              v-ripple
-              v-for="league in leagues"
-              :key="league.strLeague"
+      <div class="q-pa-md">
+        <div class="q-gutter-y-md" style="max-width: 350px; float: right">
+          <q-card>
+            <q-tabs
+              v-model="tab1"
+              dense
+              class="text-grey"
+              active-color="primary"
+              indicator-color="primary"
+              align="justify"
+              narrow-indicator
             >
-              <q-item-section>
-                <q-item-label>{{ league.strLeague }}</q-item-label>
-                <q-item-label caption>{{ league.strSport }}</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-expansion-item>
-        </div>
+              <q-tab name="allleagues" label="All leagues" />
+              <q-tab name="allsports" label="All sports" />
+            </q-tabs>
 
-        <div>
-          <q-expansion-item
-            expand-separator
-            icon="all"
-            label="All sports"
-            header-class="text-white"
-            class="bg-blue"
-          >
-            <q-item
-              clickable
-              v-ripple
-              v-for="sport in sports"
-              :key="sport.strSport"
-            >
-              <q-item-section avatar>
-                <img
-                  :src="require(`@/assets/${sport.strSport}.png`)"
-                  alt
-                  class="icon"
-                  style="height: 40px; max-width: 40px"
-                />
-              </q-item-section>
-              <q-item-section class="text-white">
-                {{ sport.strSport }}
-              </q-item-section>
-            </q-item>
-          </q-expansion-item>
+            <q-separator />
+
+            <q-tab-panels v-model="tab1" animated>
+              <q-tab-panel name="allleagues">
+                <q-item
+                  clickable
+                  v-ripple
+                  v-for="league in getLeagueData"
+                  :key="league.strLeague"
+                >
+                  <q-item-section>
+                    <q-item-label>{{ league.strLeague }}</q-item-label>
+                    <q-item-label caption>{{ league.strSport }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+
+                <q-pagination
+                  v-model="page"
+                  :min="currentPage"
+                  :max="Math.ceil(leagues.length / totalPages)"
+                  :input="true"
+                  input-class="text-orange-10"
+                >
+                </q-pagination>
+              </q-tab-panel>
+
+              <q-tab-panel name="allsports">
+                <q-item
+                  clickable
+                  v-ripple
+                  v-for="sport in getSportData"
+                  :key="sport.strSport"
+                >
+                  <q-item-section avatar>
+                    <img
+                      :src="require(`@/assets/${sport.strSport}.png`)"
+                      alt
+                      class="icon"
+                      style="height: 40px; max-width: 40px"
+                    />
+                  </q-item-section>
+                  <q-item-section class="text-green">
+                    {{ sport.strSport }}
+                  </q-item-section>
+                </q-item>
+
+                <q-pagination
+                  v-model="sportPage"
+                  :min="currentSportPage"
+                  :max="Math.ceil(sports.length / totalSportPages)"
+                  :input="true"
+                  input-class="text-orange-10"
+                >
+                </q-pagination>
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
         </div>
       </div>
       <div class="q-pa-md">
@@ -332,6 +352,15 @@ export default {
       nextMatches: [],
       liveMatches: [],
       tab: ref("finished"),
+      tab1: ref("allleagues"),
+      sportPage: 1,
+      currentSportPage: 1,
+      totalSportPages: 10,
+      nextSportPage: null,
+      page: 1,
+      currentPage: 1,
+      nextPage: null,
+      totalPages: 10,
     };
   },
   methods: {
@@ -361,6 +390,20 @@ export default {
         leftDrawerOpen.value = !leftDrawerOpen.value;
       },
     };
+  },
+  computed: {
+    getLeagueData() {
+      return this.leagues.slice(
+        (this.page - 1) * this.totalPages,
+        (this.page - 1) * this.totalPages + this.totalPages
+      );
+    },
+    getSportData() {
+      return this.sports.slice(
+        (this.sportPage - 1) * this.totalSportPages,
+        (this.sportPage - 1) * this.totalSportPages + this.totalSportPages
+      );
+    },
   },
   mounted() {
     axios
