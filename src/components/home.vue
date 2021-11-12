@@ -207,14 +207,48 @@
       </div>
       <div class="q-pa-md">
         <div class="q-gutter-y-md" style="max-width: 850px">
-          <h2 class="text-light-blue-14 title" style="text-align: center">
-            Your favourites' choices
-          </h2>
-          <q-card>
+          <div-filters class="row" style="gap: 10px; justify-content: center">
+            <div
+              class="col-auto text-blue"
+              style="width: 30%; text-align: center"
+            >
+              Select filters to display what you are interested in
+            </div>
+            <q-select
+              class="col-auto"
+              clearable
+              rounded
+              outlined
+              v-model="modelSport"
+              label="Select sport"
+              :options="filteredSports"
+              style="width: 30%"
+              bg-color="grey-4"
+              label-color="blue"
+              @update:model-value="onSportChange()"
+            >
+              <!-- <template v-slot:prepend>
+                <q-icon name="emoji_events" />
+              </template>-->
+            </q-select>
+            <q-select
+              class="col-auto"
+              rounded
+              outlined
+              v-model="model"
+              label="Select league"
+              :options="filteredLeagues"
+              style="width: 30%"
+              bg-color="grey-4"
+              label-color="blue"
+            >
+            </q-select>
+          </div-filters>
+          <q-card class="bg-grey-4">
             <q-tabs
               v-model="tab"
               dense
-              class="text-grey"
+              class="text-grey bg-grey-4"
               active-color="primary"
               indicator-color="primary"
               align="justify"
@@ -231,13 +265,16 @@
 
             <q-separator />
 
-            <q-tab-panels v-model="tab" animated>
+            <q-tab-panels v-model="tab" animated class="bg-grey-3">
               <q-tab-panel name="finished">
-                <div class="q-pa-md" style="max-width: 8500px">
-                  <q-list class="bg-white">
+                <div class="q-pa-md" style="max-width: 850px; padding: 10px">
+                  <q-list>
                     <q-item v-for="match in lastMatches" :key="match.idEvent">
                       <q-item-section>
-                        <q-item-label>{{ match.strLeague }}</q-item-label>
+                        <q-item-label
+                          >{{ match.strLeague }} |
+                          {{ match.strSport }}</q-item-label
+                        >
                         <q-item-label caption lines="2">
                           {{ match.strEvent }} | {{ match.intHomeScore }}-{{
                             match.intAwayScore
@@ -252,16 +289,59 @@
                       </q-item-section>
                     </q-item>
                     <q-separator spaced inset />
+                    <q-item v-for="match in lastMatches2" :key="match.idEvent">
+                      <q-item-section>
+                        <q-item-label
+                          >{{ match.strLeague }} |
+                          {{ match.strSport }}</q-item-label
+                        >
+                        <q-item-label caption lines="2">
+                          {{ match.strEvent }} | {{ match.intHomeScore }}-{{
+                            match.intAwayScore
+                          }}
+                        </q-item-label>
+                      </q-item-section>
+                      <q-item-section side top>
+                        <q-item-label caption>{{
+                          match.dateEvent
+                        }}</q-item-label>
+                        <q-item-label>{{ match.strTime }}</q-item-label>
+                      </q-item-section>
+                    </q-item>
                   </q-list>
                 </div>
               </q-tab-panel>
 
               <q-tab-panel name="upcoming">
                 <div class="q-pa-md" style="max-width: 850px">
-                  <q-list class="bg-white">
+                  <q-list>
                     <q-item v-for="match in nextMatches" :key="match.idEvent">
                       <q-item-section>
-                        <q-item-label>{{ match.strLeague }}</q-item-label>
+                        <q-item-label
+                          >{{ match.strLeague }} |
+                          {{ match.strSport }}</q-item-label
+                        >
+                        <q-item-label caption lines="2"
+                          >{{ match.strEvent }}
+                        </q-item-label>
+                      </q-item-section>
+
+                      <q-item-section side top>
+                        <q-item-label caption>{{
+                          match.dateEvent
+                        }}</q-item-label>
+                        <q-item-label>{{
+                          match.strTime || currentDate
+                        }}</q-item-label>
+                      </q-item-section>
+                    </q-item>
+                    <q-separator spaced inset />
+                    <q-item v-for="match in nextMatches2" :key="match.idEvent">
+                      <q-item-section>
+                        <q-item-label
+                          >{{ match.strLeague }} |
+                          {{ match.strSport }}</q-item-label
+                        >
                         <q-item-label caption lines="2"
                           >{{ match.strEvent }}
                         </q-item-label>
@@ -313,10 +393,12 @@
                       </template>
                     </q-input>
                   </div>
-                  <q-list class="bg-white">
+                  <q-list>
                     <q-item v-for="match in liveMatches" :key="match.idEvent">
                       <q-item-section>
-                        <q-item-label>{{ match.strSport }}</q-item-label>
+                        <q-item-label
+                          >{{ match.strLeague }} | {{ match.strSport }}
+                        </q-item-label>
                         <q-item-label caption lines="2"
                           >{{ match.strEvent }}
                         </q-item-label>
@@ -346,14 +428,30 @@ import axios from "axios";
 
 export default {
   name: "home",
+  setup() {
+    const leftDrawerOpen = ref(false);
+    return {
+      leftDrawerOpen,
+      toggleLeftDrawer() {
+        leftDrawerOpen.value = !leftDrawerOpen.value;
+      },
+    };
+  },
   data() {
     return {
       date: ref(this.currentDate()),
+      sport: ref(null),
+      model: ref(null),
+      modelSport: ref(null),
       leagues: [],
       sports: [],
       lastMatches: [],
+      lastMatches2: [],
       nextMatches: [],
+      nextMatches2: [],
       liveMatches: [],
+      filteredSports: [],
+      filteredLeagues: [],
       tab: ref("finished"),
       tab1: ref("allleagues"),
       sportPage: 1,
@@ -367,6 +465,10 @@ export default {
     };
   },
   methods: {
+    onSportChange() {
+      if (this.modelSport !== null) this.getSportDateEvents();
+      else this.getDateEvents();
+    },
     currentDate() {
       const current = new Date();
       const date = `${current.getFullYear()}-${
@@ -374,25 +476,23 @@ export default {
       }-${current.getDate()}`;
       return date;
     },
-    filteredSports() {
-      return this.sports.filter(function (sport) {
-        return sport !== "Soccer";
-      });
-    },
     getDateEvents() {
       return axios
         .get(`https://localhost:5001/api/SportDB/matches/${this.date}`)
         .then((response) => (this.liveMatches = response.data));
     },
-  },
-  setup() {
-    const leftDrawerOpen = ref(false);
-    return {
-      leftDrawerOpen,
-      toggleLeftDrawer() {
-        leftDrawerOpen.value = !leftDrawerOpen.value;
-      },
-    };
+    getSportDateEvents() {
+      return axios
+        .get(
+          `https://localhost:5001/api/SportDB/matches/${this.date}/${this.modelSport}`
+        )
+        .then((response) => (this.liveMatches = response.data));
+    },
+    getFilteredSports() {
+      return axios
+        .get(`https://localhost:5001/api/SportDB/matches/${this.date}`)
+        .then((response) => (this.filteredSports = response.data));
+    },
   },
   computed: {
     getLeagueData() {
@@ -411,16 +511,37 @@ export default {
   mounted() {
     axios
       .get("https://localhost:5001/api/SportDB/leagues")
-      .then((response) => (this.leagues = response.data));
+      .then((response) => (this.leagues = response.data))
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
+    axios.get("https://localhost:5001/api/SportDB/leagues").then((response) => {
+      response.data.forEach((element) => {
+        this.filteredLeagues.push(element.strLeague);
+      });
+    });
     axios
       .get("https://localhost:5001/api/SportDB/sports")
       .then((response) => (this.sports = response.data));
+    axios.get("https://localhost:5001/api/SportDB/sports").then((response) => {
+      response.data.forEach((element) => {
+        this.filteredSports.push(element.strSport);
+      });
+    });
     axios
       .get("https://localhost:5001/api/SportDB/matches/lastbyteam/133901")
       .then((response) => (this.lastMatches = response.data));
     axios
+      .get("https://localhost:5001/api/SportDB/matches/lastbyteam/134880")
+      .then((response) => (this.lastMatches2 = response.data));
+    axios
       .get("https://localhost:5001/api/SportDB/matches/nextbyteam/133901")
       .then((response) => (this.nextMatches = response.data));
+    axios
+      .get("https://localhost:5001/api/SportDB/matches/nextbyteam/133739")
+      .then((response) => (this.nextMatches2 = response.data));
     axios
       .get(`https://localhost:5001/api/SportDB/matches/${this.date}`)
       .then((response) => (this.liveMatches = response.data));
