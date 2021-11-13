@@ -1,5 +1,7 @@
 <template>
+
   <q-layout view="hHh lpR fFf">
+    <MainPageHeader/>
     <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
       <div class="q-pa-md" style="max-width: 350px">
         <q-btn
@@ -459,9 +461,11 @@
 <script>
 import { ref } from "vue";
 import axios from "axios";
+import MainPageHeader from '@/components/MainPageHeader'
 
 export default {
   name: "home",
+  components: { MainPageHeader },
   setup() {
     const leftDrawerOpen = ref(false);
     return {

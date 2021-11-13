@@ -3,11 +3,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
   {
     path: '/',
-    name: 'index',
+    name: 'MainPage',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../components/index.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/MainPage.vue')
   },
   {
     path: '/login',
