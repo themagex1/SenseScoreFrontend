@@ -28,6 +28,7 @@
             icon="sports_esports"
             label="Favourite sports"
             header-class="text-blue"
+            default-opened
           >
             <q-item clickable v-ripple>
               <q-item-section avatar>
@@ -207,43 +208,7 @@
       </div>
       <div class="q-pa-md">
         <div class="q-gutter-y-md" style="max-width: 850px">
-          <div-filters class="row" style="gap: 10px; justify-content: center">
-            <div
-              class="col-auto text-blue"
-              style="width: 30%; text-align: center"
-            >
-              Select filters to display what you are interested in
-            </div>
-            <q-select
-              class="col-auto"
-              clearable
-              rounded
-              outlined
-              v-model="modelSport"
-              label="Select sport"
-              :options="filteredSports"
-              style="width: 30%"
-              bg-color="grey-4"
-              label-color="blue"
-              @update:model-value="onSportChange()"
-            >
-              <!-- <template v-slot:prepend>
-                <q-icon name="emoji_events" />
-              </template>-->
-            </q-select>
-            <q-select
-              class="col-auto"
-              rounded
-              outlined
-              v-model="model"
-              label="Select league"
-              :options="filteredLeagues"
-              style="width: 30%"
-              bg-color="grey-4"
-              label-color="blue"
-            >
-            </q-select>
-          </div-filters>
+          <p class="text-blue-7 text-uppercase text-h4">Favourites section</p>
           <q-card class="bg-grey-4">
             <q-tabs
               v-model="tab"
@@ -260,7 +225,6 @@
                 label="Finished events"
               />
               <q-tab name="upcoming" icon="upcoming" label="Upcoming events" />
-              <q-tab name="courses" icon="live_tv" label="Courses" />
             </q-tabs>
 
             <q-separator />
@@ -271,15 +235,24 @@
                   <q-list>
                     <q-item v-for="match in lastMatches" :key="match.idEvent">
                       <q-item-section>
-                        <q-item-label
-                          >{{ match.strLeague }} |
-                          {{ match.strSport }}</q-item-label
-                        >
-                        <q-item-label caption lines="2">
-                          {{ match.strEvent }} | {{ match.intHomeScore }}-{{
-                            match.intAwayScore
-                          }}
+                        <q-item-label> {{ match.strSport }}</q-item-label>
+                        <q-item-label caption lines="1">
+                          {{ match.strLeague }}
                         </q-item-label>
+                      </q-item-section>
+                      <q-item-section class="col-2">
+                        <img
+                          :src="require(`@/assets/${match.strSport}.png`)"
+                          alt
+                          class="icon"
+                          style="height: 20px; max-width: 20px"
+                        />
+                      </q-item-section>
+                      <q-item-section>
+                        {{ match.strHomeTeam }}-{{ match.strAwayTeam }}
+                      </q-item-section>
+                      <q-item-section class="text-blue-9">
+                        {{ match.intHomeScore }}-{{ match.intAwayScore }}
                       </q-item-section>
                       <q-item-section side top>
                         <q-item-label caption>{{
@@ -291,15 +264,24 @@
                     <q-separator spaced inset />
                     <q-item v-for="match in lastMatches2" :key="match.idEvent">
                       <q-item-section>
-                        <q-item-label
-                          >{{ match.strLeague }} |
-                          {{ match.strSport }}</q-item-label
-                        >
-                        <q-item-label caption lines="2">
-                          {{ match.strEvent }} | {{ match.intHomeScore }}-{{
-                            match.intAwayScore
-                          }}
+                        <q-item-label> {{ match.strSport }}</q-item-label>
+                        <q-item-label caption lines="1">
+                          {{ match.strLeague }}
                         </q-item-label>
+                      </q-item-section>
+                      <q-item-section class="col-2">
+                        <img
+                          :src="require(`@/assets/${match.strSport}.png`)"
+                          alt
+                          class="icon"
+                          style="height: 20px; max-width: 20px"
+                        />
+                      </q-item-section>
+                      <q-item-section>
+                        {{ match.strHomeTeam }}-{{ match.strAwayTeam }}
+                      </q-item-section>
+                      <q-item-section class="text-blue-9">
+                        {{ match.intHomeScore }}-{{ match.intAwayScore }}
                       </q-item-section>
                       <q-item-section side top>
                         <q-item-label caption>{{
@@ -317,19 +299,23 @@
                   <q-list>
                     <q-item v-for="match in nextMatches" :key="match.idEvent">
                       <q-item-section>
-                        <q-item-label
-                          >{{ match.strLeague }} |
-                          {{ match.strSport }}</q-item-label
-                        >
-                        <q-item-label caption lines="2"
-                          >{{ match.strEvent }}
+                        <q-item-label> {{ match.strSport }}</q-item-label>
+                        <q-item-label caption lines="1">
+                          {{ match.strLeague }}
                         </q-item-label>
                       </q-item-section>
-
+                      <q-item-section class="col-2">
+                        <img
+                          :src="require(`@/assets/${match.strSport}.png`)"
+                          alt
+                          class="icon"
+                          style="height: 20px; max-width: 20px"
+                        />
+                      </q-item-section>
+                      <q-item-section>
+                        {{ match.strHomeTeam }}-{{ match.strAwayTeam }}
+                      </q-item-section>
                       <q-item-section side top>
-                        <q-item-label caption>{{
-                          match.dateEvent
-                        }}</q-item-label>
                         <q-item-label>{{
                           match.strTime || currentDate
                         }}</q-item-label>
@@ -338,19 +324,23 @@
                     <q-separator spaced inset />
                     <q-item v-for="match in nextMatches2" :key="match.idEvent">
                       <q-item-section>
-                        <q-item-label
-                          >{{ match.strLeague }} |
-                          {{ match.strSport }}</q-item-label
-                        >
-                        <q-item-label caption lines="2"
-                          >{{ match.strEvent }}
+                        <q-item-label> {{ match.strSport }}</q-item-label>
+                        <q-item-label caption lines="1">
+                          {{ match.strLeague }}
                         </q-item-label>
                       </q-item-section>
-
+                      <q-item-section class="col-2">
+                        <img
+                          :src="require(`@/assets/${match.strSport}.png`)"
+                          alt
+                          class="icon"
+                          style="height: 20px; max-width: 20px"
+                        />
+                      </q-item-section>
+                      <q-item-section>
+                        {{ match.strHomeTeam }}-{{ match.strAwayTeam }}
+                      </q-item-section>
                       <q-item-section side top>
-                        <q-item-label caption>{{
-                          match.dateEvent
-                        }}</q-item-label>
                         <q-item-label>{{
                           match.strTime || currentDate
                         }}</q-item-label>
@@ -359,7 +349,41 @@
                   </q-list>
                 </div>
               </q-tab-panel>
-
+            </q-tab-panels>
+          </q-card>
+          <h2 class="q-pt-md text-blue-7 text-uppercase text-h4">
+            Live section
+          </h2>
+          <div-filters class="row" style="gap: 10px; justify-content: center">
+            <q-select
+              class="col-auto"
+              clearable
+              rounded
+              outlined
+              v-model="modelSport"
+              label="Select sport"
+              :options="filteredSports"
+              style="width: 30%"
+              bg-color="grey-4"
+              label-color="blue"
+              @update:model-value="onSportChange()"
+            >
+            </q-select>
+            <q-select
+              class="col-auto"
+              rounded
+              outlined
+              v-model="model"
+              label="Select league"
+              :options="filteredLeagues"
+              style="width: 30%"
+              bg-color="grey-4"
+              label-color="blue"
+            >
+            </q-select>
+          </div-filters>
+          <q-card class="bg-grey-4">
+            <q-tab-panels v-model="tabCourses" animated class="bg-grey-3">
               <q-tab-panel name="courses">
                 <div class="q-pa-md" style="max-width: 850px">
                   <div class="q-pa-md" style="max-width: 300px">
@@ -396,14 +420,22 @@
                   <q-list>
                     <q-item v-for="match in liveMatches" :key="match.idEvent">
                       <q-item-section>
-                        <q-item-label
-                          >{{ match.strLeague }} | {{ match.strSport }}
-                        </q-item-label>
-                        <q-item-label caption lines="2"
-                          >{{ match.strEvent }}
+                        <q-item-label> {{ match.strSport }} </q-item-label>
+                        <q-item-label caption lines="1"
+                          >{{ match.strLeague }}
                         </q-item-label>
                       </q-item-section>
-
+                      <q-item-section class="col-2">
+                        <img
+                          :src="require(`@/assets/${match.strSport}.png`)"
+                          alt
+                          class="icon"
+                          style="height: 20px; max-width: 20px"
+                        />
+                      </q-item-section>
+                      <q-item-section>
+                        {{ match.strEvent }}
+                      </q-item-section>
                       <q-item-section side top>
                         <q-item-label caption>{{
                           match.dateEvent
@@ -454,6 +486,7 @@ export default {
       filteredLeagues: [],
       tab: ref("finished"),
       tab1: ref("allleagues"),
+      tabCourses: ref("courses"),
       sportPage: 1,
       currentSportPage: 1,
       totalSportPages: 8,
