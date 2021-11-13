@@ -73,7 +73,7 @@
                 <q-btn label="REGISTER"
                        type="submit"
                        color="grey-9"
-                       class="button__login text-light-blue-14"
+                       class="button__register-1 text-light-blue-14"
                 />
                 <q-btn label="RESET"
                        type="reset"
@@ -142,5 +142,80 @@ export default {
   font-weight: bold;
   color: $grey-9;
   text-align: center;
+}
+
+.card__Popup {
+  border-radius: 25px 0 25px 0;
+  min-width: 50vw;
+  min-height: 60vh;
+  border: 10px solid $grey-9;
+}
+
+.column__1 {
+  border-right: solid $grey-9;
+}
+
+.column__1-title {
+  margin: 4vw 2vw;
+}
+
+.column__1-description {
+  margin: 0 2vw;
+}
+
+.column__1-title-header {
+  font-family: "News of the World";
+  font-style: italic;
+  font-weight: bold;
+  font-size: 5vw;
+  color: $grey-9;
+  text-align: center;
+}
+
+.column__1-description-text {
+  font-family: "News of the World";
+  font-weight: inherit;
+  font-size: 1.2vw;
+  color: $grey-9;
+}
+
+.column__2-title-header {
+  font-family: "News of the World";
+  font-weight: bold;
+  font-size: 4vw;
+}
+
+.register__form {
+  margin: 0 4vw;
+  color: $light-blue-14;
+}
+
+.register__form-input {
+  margin-left: auto;
+  margin-right: auto;
+  font-family: "News of the World";
+  font-size: 1.3vw;
+}
+
+.acceptToggle, .form__button {
+  margin-left: auto;
+  margin-right: auto;
+  font-family: "News of the World";
+  font-size: 1.1vw;
+  color: $grey-9;
+}
+
+.form__button {
+  text-align: center;
+}
+.button__register-1, .button__reset {
+  font-size: 1.2vw;
+  width: 6vw;
+}
+.button__register {
+  font-size: 1.5vw;
+  width: 10vw;
+  font-family: "News of the World";
+  color: $grey-9;
 }
 </style>

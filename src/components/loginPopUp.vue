@@ -55,7 +55,7 @@
                 <q-btn label="LOGIN"
                        type="submit"
                        color="grey-9"
-                       class="button__login text-light-blue-14"
+                       class="button__login-1 text-light-blue-14"
                 />
                 <q-btn
                     label="RESET"
@@ -120,7 +120,7 @@ export default {
 }
 
 .column__loginPopup-1 {
-  border-right: solid black;
+  border-right: solid $grey-9;
 }
 
 /* Lewa strona */
@@ -180,7 +180,7 @@ export default {
 .buttons {
   text-align: center;
 
-  .button__login, .button__reset {
+  .button__login-1, .button__reset {
     font-size: 1.2vw;
     width: 6vw;
   }

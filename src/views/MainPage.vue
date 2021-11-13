@@ -97,7 +97,7 @@ export default {
 @import "../quasar.variables";
 
 .container {
-  margin: 5vh auto;
+  margin: 2vh auto;
 }
 
 .description__left {
