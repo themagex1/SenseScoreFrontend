@@ -373,12 +373,13 @@
               class="col-auto"
               rounded
               outlined
-              v-model="model"
+              v-model="modelLeague"
               label="Select league"
               :options="filteredLeagues"
               style="width: 30%"
               bg-color="grey-4"
               label-color="blue"
+              @update:model-value="onLeagueChange()"
             >
             </q-select>
           </div-filters>
@@ -475,6 +476,7 @@ export default {
       sport: ref(null),
       model: ref(null),
       modelSport: ref(null),
+      modelLeague: ref(null),
       leagues: [],
       sports: [],
       lastMatches: [],
@@ -502,6 +504,10 @@ export default {
       if (this.modelSport !== null) this.getSportDateEvents();
       else this.getDateEvents();
     },
+    onLeagueChange() {
+      if (this.modelLeague !== null) this.getLeagueDateEvents();
+      else this.getDateEvents();
+    },
     currentDate() {
       const current = new Date();
       const date = `${current.getFullYear()}-${
@@ -517,7 +523,14 @@ export default {
     getSportDateEvents() {
       return axios
         .get(
-          `https://localhost:5001/api/SportDB/matches/${this.date}/${this.modelSport}`
+          `https://localhost:5001/api/SportDB/matches/${this.date}?s=${this.modelSport}`
+        )
+        .then((response) => (this.liveMatches = response.data));
+    },
+    getLeagueDateEvents() {
+      return axios
+        .get(
+          `https://localhost:5001/api/SportDB/matches/${this.date}?l=${this.modelLeague}`
         )
         .then((response) => (this.liveMatches = response.data));
     },
