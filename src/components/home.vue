@@ -371,6 +371,7 @@
             </q-select>
             <q-select
               class="col-auto"
+              clearable
               rounded
               outlined
               v-model="modelLeague"
@@ -505,7 +506,7 @@ export default {
       else this.getDateEvents();
     },
     onLeagueChange() {
-      if (this.modelLeague !== null) this.getLeagueDateEvents();
+      if (this.modelLeague !== null) this.getDateEvents();
       else this.getDateEvents();
     },
     currentDate() {
