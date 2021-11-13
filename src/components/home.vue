@@ -506,7 +506,7 @@ export default {
       else this.getDateEvents();
     },
     onLeagueChange() {
-      if (this.modelLeague !== null) this.getDateEvents();
+      if (this.modelLeague !== null) this.getLeagueDateEvents();
       else this.getDateEvents();
     },
     currentDate() {
