@@ -20,7 +20,6 @@
               <h2 class="login-h text-center text-grey-9">Log In</h2>
             </div>
             <q-form
-                @submit="onSubmit"
                 @reset="onReset"
                 class="q-gutter-md login-form"
             >
@@ -42,8 +41,6 @@
                   v-model="password"
                   label="Password"
                   type="password"
-                  lazy-rules:rules="[val => val !== null && val.length > 5 ||
-                'Your password must contain at least six characters',]"
               />
               <q-toggle class="acceptToggle"
                         color="grey-9"
@@ -56,6 +53,7 @@
                        type="submit"
                        color="grey-9"
                        class="button__login-1 text-light-blue-14"
+                       @click="doLogin"
                 />
                 <q-btn
                     label="RESET"
@@ -82,29 +80,40 @@
 
 <script>
 import { ref } from 'vue'
+import { getAuthService } from '@/services/authService'
 
 export default {
   setup () {
-    const email = ref(null)
-    const password = ref(null)
     const accept = ref(false)
 
     return {
       card: ref(false),
-      email,
-      password,
       accept,
-      onSubmit () {
-
-      },
       onReset () {
-        email.value = null
-        password.value = null
         accept.value = false
       }
     }
   },
-  name: 'loginPopUp'
+  data () {
+    return {
+      email: '',
+      password: '',
+
+    }
+  },
+  name: 'loginPopUp',
+  methods: {
+    async doLogin() {
+
+      const loggedIn = await getAuthService().logIn(this.email, this.password)
+      if(loggedIn){
+        await this.$router.push({
+          name:'home'
+        })
+
+      }
+    }
+  }
 }
 </script>
 

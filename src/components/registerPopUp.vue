@@ -25,13 +25,22 @@
 
           <div class="col column__2">
             <div class="column__2-title">
-              <h2 class="column__2-title-header text-center text-grey-9">Log In</h2>
+              <h2 class="column__2-title-header text-center text-grey-9">Register Now</h2>
             </div>
             <q-form
-                @submit="onSubmit"
+                @submit="doSignUp"
                 @reset="onReset"
                 class="q-gutter-md register__form"
             >
+              <q-input
+                  standout
+                  v-model="username"
+                  label="Username"
+                  type="text"
+                  bg-color="grey-9"
+                  label-color="light-blue-14"
+                  class="register__form-input"
+              />
               <q-input
                   standout
                   v-model="email"
@@ -49,8 +58,6 @@
                   v-model="password"
                   label="Password"
                   type="password"
-                  lazy-rules:rules="[val => val !== null && val.length > 5 ||
-                'Your password must contain at least six characters',]"
               />
               <q-input
                   class="register__form-input"
@@ -60,8 +67,6 @@
                   v-model="repeatPassword"
                   label="Confirm password"
                   type="password"
-                  lazy-rules:rules="[val => val == password ||
-                'Password is not matched',]"
               />
               <q-toggle class="acceptToggle"
                         color="grey-9"
@@ -71,9 +76,10 @@
               />
               <div class="form__button">
                 <q-btn label="REGISTER"
-                       type="submit"
                        color="grey-9"
                        class="button__register-1 text-light-blue-14"
+                       @click="doSignUp"
+                       type="submit"
                 />
                 <q-btn label="RESET"
                        type="reset"
@@ -94,34 +100,53 @@
 
 <script>
 import { ref } from 'vue'
+import { getAccountService } from '@/services/accountService'
+import { getAuthService } from '@/services/authService'
+
 
 export default {
   name: 'registerPopUp',
   setup () {
-
-    const email = ref(null)
-    const password = ref(null)
-    const repeatPassword = ref(null)
     const accept = ref(false)
+
     return {
       card: ref(false),
-      email,
-      password,
-      repeatPassword,
       accept,
-
-      onSubmit () {
-
-      },
       onReset () {
-        email.value = null
-        password.value = null
-        repeatPassword.value = null
         accept.value = false
 
       }
     }
   },
+  data(){
+    return {
+      username: '',
+      email: '',
+      password: '',
+      repeatPassword: ''
+    }
+  },
+  methods: {
+    async doSignUp () {
+      try {
+        const result = await getAccountService().addAccount(this.email, this.username, this.password)
+        if(result) {
+          await getAuthService().logIn(this.email, this.password)
+          console.log('OK')
+          await this.$router.push({
+            name: 'home'
+          })
+        }
+        else {
+          //
+        }
+      }
+      catch (e) {
+        //do nothing
+      }
+    },
+
+  }
 
 }
 </script>
@@ -131,7 +156,7 @@ export default {
 
 .button__register {
   font-size: 1.5vw;
-  width: 10vw;
+  width: 11vw;
   font-family: "News of the World";
   color: $grey-9;
 }
@@ -147,7 +172,7 @@ export default {
 .card__Popup {
   border-radius: 25px 0 25px 0;
   min-width: 50vw;
-  min-height: 60vh;
+  min-height: 70vh;
   border: 10px solid $grey-9;
 }
 
