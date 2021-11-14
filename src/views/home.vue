@@ -211,7 +211,7 @@
                       clickable
                       v-for="match in lastMatches"
                       :key="match.idEvent"
-                      @click="test"
+                      @click="eventCard = true"
                     >
                       <q-item-section>
                         <q-item-label> {{ match.strSport }}</q-item-label>
@@ -413,33 +413,35 @@
                     </q-input>
                   </div>
                   <q-list>
-                    <q-item v-for="match in liveMatches" :key="match.idEvent">
-                      <q-item-section>
-                        <q-item-label> {{ match.strSport }} </q-item-label>
-                        <q-item-label caption lines="1"
-                          >{{ match.strLeague }}
-                        </q-item-label>
-                      </q-item-section>
-                      <q-item-section class="col-2">
-                        <img
-                          :src="require(`@/assets/${match.strSport}.png`)"
-                          alt
-                          class="icon"
-                          style="height: 20px; max-width: 20px"
-                        />
-                      </q-item-section>
-                      <q-item-section>
-                        {{ match.strEvent }}
-                      </q-item-section>
-                      <q-item-section side top>
-                        <q-item-label caption>{{
-                          match.dateEvent
-                        }}</q-item-label>
-                        <q-item-label>{{
-                          formatPrice(match.strTime)
-                        }}</q-item-label>
-                      </q-item-section>
-                    </q-item>
+                    <q-scroll-area style="height: 300px">
+                      <q-item v-for="match in liveMatches" :key="match.idEvent">
+                        <q-item-section>
+                          <q-item-label> {{ match.strSport }} </q-item-label>
+                          <q-item-label caption lines="1"
+                            >{{ match.strLeague }}
+                          </q-item-label>
+                        </q-item-section>
+                        <q-item-section class="col-2">
+                          <img
+                            :src="require(`@/assets/${match.strSport}.png`)"
+                            alt
+                            class="icon"
+                            style="height: 20px; max-width: 20px"
+                          />
+                        </q-item-section>
+                        <q-item-section>
+                          {{ match.strEvent }}
+                        </q-item-section>
+                        <q-item-section side top>
+                          <q-item-label caption>{{
+                            match.dateEvent
+                          }}</q-item-label>
+                          <q-item-label>{{
+                            formatPrice(match.strTime)
+                          }}</q-item-label>
+                        </q-item-section>
+                      </q-item>
+                    </q-scroll-area>
                   </q-list>
                 </div>
               </q-tab-panel>
@@ -447,6 +449,88 @@
           </q-card>
         </div>
       </div>
+
+      <q-dialog v-model="eventCard">
+        <div class="q-pa-md" style="max-width: 600px">
+          <q-card>
+            <q-tabs
+              v-model="matchTab"
+              dense
+              class="text-grey"
+              active-color="primary"
+              indicator-color="primary"
+              align="justify"
+            >
+              <q-tab name="match" label="Match" />
+              <q-tab name="h2h" label="H2H" />
+              <q-tab name="table" label="Table" />
+            </q-tabs>
+
+            <q-separator />
+
+            <q-tab-panels v-model="matchTab" animated>
+              <q-tab-panel name="match" class="q-pa-none">
+                <q-splitter v-model="splitterModel" style="height: 250px">
+                  <template v-slot:before>
+                    <q-tabs
+                      v-model="matchDetailsTab"
+                      vertical
+                      class="text-teal"
+                    >
+                      <q-tab name="squad" label="Squads" />
+                      <q-tab name="details" label="Details" />
+                    </q-tabs>
+                  </template>
+
+                  <template v-slot:after>
+                    <q-tab-panels
+                      v-model="matchDetailsTab"
+                      animated
+                      transition-prev="slide-down"
+                      transition-next="slide-up"
+                    >
+                      <q-tab-panel name="squad">
+                        <div class="text-h4 q-mb-md">Squads</div>
+                        <p>
+                          Lorem ipsum dolor sit, amet consectetur adipisicing
+                          elit.
+                        </p>
+                      </q-tab-panel>
+
+                      <q-tab-panel name="details">
+                        <div class="text-h4 q-mb-md">Details</div>
+                        <p>
+                          Lorem ipsum dolor sit, amet consectetur adipisicing
+                          elit.
+                        </p>
+                      </q-tab-panel>
+                    </q-tab-panels>
+                  </template>
+                </q-splitter>
+              </q-tab-panel>
+
+              <q-tab-panel name="h2h">
+                <div class="text-h6">H2H</div>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              </q-tab-panel>
+
+              <q-tab-panel name="table">
+                <q-table
+                  style="height: 400px"
+                  title="Table"
+                  :rows="rows"
+                  :columns="columns"
+                  row-key="name"
+                  hide-bottom
+                  virtual-scroll
+                  v-model:pagination="pagination"
+                  :rows-per-page-options="[0]"
+                />
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
+        </div>
+      </q-dialog>
     </q-page-container>
   </q-layout>
 </template>
@@ -470,11 +554,18 @@ export default {
   },
   data() {
     return {
+      pagination: ref({
+        rowsPerPage: 0,
+      }),
       date: ref(this.currentDate()),
       sport: ref(null),
       model: ref(null),
       modelSport: ref(null),
       modelLeague: ref(null),
+      eventCard: false,
+      matchTab: ref("match"),
+      matchDetailsTab: ref("squad"),
+      splitterModel: ref(20),
       leagues: [],
       sports: [],
       lastMatches: [],
@@ -486,6 +577,8 @@ export default {
       filteredLeagues: [],
       tab: ref("finished"),
       tabCourses: ref("courses"),
+      columns,
+      rows,
     };
   },
   methods: {
@@ -588,6 +681,151 @@ export default {
       .then((response) => (this.liveMatches = response.data));
   },
 };
+
+const columns = [
+  {
+    name: "standing",
+    required: true,
+    field: (row) => row.standing,
+    sortable: true,
+  },
+  { name: "team", label: "Team", field: "team", sortable: true },
+  { name: "played", label: "P", field: "played" },
+  { name: "win", label: "W", field: "win" },
+  { name: "lost", label: "L", field: "lost" },
+  { name: "draws", label: "D", field: "draws" },
+  { name: "goalsIn", label: "In", field: "goalsIn" },
+  { name: "goalsOut", label: "Out", field: "goalsOut" },
+  {
+    name: "goalsDifference",
+    label: "GD",
+    field: "goalsDifference",
+  },
+  { name: "points", label: "P", field: "points" },
+];
+
+const rows = [
+  {
+    standing: 1,
+    team: "Man City",
+    played: 38,
+    win: 27,
+    lost: 6,
+    draws: 5,
+    goalsIn: 83,
+    goalsOut: 32,
+    goalsDifference: 51,
+    points: 86,
+  },
+  {
+    standing: 2,
+    team: "Man United",
+    played: 38,
+    win: 21,
+    lost: 6,
+    draws: 9,
+    goalsIn: 73,
+    goalsOut: 44,
+    goalsDifference: 29,
+    points: 74,
+  },
+  {
+    standing: 3,
+    team: "Liverpool",
+    played: 38,
+    win: 20,
+    lost: 9,
+    draws: 9,
+    goalsIn: 68,
+    goalsOut: 42,
+    goalsDifference: 26,
+    points: 69,
+  },
+  {
+    standing: 4,
+    team: "Chelsea",
+    played: 38,
+    win: 19,
+    lost: 9,
+    draws: 9,
+    goalsIn: 58,
+    goalsOut: 36,
+    goalsDifference: 22,
+    points: 67,
+  },
+  {
+    standing: 5,
+    team: "Chelsea",
+    played: 38,
+    win: 19,
+    lost: 9,
+    draws: 9,
+    goalsIn: 58,
+    goalsOut: 36,
+    goalsDifference: 22,
+    points: 67,
+  },
+  {
+    standing: 6,
+    team: "x",
+    played: 38,
+    win: 19,
+    lost: 9,
+    draws: 9,
+    goalsIn: 58,
+    goalsOut: 36,
+    goalsDifference: 22,
+    points: 67,
+  },
+  {
+    standing: 7,
+    team: "y",
+    played: 38,
+    win: 19,
+    lost: 9,
+    draws: 9,
+    goalsIn: 58,
+    goalsOut: 36,
+    goalsDifference: 22,
+    points: 67,
+  },
+  {
+    standing: 8,
+    team: "z",
+    played: 38,
+    win: 19,
+    lost: 9,
+    draws: 9,
+    goalsIn: 58,
+    goalsOut: 36,
+    goalsDifference: 22,
+    points: 67,
+  },
+  {
+    standing: 9,
+    team: "y",
+    played: 38,
+    win: 19,
+    lost: 9,
+    draws: 9,
+    goalsIn: 58,
+    goalsOut: 36,
+    goalsDifference: 22,
+    points: 67,
+  },
+  {
+    standing: 10,
+    team: "y",
+    played: 38,
+    win: 19,
+    lost: 9,
+    draws: 9,
+    goalsIn: 58,
+    goalsOut: 36,
+    goalsDifference: 22,
+    points: 67,
+  },
+];
 </script>
 
 <style scoped>
