@@ -63,7 +63,20 @@
           <div class="image__marquee"></div>
         </div>
       </div>
-      -->
+
+      <q-footer elevated class="footer" v-if="cookiesPolicyAccepted">
+        <q-toolbar style="">
+          <div class="footer__box self-center">
+            <div class="footer__box-text text-center">
+              <span class="text-weight-bold"> Ważna informacja!</span>
+              Ta strona korzysta z plików cookies do przechowywania informacji na Twoim komputerze.
+              Aby uzyskać szczegółowe informacje na temat blokowania plików cookies, zapoznaj się z polityką cookies
+            </div>
+          </div>
+          <q-space/>
+          <q-btn @click="acceptCookiesPolicy"> Akceptuję politykę cookies</q-btn>
+        </q-toolbar>
+      </q-footer>
     </q-page-container>
   </div>
 
@@ -89,6 +102,16 @@ export default {
       slide: ref(1),
 
     }
+  },
+  data () {
+    return {
+      cookiesPolicyAccepted: true
+    }
+  },
+  methods: {
+    acceptCookiesPolicy () {
+      this.cookiesPolicyAccepted = false
+    }
   }
 }
 </script>
@@ -111,7 +134,7 @@ export default {
 .title {
   font-size: 7vw;
   text-align: center;
-  font-family: "News of the World";
+  font-family: "News of the World", serif;
   margin: 10vh auto;
 }
 
@@ -132,5 +155,23 @@ export default {
       background-position-x: 728px; /* width of the image */
     }
   }
+}
+
+.footer {
+  background-color: rgba(0, 145, 234, 0.9);
+  height: 70px;
+  max-width: 80vw;
+  margin: 0 auto 10px;
+  border-radius: 15px;
+}
+
+.footer__box {
+  margin: 1em auto;
+}
+
+.footer__box-text {
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: $grey-9;
 }
 </style>
