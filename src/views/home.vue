@@ -1,7 +1,6 @@
 <template>
-
   <q-layout view="hHh lpR fFf">
-    <MainPageHeader/>
+    <MainPageHeader />
     <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
       <div class="q-pa-md" style="max-width: 350px">
         <q-btn
@@ -134,88 +133,56 @@
     </q-drawer>
     <q-page-container>
       <div class="q-pa-md">
-        <div class="q-gutter-y-md" style="max-width: 350px; float: right">
-          <q-card>
-            <q-tabs
-              v-model="tab1"
-              dense
-              class="text-grey"
-              active-color="primary"
-              indicator-color="primary"
-              align="justify"
-              narrow-indicator
-            >
-              <q-tab name="allleagues" label="All leagues" />
-              <q-tab name="allsports" label="All sports" />
-            </q-tabs>
-
-            <q-separator />
-
-            <q-tab-panels v-model="tab1" animated>
-              <q-tab-panel name="allleagues">
-                <q-item
-                  clickable
-                  v-ripple
-                  v-for="league in getLeagueData"
-                  :key="league.strLeague"
+        <div class="q-gutter-y-md" style="max-width: 320px; float: right">
+          <q-card class="coupon shadow-2 rounded-borders">
+            <q-tab-panel class="bg-grey-9 text-blue-7">
+              <q-item class="q-mb-md" v-ripple>
+                <q-item-section style="color: #bbdefb">COUPON</q-item-section>
+              </q-item>
+              <q-item v-ripple class="bg-grey-8 q-mb-sm">
+                <q-item-section class="text-blue-6"
+                  >Poland-Andorra</q-item-section
                 >
-                  <q-item-section>
-                    <q-item-label>{{ league.strLeague }}</q-item-label>
-                    <q-item-label caption>{{ league.strSport }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-
-                <q-pagination
-                  v-model="page"
-                  :min="currentPage"
-                  :max="Math.ceil(leagues.length / totalPages)"
-                  :input="true"
-                  input-class="text-orange-10"
-                >
-                </q-pagination>
-              </q-tab-panel>
-
-              <q-tab-panel name="allsports">
-                <q-item
-                  clickable
-                  v-ripple
-                  v-for="sport in getSportData"
-                  :key="sport.strSport"
-                >
-                  <q-item-section avatar>
-                    <img
-                      :src="require(`@/assets/${sport.strSport}.png`)"
-                      alt
-                      class="icon"
-                      style="height: 40px; max-width: 40px"
-                    />
-                  </q-item-section>
-                  <q-item-section class="text-green">
-                    {{ sport.strSport }}
-                  </q-item-section>
-                </q-item>
-
-                <q-pagination
-                  v-model="sportPage"
-                  :min="currentSportPage"
-                  :max="Math.ceil(sports.length / totalSportPages)"
-                  :input="true"
-                  input-class="text-orange-10"
-                >
-                </q-pagination>
-              </q-tab-panel>
-            </q-tab-panels>
+                <q-item-section side class="text-blue-6">1.45</q-item-section>
+                <q-item-section side>
+                  <q-icon name="delete" class="text-blue-6" />
+                </q-item-section>
+              </q-item>
+              <q-item v-ripple class="bg-grey-8">
+                <q-item-section class="text-blue-6">X-Y</q-item-section>
+                <q-item-section side class="text-blue-6">2.30</q-item-section>
+                <q-item-section side>
+                  <q-icon name="delete" class="text-blue-6" />
+                </q-item-section>
+              </q-item>
+              <q-separator />
+              <q-item v-ripple>
+                <q-item-section>
+                  <q-item-label overline>To pay:</q-item-label>
+                  <q-item-label>5$</q-item-label>
+                </q-item-section>
+                <q-item-section style="text-align: right">
+                  <q-item-label overline>Course:</q-item-label>
+                  <q-item-label>3.34</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-item v-ripple>
+                <q-item-section
+                  ><q-btn color="primary" label="PLAY" />
+                </q-item-section>
+              </q-item>
+            </q-tab-panel>
           </q-card>
         </div>
       </div>
       <div class="q-pa-md">
-        <div class="q-gutter-y-md" style="max-width: 850px">
+        <div class="q-gutter-y-md" style="max-width: 850px; margin: 0 auto">
           <p class="text-blue-7 text-uppercase text-h4">Favourites section</p>
-          <q-card class="bg-grey-4">
+          <q-card class="bg-grey-14">
             <q-tabs
               v-model="tab"
               dense
-              class="text-grey bg-grey-4"
+              class="bg-grey-9 text-blue-7"
               active-color="primary"
               indicator-color="primary"
               align="justify"
@@ -231,11 +198,21 @@
 
             <q-separator />
 
-            <q-tab-panels v-model="tab" animated class="bg-grey-3">
+            <q-tab-panels
+              v-model="tab"
+              animated
+              class="bg-grey-9 text-blue-7"
+              style="color: #b383fc"
+            >
               <q-tab-panel name="finished">
                 <div class="q-pa-md" style="max-width: 850px; padding: 10px">
                   <q-list>
-                    <q-item v-for="match in lastMatches" :key="match.idEvent">
+                    <q-item
+                      clickable
+                      v-for="match in lastMatches"
+                      :key="match.idEvent"
+                      @click="test"
+                    >
                       <q-item-section>
                         <q-item-label> {{ match.strSport }}</q-item-label>
                         <q-item-label caption lines="1">
@@ -253,7 +230,7 @@
                       <q-item-section>
                         {{ match.strHomeTeam }}-{{ match.strAwayTeam }}
                       </q-item-section>
-                      <q-item-section class="text-blue-9">
+                      <q-item-section style="color: #c3ddf4">
                         {{ match.intHomeScore }}-{{ match.intAwayScore }}
                       </q-item-section>
                       <q-item-section side top>
@@ -282,7 +259,7 @@
                       <q-item-section>
                         {{ match.strHomeTeam }}-{{ match.strAwayTeam }}
                       </q-item-section>
-                      <q-item-section class="text-blue-9">
+                      <q-item-section style="color: #c3ddf4">
                         {{ match.intHomeScore }}-{{ match.intAwayScore }}
                       </q-item-section>
                       <q-item-section side top>
@@ -366,7 +343,7 @@
               label="Select sport"
               :options="filteredSports"
               style="width: 30%"
-              bg-color="grey-4"
+              bg-color="grey-8"
               label-color="blue"
               @update:model-value="onSportChange()"
             >
@@ -380,14 +357,18 @@
               label="Select league"
               :options="filteredLeagues"
               style="width: 30%"
-              bg-color="grey-4"
+              bg-color="grey-8"
               label-color="blue"
               @update:model-value="onLeagueChange()"
             >
             </q-select>
           </div-filters>
-          <q-card class="bg-grey-4">
-            <q-tab-panels v-model="tabCourses" animated class="bg-grey-3">
+          <q-card class="bg-grey-9 text-blue-7">
+            <q-tab-panels
+              v-model="tabCourses"
+              animated
+              class="bg-grey-9 text-blue-7"
+            >
               <q-tab-panel name="courses">
                 <div class="q-pa-md" style="max-width: 850px">
                   <div class="q-pa-md" style="max-width: 300px">
@@ -461,7 +442,7 @@
 <script>
 import { ref } from "vue";
 import axios from "axios";
-import MainPageHeader from '@/components/MainPageHeader'
+import MainPageHeader from "@/components/MainPageHeader";
 
 export default {
   name: "home",
@@ -492,19 +473,13 @@ export default {
       filteredSports: [],
       filteredLeagues: [],
       tab: ref("finished"),
-      tab1: ref("allleagues"),
       tabCourses: ref("courses"),
-      sportPage: 1,
-      currentSportPage: 1,
-      totalSportPages: 8,
-      nextSportPage: null,
-      page: 1,
-      currentPage: 1,
-      nextPage: null,
-      totalPages: 12,
     };
   },
   methods: {
+    test() {
+      console.log("test");
+    },
     onSportChange() {
       if (this.modelSport !== null) this.getSportDateEvents();
       else this.getDateEvents();
@@ -599,3 +574,16 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.q-item__label--caption,
+.q-item__label {
+  color: #1e88e5;
+}
+.coupon {
+  border: 1px solid #bbdefb;
+}
+.q-field--filled .q-field__control {
+  background: #616161;
+}
+</style>
