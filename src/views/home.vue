@@ -237,7 +237,9 @@
                         <q-item-label caption>{{
                           match.dateEvent
                         }}</q-item-label>
-                        <q-item-label>{{ match.strTime }}</q-item-label>
+                        <q-item-label>{{
+                          formatPrice(match.strTime)
+                        }}</q-item-label>
                       </q-item-section>
                     </q-item>
                     <q-separator spaced inset />
@@ -266,7 +268,9 @@
                         <q-item-label caption>{{
                           match.dateEvent
                         }}</q-item-label>
-                        <q-item-label>{{ match.strTime }}</q-item-label>
+                        <q-item-label>{{
+                          formatPrice(match.strTime)
+                        }}</q-item-label>
                       </q-item-section>
                     </q-item>
                   </q-list>
@@ -295,8 +299,11 @@
                         {{ match.strHomeTeam }}-{{ match.strAwayTeam }}
                       </q-item-section>
                       <q-item-section side top>
+                        <q-item-label caption>{{
+                          match.dateEvent
+                        }}</q-item-label>
                         <q-item-label>{{
-                          match.strTime || currentDate
+                          formatPrice(match.strTime)
                         }}</q-item-label>
                       </q-item-section>
                     </q-item>
@@ -320,8 +327,11 @@
                         {{ match.strHomeTeam }}-{{ match.strAwayTeam }}
                       </q-item-section>
                       <q-item-section side top>
+                        <q-item-label caption>{{
+                          match.dateEvent
+                        }}</q-item-label>
                         <q-item-label>{{
-                          match.strTime || currentDate
+                          formatPrice(match.strTime)
                         }}</q-item-label>
                       </q-item-section>
                     </q-item>
@@ -425,7 +435,9 @@
                         <q-item-label caption>{{
                           match.dateEvent
                         }}</q-item-label>
-                        <q-item-label>{{ match.strTime }}</q-item-label>
+                        <q-item-label>{{
+                          formatPrice(match.strTime)
+                        }}</q-item-label>
                       </q-item-section>
                     </q-item>
                   </q-list>
@@ -477,6 +489,9 @@ export default {
     };
   },
   methods: {
+    formatPrice(value) {
+      return value.slice(0, 5);
+    },
     test() {
       console.log("test");
     },
