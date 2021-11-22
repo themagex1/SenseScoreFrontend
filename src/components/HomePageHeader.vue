@@ -35,4 +35,16 @@ export default {
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Ubuntu&display=swap");
+
+.q-item,
+q.input,
+q.list,
+p,
+.q-tab,
+.q-btn,
+.q-toolbar {
+  font-family: "Mochiy Pop One", sans-serif;
+  font-family: "Ubuntu", sans-serif;
+}
 </style>

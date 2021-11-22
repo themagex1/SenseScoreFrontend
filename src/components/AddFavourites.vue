@@ -1,13 +1,16 @@
 <template>
   <q-layout view="hHh lpR fFf">
     <HomePageHeader />
+    <HomePageDrawer />
     <q-page-container>
+      <RoutingTabs />
       <div class="q-pa-md">
-        <div class="q-gutter-y-md column" style="max-width: 300px">
+        <div
+          class="q-gutter-y-md row"
+          style="width: 100%; justify-content: center"
+        >
           <q-input
-            rounded
-            bg-color="blue"
-            color="grey-3"
+            color="blue-7"
             v-model="text"
             label="Search"
             @keyup.enter="
@@ -29,13 +32,12 @@
       </section>
 
       <section v-else>
-        <div v-if="loading">Loading...</div>
-        <div class="q-pa-md">
+        <div class="q-pa-md row" style="justify-content: center">
           <q-list
             bordered
             separator
-            class="q-gutter-y-md column"
-            style="max-width: 300px"
+            class="q-gutter-y-md text-primary"
+            style="width: col-2"
           >
             <q-item
               clickable
@@ -73,13 +75,15 @@
 <script>
 import { ref } from "vue";
 import HomePageHeader from "@/components/HomePageHeader";
+import HomePageDrawer from "@/components/HomePageDrawer";
+import RoutingTabs from "@/components/RoutingTabs";
 import axios from "axios";
 
 let url = "https://localhost:5001/api/SportDB/";
 
 export default {
   name: "addFavourites",
-  components: { HomePageHeader },
+  components: { HomePageHeader, RoutingTabs, HomePageDrawer },
   setup() {
     return {
       value: ref(true),
@@ -120,4 +124,11 @@ export default {
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Ubuntu&display=swap");
+.q-item,
+q.input,
+q.list {
+  font-family: "Mochiy Pop One", sans-serif;
+  font-family: "Ubuntu", sans-serif;
+}
 </style>

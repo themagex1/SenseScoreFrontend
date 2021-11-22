@@ -3,6 +3,7 @@
     <MainPageHeader />
     <HomePageDrawer />
     <q-page-container>
+      <RoutingTabs/>
       <div class="q-pa-md">
         <div class="q-gutter-y-md" style="max-width: 320px; float: right">
           <q-card class="coupon shadow-2 rounded-borders">
@@ -283,7 +284,10 @@
             >
               <q-tab-panel name="courses">
                 <div class="q-pa-md" style="max-width: 850px">
-                  <div class="q-pa-md row" style="max-width: 600px">
+                  <div
+                    class="q-pa-md row"
+                    style="max-width: 600px; justify-content: space-between"
+                  >
                     <q-input
                       class="auto-column"
                       filled
@@ -315,8 +319,8 @@
                       </template>
                     </q-input>
                     <q-btn
-                      color="white"
-                      text-color="black"
+                      color="grey-9"
+                      text-color="blue-7"
                       label="Get latest events"
                       @click="getTimeEvents()"
                     />
@@ -516,12 +520,13 @@ import { ref } from "vue";
 import axios from "axios";
 import MainPageHeader from "@/components/MainPageHeader";
 import HomePageDrawer from "@/components/HomePageDrawer";
+import RoutingTabs from "@/components/RoutingTabs";
 
 let url = "https://localhost:5001/api/SportDB/";
 
 export default {
   name: "home",
-  components: { MainPageHeader, HomePageDrawer },
+  components: { MainPageHeader, HomePageDrawer, RoutingTabs },
   setup() {
     const leftDrawerOpen = ref(false);
 
@@ -642,7 +647,7 @@ export default {
       }
       let time = hours - 1 + ":" + minutes + ":" + seconds;
       time = time.split(":").join("");
-      this.filteredMatches = this.liveMatches.filter((d) => {
+      this.filteredMatches = this.filteredMatches.filter((d) => {
         return d.strTime.split(":").join("") > parseInt(time);
       });
     },
@@ -746,6 +751,7 @@ const columns = [
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Ubuntu&display=swap");
 .q-item__label--caption,
 .q-item__label {
   color: #1e88e5;
@@ -755,5 +761,15 @@ const columns = [
 }
 .q-field--filled .q-field__control {
   background: #616161;
+}
+.q-item,
+q.input,
+q.list,
+p,
+.q-tab,
+.q-btn,
+.q-select {
+  font-family: "Mochiy Pop One", sans-serif;
+  font-family: "Ubuntu", sans-serif;
 }
 </style>
