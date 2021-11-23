@@ -5,6 +5,29 @@
     <q-page-container>
       <RoutingTabs />
       <div class="q-pa-md">
+        <q-list
+          class="q-gutter-y-md row"
+          style="justify-content: space-between; border: 1px solid #bbdefb"
+        >
+          <q-item
+            clickable
+            v-ripple
+            v-for="sport in sports"
+            :key="sport.idSport"
+            class="text-blue col-2"
+          >
+            <q-item-section>{{ sport.strSport }}</q-item-section>
+            <q-item-section thumbnail>
+              <img :src="sport.strSportThumb" />
+            </q-item-section>
+            <q-item-section side>
+              <q-icon name="star" />
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </div>
+
+      <div class="q-pa-md">
         <div
           class="q-gutter-y-md row"
           style="width: 100%; justify-content: center"
@@ -16,6 +39,7 @@
             @keyup.enter="
               searchTeams();
               searchPlayers();
+              searchLeagues();
             "
           >
             <template v-slot:append>
@@ -65,6 +89,19 @@
                 <q-icon name="star" />
               </q-item-section>
             </q-item>
+            <q-item
+              clickable
+              v-ripple
+              v-for="league in filteredLeagues"
+              :key="league.idLeague"
+              class="text-blue"
+            >
+              <q-item-section>{{ league.strLeague }}</q-item-section>
+              <q-item-section>{{ league.strSport }}</q-item-section>
+              <q-item-section side>
+                <q-icon name="star" />
+              </q-item-section>
+            </q-item>
           </q-list>
         </div>
       </section>
@@ -96,6 +133,9 @@ export default {
       errored: false,
       searchResult: null,
       searchPlayerResult: null,
+      sports: [],
+      leagues: [],
+      filteredLeagues: [],
     };
   },
   methods: {
@@ -119,6 +159,36 @@ export default {
         })
         .finally(() => (this.loading = false));
     },
+    searchLeagues() {
+      this.filteredLeagues = this.leagues.filter((b) => {
+        return b.strLeague
+          .toLowerCase()
+          .trim()
+          .includes(this.text.toLowerCase().trim());
+      });
+      console.log(this.filteredLeagues);
+    },
+  },
+  mounted() {
+    axios
+      .get(url + "sports")
+      .then((response) => (this.sports = response.data))
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
+
+    axios
+      .get(url + "leagues")
+      .then((response) => {
+        this.leagues = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
   },
 };
 </script>
