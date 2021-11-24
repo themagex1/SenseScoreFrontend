@@ -91,6 +91,11 @@ import { ref } from 'vue'
 import LoginPopUp from '@/components/loginPopUp'
 import RegisterPopup from '@/components/registerPopUp'
 import MainPageHeader from '@/components/MainPageHeader'
+import FetchHelper from '@/helpers/fetchHelper'
+import {
+  setAuthToken,
+  setLoggedInEmail
+} from '@/services/sessionProps'
 
 export default {
   name: 'MainPage',
@@ -116,17 +121,32 @@ export default {
       this.cookiesPolicyAccepted = false
     },
     async signInWithGoogle(){
-      const googleUser = await this.$gAuth.signIn();
-      var id_token = googleUser.getAuthResponse().id_token;
-      await fetch("https://localhost:5001/Account/google-request", {
-      method: 'POST',
+      try {
+        const fetchHelper = new FetchHelper();
+        const googleUser = await this.$gAuth.signIn();
+        var id_token = googleUser.getAuthResponse().id_token;
+        const response = await fetch("https://localhost:5001/Account/google-request", {
+          method: 'POST',
           headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        id_token,
-      }),
-    });
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id_token,
+          })
+        }).then(fetchHelper.handleErrors)
+          .then(res => res.json());
+        console.log(response)
+        setAuthToken(response.access_token)
+        console.log(googleUser)
+        setLoggedInEmail(googleUser.Email)
+        await this.$router.push({
+          name: 'home',
+        })
+      }catch(e)
+      {
+        setAuthToken(null)
+        setLoggedInEmail(null)
+      }
   },
   }
 }

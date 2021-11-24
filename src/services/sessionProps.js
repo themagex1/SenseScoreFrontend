@@ -38,3 +38,4 @@ function removeCookie (cookie_name) {
   document.cookie = cookieName + '=; max-age=-1;'
 }
 export const [getLoggedInEmail, setLoggedInEmail] = createCookie('loggedInEmail')
+export const [getAuthToken, setAuthToken] = createCookie('authToken')
