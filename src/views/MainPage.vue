@@ -10,6 +10,9 @@
             <div class="row justify-center">
               <LoginPopUp/>
               <RegisterPopup/>
+              <Button @click="signInWithGoogle()">
+                Sign in with Google
+              </Button>
             </div>
           </div>
 
@@ -111,7 +114,20 @@ export default {
   methods: {
     acceptCookiesPolicy () {
       this.cookiesPolicyAccepted = false
-    }
+    },
+    async signInWithGoogle(){
+      const googleUser = await this.$gAuth.signIn();
+      var id_token = googleUser.getAuthResponse().id_token;
+      await fetch("https://localhost:5001/Account/google-request", {
+      method: 'POST',
+          headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id_token,
+      }),
+    });
+  },
   }
 }
 </script>
