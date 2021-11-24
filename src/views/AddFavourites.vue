@@ -63,6 +63,7 @@
             class="q-gutter-y-md text-primary"
             style="width: col-2"
           >
+            <q-item-label header v-if="searchResult.length">Teams</q-item-label>
             <q-item
               clickable
               v-ripple
@@ -76,6 +77,9 @@
                 <q-icon name="star" />
               </q-item-section>
             </q-item>
+            <q-item-label header v-if="searchPlayerResult.length"
+              >Athletes</q-item-label
+            >
             <q-item
               clickable
               v-ripple
@@ -89,6 +93,9 @@
                 <q-icon name="star" />
               </q-item-section>
             </q-item>
+            <q-item-label header v-if="filteredLeagues.length"
+              >Leagues</q-item-label
+            >
             <q-item
               clickable
               v-ripple
@@ -131,8 +138,8 @@ export default {
     return {
       loading: true,
       errored: false,
-      searchResult: null,
-      searchPlayerResult: null,
+      searchResult: [],
+      searchPlayerResult: [],
       sports: [],
       leagues: [],
       filteredLeagues: [],
@@ -166,13 +173,17 @@ export default {
           .trim()
           .includes(this.text.toLowerCase().trim());
       });
-      console.log(this.filteredLeagues);
     },
   },
   mounted() {
     axios
       .get(url + "sports")
-      .then((response) => (this.sports = response.data))
+      .then(
+        (response) =>
+          (this.sports = response.data.sort((a, b) => {
+            return a.strSport.localeCompare(b.strSport);
+          }))
+      )
       .catch((error) => {
         console.log(error);
         this.errored = true;

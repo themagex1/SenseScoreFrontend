@@ -23,7 +23,7 @@ const routes = [
     path: '/add-favourites',
     name: 'addFavourites',
 
-    component: () => import(/* webpackChunkName: "about" */ '../components/AddFavourites'),
+    component: () => import(/* webpackChunkName: "about" */ '../views/AddFavourites'),
   },
 ]
 

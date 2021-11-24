@@ -9,7 +9,7 @@ const createCookie = name => [
   },
 ]
 
-function setCookie (cookie_name, cookie_value) {
+function setCookie(cookie_name, cookie_value) {
   const today = new Date()
   let expire = new Date()
   expire.setTime(today.getTime() + 60 * 60 * 1000 * 24 * COOKIE_EXPIRATION_DAYS)
@@ -17,7 +17,7 @@ function setCookie (cookie_name, cookie_value) {
 
 }
 
-function getCookie (cookie_name) {
+function getCookie(cookie_name) {
   let name = cookie_name + '='
   let decodedCookie = decodeURIComponent(document.cookie)
   let cookieArray = decodedCookie.split(';')
@@ -33,8 +33,9 @@ function getCookie (cookie_name) {
   return null
 }
 
-function removeCookie (cookie_name) {
+function removeCookie(cookie_name) {
   const cookieName = encodeURIComponent(cookie_name)
   document.cookie = cookieName + '=; max-age=-1;'
 }
 export const [getLoggedInEmail, setLoggedInEmail] = createCookie('loggedInEmail')
+export const [getAuthToken, setAuthToken] = createCookie('authToken')

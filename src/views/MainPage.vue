@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <MainPageHeader/>
+    <MainPageHeader />
     <q-page-container>
       <div class="fit row wrap container">
         <div class="col self-center column-1">
@@ -8,8 +8,9 @@
             <h1 class="text-light-blue-14 title">YOUR LEAGUE</h1>
             <h1 class="text-light-blue-14 title">YOUR MATCH</h1>
             <div class="row justify-center">
-              <LoginPopUp/>
-              <RegisterPopup/>
+              <LoginPopUp />
+              <RegisterPopup />
+              <Button @click="signInWithGoogle()"> Sign in with Google </Button>
             </div>
           </div>
 
@@ -22,27 +23,27 @@
         <div class="col self-center column-2">
           <div class="section__carousel text-center items-center">
             <q-carousel
-                animated
-                v-model="slide"
-                arrows
-                navigation
-                infinite
-                :autoplay="autoplay"
-                transition-next="slide-left"
-                transition-prev="slide-right"
-                @mouseleave="autoplay = true"
-                @mouseenter="autoplay = false"
+              animated
+              v-model="slide"
+              arrows
+              navigation
+              infinite
+              :autoplay="autoplay"
+              transition-next="slide-left"
+              transition-prev="slide-right"
+              @mouseleave="autoplay = true"
+              @mouseenter="autoplay = false"
             >
-              <q-carousel-slide :name="1" img-src="@/assets/pilka-nozna.jpeg"/>
-              <q-carousel-slide :name="2" img-src="@/assets/koszykowka.jpeg"/>
+              <q-carousel-slide :name="1" img-src="@/assets/pilka-nozna.jpeg" />
+              <q-carousel-slide :name="2" img-src="@/assets/koszykowka.jpeg" />
               <q-carousel-slide
-                  :name="3"
-                  img-src="@/assets/tenis-ziemny.jpeg"
+                :name="3"
+                img-src="@/assets/tenis-ziemny.jpeg"
               />
-              <q-carousel-slide :name="4" img-src="@/assets/pilka-nozna.jpeg"/>
+              <q-carousel-slide :name="4" img-src="@/assets/pilka-nozna.jpeg" />
               <q-carousel-slide
-                  :name="5"
-                  img-src="@/assets/tenis-ziemny.jpeg"
+                :name="5"
+                img-src="@/assets/tenis-ziemny.jpeg"
               />
             </q-carousel>
           </div>
@@ -50,8 +51,8 @@
           <div class="icon-description"></div>
         </div>
         <div
-            class="col column-3"
-            style="
+          class="col column-3"
+          style="
             overflow: auto;
             min-width: 100%;
             max-width: 100%;
@@ -69,51 +70,84 @@
           <div class="footer__box self-center">
             <div class="footer__box-text text-center">
               <span class="text-weight-bold"> Ważna informacja!</span>
-              Ta strona korzysta z plików cookies do przechowywania informacji na Twoim komputerze.
-              Aby uzyskać szczegółowe informacje na temat blokowania plików cookies, zapoznaj się z polityką cookies
+              Ta strona korzysta z plików cookies do przechowywania informacji
+              na Twoim komputerze. Aby uzyskać szczegółowe informacje na temat
+              blokowania plików cookies, zapoznaj się z polityką cookies
             </div>
           </div>
-          <q-space/>
-          <q-btn @click="acceptCookiesPolicy"> Akceptuję politykę cookies</q-btn>
+          <q-space />
+          <q-btn @click="acceptCookiesPolicy">
+            Akceptuję politykę cookies</q-btn
+          >
         </q-toolbar>
       </q-footer>
     </q-page-container>
   </div>
-
-
 </template>
 
 <script>
-import { ref } from 'vue'
-import LoginPopUp from '@/components/loginPopUp'
-import RegisterPopup from '@/components/registerPopUp'
-import MainPageHeader from '@/components/MainPageHeader'
+import { ref } from "vue";
+import LoginPopUp from "@/components/loginPopUp";
+import RegisterPopup from "@/components/registerPopUp";
+import MainPageHeader from "@/components/MainPageHeader";
+import FetchHelper from "@/helpers/fetchHelper";
+import { setAuthToken, setLoggedInEmail } from "@/services/sessionProps";
 
 export default {
-  name: 'MainPage',
+  name: "MainPage",
   components: {
     MainPageHeader,
     LoginPopUp,
     RegisterPopup,
   },
-  setup () {
+  setup() {
     return {
       autoplay: ref(true),
       slide: ref(1),
-
-    }
+    };
   },
-  data () {
+  data() {
     return {
-      cookiesPolicyAccepted: true
-    }
+      cookiesPolicyAccepted: true,
+    };
   },
   methods: {
-    acceptCookiesPolicy () {
-      this.cookiesPolicyAccepted = false
-    }
-  }
-}
+    acceptCookiesPolicy() {
+      this.cookiesPolicyAccepted = false;
+    },
+    async signInWithGoogle() {
+      try {
+        const fetchHelper = new FetchHelper();
+        const googleUser = await this.$gAuth.signIn();
+        var id_token = googleUser.getAuthResponse().id_token;
+        const response = await fetch(
+          "https://localhost:5001/Account/google-request",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id_token,
+            }),
+          }
+        )
+          .then(fetchHelper.handleErrors)
+          .then((res) => res.json());
+        console.log(response);
+        setAuthToken(response.access_token);
+        console.log(googleUser);
+        setLoggedInEmail(googleUser.Email);
+        await this.$router.push({
+          name: "home",
+        });
+      } catch (e) {
+        setAuthToken(null);
+        setLoggedInEmail(null);
+      }
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">

@@ -3,7 +3,7 @@
     <MainPageHeader />
     <HomePageDrawer />
     <q-page-container>
-      <RoutingTabs/>
+      <RoutingTabs />
       <div class="q-pa-md">
         <div class="q-gutter-y-md" style="max-width: 320px; float: right">
           <q-card class="coupon shadow-2 rounded-borders">
@@ -11,22 +11,25 @@
               <q-item class="q-mb-md" v-ripple>
                 <q-item-section style="color: #bbdefb">COUPON</q-item-section>
               </q-item>
-              <q-item v-ripple class="bg-grey-8 q-mb-sm">
-                <q-item-section class="text-blue-6"
-                  >Poland-Andorra</q-item-section
+              <div v-if="!coupon.length">Coupon is empty</div>
+              <div v-else>
+                <q-item
+                  v-for="c in coupon"
+                  :key="c.id"
+                  v-ripple
+                  class="bg-grey-8 q-mb-sm"
                 >
-                <q-item-section side class="text-blue-6">1.45</q-item-section>
-                <q-item-section side>
-                  <q-icon name="delete" class="text-blue-6" />
-                </q-item-section>
-              </q-item>
-              <q-item v-ripple class="bg-grey-8">
-                <q-item-section class="text-blue-6">X-Y</q-item-section>
-                <q-item-section side class="text-blue-6">2.30</q-item-section>
-                <q-item-section side>
-                  <q-icon name="delete" class="text-blue-6" />
-                </q-item-section>
-              </q-item>
+                  <q-item-section class="text-blue-6"
+                    >{{ c.p1 }}-{{ c.p2 }}</q-item-section
+                  >
+                  <q-item-section side class="text-blue-6"
+                    >{{ c.course1 }} {{ c.course2 }}</q-item-section
+                  >
+                  <q-item-section side>
+                    <q-icon name="delete" class="text-blue-6" />
+                  </q-item-section>
+                </q-item>
+              </div>
               <q-separator />
               <q-item v-ripple>
                 <q-item-section>
@@ -35,7 +38,7 @@
                 </q-item-section>
                 <q-item-section style="text-align: right">
                   <q-item-label overline>Course:</q-item-label>
-                  <q-item-label>3.34</q-item-label>
+                  <q-item-label>{{ countCourses() }}</q-item-label>
                 </q-item-section>
               </q-item>
               <q-item v-ripple>
@@ -374,6 +377,15 @@
                               formatPrice(match.strTime)
                             }}</q-item-label>
                           </q-item-section>
+                          <q-item-section side
+                            ><q-btn
+                              flat
+                              round
+                              icon="add"
+                              @click="
+                                add(match.strHomeTeam, match.strAwayTeam)
+                              "
+                          /></q-item-section>
                         </q-item>
                       </q-scroll-area>
                     </q-list>
@@ -568,9 +580,33 @@ export default {
       tab: ref("finished"),
       tabCourses: ref("courses"),
       columns,
+      coupon: [
+        {
+          id: 1,
+          p1: "Poland",
+          p2: "Andora",
+          course1: 1.5,
+          course2: 2,
+        },
+      ],
     };
   },
   methods: {
+    countCourses() {
+      let couponCourse = 1.0;
+      for (let i in this.coupon) {
+        couponCourse *= this.coupon[i].course1;
+      }
+      return couponCourse.toFixed(2);
+    },
+    add(team1, team2) {
+      this.coupon.push({
+        p1: team1,
+        p2: team2,
+        course1: 1.3,
+        course2: 3.1,
+      });
+    },
     live(id, team1Id, team2Id, idLeague, strSeason) {
       const requestOne = axios.get(url + `matches/lastbyteam/${team1Id}`);
       const requestTwo = axios.get(url + `matchstats/${id}`);
