@@ -20,7 +20,7 @@
           color="grey-9"
           flat
           no-caps
-          to="/home"
+          to=""
           >Home
         </q-btn>
       </div>
@@ -31,7 +31,7 @@
           color="grey-9"
           flat
           no-caps
-          to="/about"
+          to=""
           >About Us
         </q-btn>
       </div>

@@ -11,41 +11,60 @@
               <q-item class="q-mb-md" v-ripple>
                 <q-item-section style="color: #bbdefb">COUPON</q-item-section>
               </q-item>
-              <div v-if="!coupon.length">Coupon is empty</div>
+              <div v-if="!coupon[0].positions.length">
+                <p>Your coupon is empty</p>
+                <p>Add a bid from live matches</p>
+              </div>
               <div v-else>
-                <q-item
-                  v-for="c in coupon"
-                  :key="c.id"
-                  v-ripple
-                  class="bg-grey-8 q-mb-sm"
+                <q-list
+                  v-for="coupon in coupon"
+                  :key="coupon.id"
+                  style="width: 220px; border: 1px solid blue"
                 >
-                  <q-item-section class="text-blue-6"
-                    >{{ c.p1 }}-{{ c.p2 }}</q-item-section
+                  <q-item
+                    v-for="position in coupon.positions"
+                    :key="position.eventID"
                   >
-                  <q-item-section side class="text-blue-6"
-                    >{{ c.course1 }} {{ c.course2 }}</q-item-section
-                  >
-                  <q-item-section side>
-                    <q-icon name="delete" class="text-blue-6" />
+                    <q-item-section>
+                      <q-item-label>{{ position.eventID }}</q-item-label>
+                      <q-item-label caption>Event ID</q-item-label>
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>{{ position.odds }}</q-item-label>
+                      <q-item-label caption>Odd</q-item-label>
+                    </q-item-section>
+                    <q-item-section>
+                      <q-btn icon="delete" @click="removeEvent(position)" />
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+                <q-separator />
+                <q-item v-ripple>
+                  <q-item-section>
+                    <q-item-label overline>To pay:</q-item-label>
+                    <q-item-label
+                      ><q-input outlined v-model="text" label="Bet"
+                    /></q-item-label>
+                  </q-item-section>
+                  <q-item-section style="text-align: right">
+                    <q-item-label overline>Course:</q-item-label>
+                    <q-item-label>{{ countCourses() }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-item v-ripple>
+                  <q-item-section v-if="text.length">
+                    Potential win: {{ roundDecimal }}
+                  </q-item-section>
+                  <q-item-section v-else
+                    >Potential win: {{ roundDecimal }}
+                  </q-item-section>
+                </q-item>
+                <q-item v-ripple>
+                  <q-item-section
+                    ><q-btn @click="play()" color="primary" label="PLAY" />
                   </q-item-section>
                 </q-item>
               </div>
-              <q-separator />
-              <q-item v-ripple>
-                <q-item-section>
-                  <q-item-label overline>To pay:</q-item-label>
-                  <q-item-label>5$</q-item-label>
-                </q-item-section>
-                <q-item-section style="text-align: right">
-                  <q-item-label overline>Course:</q-item-label>
-                  <q-item-label>{{ countCourses() }}</q-item-label>
-                </q-item-section>
-              </q-item>
-              <q-item v-ripple>
-                <q-item-section
-                  ><q-btn color="primary" label="PLAY" />
-                </q-item-section>
-              </q-item>
             </q-tab-panel>
           </q-card>
         </div>
@@ -335,23 +354,12 @@
                     </p>
                   </section>
                   <section v-else>
-                    <q-list>
-                      <q-scroll-area style="height: 300px">
-                        <q-item
-                          clickable
-                          v-for="match in filteredMatches"
-                          :key="match.idEvent"
-                          @click="
-                            (eventCard = true),
-                              live(
-                                match.idEvent,
-                                match.idHomeTeam,
-                                match.idAwayTeam,
-                                match.idLeague,
-                                match.strSeason
-                              )
-                          "
-                        >
+                    <q-scroll-area style="height: 300px">
+                      <q-list
+                        v-for="match in filteredMatches"
+                        :key="match.idEvent"
+                      >
+                        <q-item>
                           <q-item-section>
                             <q-item-label> {{ match.strSport }} </q-item-label>
                             <q-item-label caption lines="1"
@@ -377,18 +385,61 @@
                               formatPrice(match.strTime)
                             }}</q-item-label>
                           </q-item-section>
-                          <q-item-section side
-                            ><q-btn
-                              flat
-                              round
-                              icon="add"
-                              @click="
-                                add(match.strHomeTeam, match.strAwayTeam)
-                              "
-                          /></q-item-section>
+                          <q-item-section side top>
+                            <q-item-label caption
+                              >Courses [W1/D/W2]</q-item-label
+                            >
+                            <q-item-label
+                              ><q-btn
+                                @click="
+                                  (eventCard = false),
+                                    add(match.idEvent, match.homeOdds)
+                                "
+                              >
+                                {{ match.homeOdds }}</q-btn
+                              >
+                              <q-btn
+                                @click="
+                                  (eventCard = false),
+                                    add(match.idEvent, match.awayOdds)
+                                "
+                              >
+                                {{ match.awayOdds }}</q-btn
+                              >
+                              <q-btn
+                                @click="
+                                  (eventCard = false),
+                                    add(match.idEvent, match.drawOdds)
+                                "
+                              >
+                                {{ match.drawOdds }}</q-btn
+                              >
+                            </q-item-label>
+                          </q-item-section>
+                          <q-item-section
+                            v-if="match.strSport == 'Soccer'"
+                            side
+                            top
+                          >
+                            <q-item-label caption
+                              ><q-btn
+                                @click="
+                                  (eventCard = true),
+                                    live(
+                                      match.idEvent,
+                                      match.idHomeTeam,
+                                      match.idAwayTeam,
+                                      match.idLeague,
+                                      match.strSeason
+                                    )
+                                "
+                                >Details</q-btn
+                              ></q-item-label
+                            >
+                          </q-item-section>
                         </q-item>
-                      </q-scroll-area>
-                    </q-list>
+                      </q-list>
+                    </q-scroll-area>
                   </section>
                 </div>
               </q-tab-panel>
@@ -399,7 +450,7 @@
 
       <q-dialog v-model="eventCard">
         <div class="q-pa-md">
-          <q-card style="width: 500px">
+          <q-card>
             <q-tabs
               v-model="matchTab"
               dense
@@ -407,6 +458,7 @@
               active-color="primary"
               indicator-color="primary"
               align="justify"
+              style="width: 500px"
             >
               <q-tab name="match" label="Match" />
               <q-tab name="h2h" label="H2H" />
@@ -415,7 +467,11 @@
 
             <q-separator />
 
-            <q-tab-panels v-model="matchTab" animated>
+            <q-tab-panels
+              v-model="matchTab"
+              animated
+              style="width: 500px; height: 800px"
+            >
               <q-tab-panel name="match" class="q-pa-none">
                 <q-splitter v-model="splitterModel">
                   <template v-slot:before>
@@ -507,7 +563,6 @@
               <q-tab-panel name="table">
                 <div v-if="rowsTable !== null">
                   <q-table
-                    style="width: 500px"
                     title="Table"
                     :rows="rowsTable"
                     :columns="columns"
@@ -534,6 +589,8 @@ import MainPageHeader from "@/components/MainPageHeader";
 import HomePageDrawer from "@/components/HomePageDrawer";
 import RoutingTabs from "@/components/RoutingTabs";
 
+const bearer = localStorage.getItem("bearer");
+
 let url = "https://localhost:5001/api/SportDB/";
 
 export default {
@@ -541,8 +598,9 @@ export default {
   components: { MainPageHeader, HomePageDrawer, RoutingTabs },
   setup() {
     const leftDrawerOpen = ref(false);
-
     return {
+      testError: false,
+      text: ref(""),
       leftDrawerOpen,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
@@ -553,6 +611,7 @@ export default {
     return {
       loading: true,
       errored: false,
+      success: false,
       rowsTable: [],
       date: ref(this.currentDate()),
       sport: ref(null),
@@ -582,30 +641,85 @@ export default {
       columns,
       coupon: [
         {
-          id: 1,
-          p1: "Poland",
-          p2: "Andora",
-          course1: 1.5,
-          course2: 2,
+          rate: 3,
+          totalOdds: 2.5,
+          positions: [],
         },
       ],
     };
   },
+  computed: {
+    roundDecimal: function () {
+      return (this.countCourses() * this.toInt()).toFixed(2);
+    },
+  },
   methods: {
+    toInt() {
+      if (this.text == "") {
+        return (this.text = 5);
+      }
+      return parseInt(this.text);
+    },
+    play() {
+      this.coupon[0].totalOdds = this.countCourses();
+      this.coupon[0].rate = this.toInt();
+      axios({
+        method: "post",
+        baseURL: "https://localhost:5001/api/" + "Betting/tickets",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+        data: this.coupon[0],
+      })
+        .then(function (response) {
+          console.log(response);
+          return true;
+        })
+        .catch(function (error) {
+          console.log(error);
+          if (error.response) {
+            console.log(error.response.data);
+            // => the response payload
+          }
+          return false;
+        });
+    },
+    removeEvent(match) {
+      this.coupon[0].positions.splice(
+        this.coupon[0].positions.indexOf(match),
+        1
+      );
+    },
     countCourses() {
       let couponCourse = 1.0;
       for (let i in this.coupon) {
-        couponCourse *= this.coupon[i].course1;
+        for (let j in this.coupon[i].positions) {
+          couponCourse *= this.coupon[i].positions[j].odds;
+          this.coupon.totalOdds = couponCourse;
+        }
       }
       return couponCourse.toFixed(2);
     },
-    add(team1, team2) {
-      this.coupon.push({
-        p1: team1,
-        p2: team2,
-        course1: 1.3,
-        course2: 3.1,
-      });
+    add(eventId, course) {
+      let valid = true;
+      for (let i = 0; i < this.coupon[0].positions.length; i++) {
+        if (this.coupon[0].positions[i].eventID == eventId) {
+          valid = false;
+        }
+      }
+      if (valid)
+        this.coupon[0].positions.push({
+          eventID: eventId,
+          choice: 0,
+          odds: course,
+        });
+      else {
+        for (let i = 0; i < this.coupon[0].positions.length; i++) {
+          if (this.coupon[0].positions[i].eventID == eventId) {
+            this.coupon[0].positions[i].odds = course;
+          }
+        }
+      }
     },
     live(id, team1Id, team2Id, idLeague, strSeason) {
       const requestOne = axios.get(url + `matches/lastbyteam/${team1Id}`);
@@ -708,15 +822,9 @@ export default {
       })
       .finally(() => (this.loading = false));
     axios.get(url + "leagues").then((response) => {
-      response.data
-        .forEach((element) => {
-          this.filteredLeagues.push(element.strLeague);
-        })
-        .catch((error) => {
-          console.log(error);
-          this.errored = true;
-        })
-        .finally(() => (this.loading = false));
+      response.data.forEach((element) => {
+        this.filteredLeagues.push(element.strLeague);
+      });
     });
     axios
       .get(url + "sports")
@@ -727,15 +835,9 @@ export default {
       })
       .finally(() => (this.loading = false));
     axios.get(url + "sports").then((response) => {
-      response.data
-        .forEach((element) => {
-          this.filteredSports.push(element.strSport);
-        })
-        .catch((error) => {
-          console.log(error);
-          this.errored = true;
-        })
-        .finally(() => (this.loading = false));
+      response.data.forEach((element) => {
+        this.filteredSports.push(element.strSport);
+      });
     });
     axios
       .get(url + "matches/lastbyteam/133901")
@@ -754,6 +856,12 @@ export default {
       .then((response) => {
         this.liveMatches = response.data;
         this.filteredMatches = this.liveMatches;
+
+        this.filteredMatches.forEach((e) => {
+          e.course1 = (Math.random() * (5.0 - 1.01 + 1) + 1.01).toFixed(2);
+          e.course2 = (Math.random() * (5.0 - 1.01 + 1) + 1.01).toFixed(2);
+          e.coursed = (Math.random() * (5.0 - 1.01 + 1) + 1.01).toFixed(2);
+        });
       })
       .catch((error) => {
         console.log(error);

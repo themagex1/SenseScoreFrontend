@@ -20,6 +20,12 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/home'),
   },
   {
+    path: '/coupons',
+    name: 'Coupons',
+
+    component: () => import(/* webpackChunkName: "about" */ '../views/Coupons'),
+  },
+  {
     path: '/add-favourites',
     name: 'addFavourites',
 

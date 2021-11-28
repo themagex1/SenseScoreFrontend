@@ -134,10 +134,11 @@ export default {
         )
           .then(fetchHelper.handleErrors)
           .then((res) => res.json());
-        console.log(response);
+        localStorage.setItem("bearer", response.access_token);
         setAuthToken(response.access_token);
         console.log(googleUser);
         setLoggedInEmail(googleUser.Email);
+
         await this.$router.push({
           name: "home",
         });

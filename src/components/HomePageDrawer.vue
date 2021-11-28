@@ -30,46 +30,16 @@
           header-class="text-blue"
           default-opened
         >
-          <q-item clickable v-ripple>
+          <q-item
+            clickable
+            v-ripple
+            v-for="sport in favouriteSports"
+            :key="sport"
+          >
             <q-item-section avatar>
               <q-icon color="primary" name="sports_soccer" />
             </q-item-section>
-            <q-item-section>Football</q-item-section>
-          </q-item>
-
-          <q-item clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon color="primary" name="sports_tennis" />
-            </q-item-section>
-            <q-item-section>Tennis</q-item-section>
-          </q-item>
-
-          <q-item clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon color="primary" name="sports_basketball" />
-            </q-item-section>
-            <q-item-section>Basketball</q-item-section>
-          </q-item>
-
-          <q-item clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon color="primary" name="sports_volleyball" />
-            </q-item-section>
-            <q-item-section>Volleyball</q-item-section>
-          </q-item>
-
-          <q-item clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon color="primary" name="sports_cricket" />
-            </q-item-section>
-            <q-item-section>Cricket</q-item-section>
-          </q-item>
-
-          <q-item clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon color="primary" name="pool" />
-            </q-item-section>
-            <q-item-section>Swimming</q-item-section>
+            <q-item-section>{{ sport }}</q-item-section>
           </q-item>
         </q-expansion-item>
 
@@ -79,8 +49,13 @@
           label="Favourite athlete"
           header-class="text-blue"
         >
-          <q-item clickable v-ripple>
-            <q-item-section>Robert Lewandowski</q-item-section>
+          <q-item
+            clickable
+            v-ripple
+            v-for="athlete in favouriteAthletes"
+            :key="athlete"
+          >
+            <q-item-section>{{ athlete }}</q-item-section>
           </q-item>
         </q-expansion-item>
 
@@ -90,16 +65,10 @@
           label="Favourite teams"
           header-class="text-blue"
         >
-          <q-item clickable v-ripple>
+          <q-item clickable v-ripple v-for="team in favouriteTeams" :key="team">
             <q-item-section>
-              <q-item-section>Polska</q-item-section>
-              <q-item-label caption>Football</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item clickable v-ripple>
-            <q-item-section>
-              <q-item-section>FC Barcelona</q-item-section>
-              <q-item-label caption>Football</q-item-label>
+              <q-item-section>{{ team.name }}</q-item-section>
+              <q-item-label caption>{{ team.sport }}</q-item-label>
             </q-item-section>
           </q-item>
         </q-expansion-item>
@@ -110,10 +79,15 @@
           label="Favourite leagues"
           header-class="text-blue"
         >
-          <q-item clickable v-ripple>
+          <q-item
+            clickable
+            v-ripple
+            v-for="league in favouriteLeagues"
+            :key="league"
+          >
             <q-item-section>
-              <q-item-section>Premier League</q-item-section>
-              <q-item-label caption>Football</q-item-label>
+              <q-item-section>{{ league.name }}</q-item-section>
+              <q-item-label caption>{{ league.sport }}</q-item-label>
             </q-item-section>
           </q-item>
         </q-expansion-item>
@@ -140,6 +114,23 @@ export default {
   setup() {
     return {
       value: ref(true),
+      favouriteSports: [
+        "Football",
+        "Tennis",
+        "Basketball",
+        "Volleyball",
+        "Cricket",
+        "Swimming",
+      ],
+      favouriteAthletes: ["Robet Lewandowski", "Kamil Stoch"],
+      favouriteTeams: [
+        { name: "Poland", sport: "Soccer" },
+        { name: "FC Barcelona", sport: "Soccer" },
+      ],
+      favouriteLeagues: [
+        { name: "English Premier League", sport: "Soccer" },
+        { name: "PKO BP Ekstraklasa", sport: "Soccer" },
+      ],
     };
   },
 };

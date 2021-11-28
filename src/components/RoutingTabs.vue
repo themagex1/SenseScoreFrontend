@@ -4,8 +4,8 @@
       <q-tabs v-model="tab" no-caps class="text-grey-10 shadow-2">
         <q-route-tab label="Events" to="/home" exact />
         <q-route-tab label="Favourites" to="/add-favourites" exact />
+        <q-route-tab label="Coupons" to="/coupons" exact />
         <q-route-tab label="Ranks" to="" exact />
-        <q-route-tab label="Placeholder" to="" exact />
       </q-tabs>
     </div>
   </div>

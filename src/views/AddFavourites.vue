@@ -10,7 +10,6 @@
           style="justify-content: space-between; border: 1px solid #bbdefb"
         >
           <q-item
-            clickable
             v-ripple
             v-for="sport in sports"
             :key="sport.idSport"
@@ -21,7 +20,12 @@
               <img :src="sport.strSportThumb" />
             </q-item-section>
             <q-item-section side>
-              <q-icon name="star" />
+              <q-btn
+                flat
+                round
+                icon="star"
+                @click="addFavourite(sport.strSport)"
+              />
             </q-item-section>
           </q-item>
         </q-list>
@@ -143,9 +147,20 @@ export default {
       sports: [],
       leagues: [],
       filteredLeagues: [],
+      favouriteSports: [
+        "Football",
+        "Tennis",
+        "Basketball",
+        "Volleyball",
+        "Cricket",
+        "Swimming",
+      ],
     };
   },
   methods: {
+    addFavourite(team) {
+      this.favouriteSports.push(team);
+    },
     searchTeams() {
       return axios
         .get(url + `search/teams/${this.text}`)
