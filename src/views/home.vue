@@ -773,15 +773,11 @@ export default {
     },
     onSportChange() {
       if (this.modelSport !== null) this.getSportDateEvents();
-      else if (this.modelSport === null && this.modelLeague !== null)
-        this.getLeagueDateEvents();
       else this.getDateEvents();
     },
     onLeagueChange() {
       if (this.modelLeague !== null) this.getLeagueDateEvents();
-      else if (this.modelLeague === null && this.modelSport !== null)
-        this.getSportDateEvents();
-      else this.getDateEvents();
+      else this.getSportDateEvents();
     },
     currentDate() {
       const current = new Date();
@@ -816,19 +812,25 @@ export default {
       }
       let time = hours - 1 + ":" + minutes + ":" + seconds;
       time = time.split(":").join("");
-      this.filteredMatches = this.filteredMatches.filter((d) => {
+      return this.filteredMatches.filter((d) => {
         return d.strTime.split(":").join("") > parseInt(time);
       });
     },
     getSportDateEvents() {
-      this.filteredMatches = this.filteredMatches.filter(
+      console.log(
+        this.filteredMatches.filter((b) => b.strSport === this.modelSport)
+      );
+      this.filteredMatches = this.liveMatches.filter(
         (b) => b.strSport === this.modelSport
       );
+      return this.filteredMatches;
     },
     getLeagueDateEvents() {
       this.filteredMatches = this.filteredMatches.filter(
         (b) => b.strLeague === this.modelLeague
       );
+      console.log(this.filteredMatches);
+      return this.filteredMatches;
     },
   },
   mounted() {
