@@ -36,7 +36,16 @@
             flat
             @click="login"
           ></q-btn>
-          <LoginPopUp/>
+          <q-btn
+            color="primary"
+            text-color="white"
+            push
+            label="Sign in"
+            icon="login"
+            flat
+            @click="login"
+          ></q-btn>
+          <LoginPopUp />
           <q-btn
             color="primary"
             text-color="white"
@@ -55,7 +64,7 @@
                 SIGN UP
               </div>
               <!--Register form -->
-              <div  style="min-height: 35vh; min-width: 50vh">
+              <div style="min-height: 35vh; min-width: 50vh">
                 <div class="q-pa-md flex-center column">
                   <q-form
                     @submit="onSubmit"
@@ -156,16 +165,16 @@
 <script>
 import { ref } from "vue";
 import { useQuasar } from "quasar";
-import LoginPopUp from '@/components/loginPopUp'
+import LoginPopUp from "@/components/loginPopUp";
 
 export default {
   name: "LoginRegister",
   components: { LoginPopUp },
   data() {},
   methods: {
-    login(){
-      this.$router.push('/login')
-    }
+    login() {
+      this.$router.push("/login");
+    },
   },
   setup() {
     const $q = useQuasar();
@@ -177,6 +186,14 @@ export default {
       name,
       password,
       accept,
+      notify() {
+        $q.notify({
+          color: "red-5",
+          textColor: "white",
+          icon: "warning",
+          message: "You need to accept the license and terms first",
+        });
+      },
       onSubmit() {
         if (accept.value !== true) {
           $q.notify({

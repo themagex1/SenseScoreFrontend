@@ -36,9 +36,6 @@
             v-for="sport in favouriteSports"
             :key="sport"
           >
-            <q-item-section avatar>
-              <q-icon color="primary" name="sports_soccer" />
-            </q-item-section>
             <q-item-section>{{ sport }}</q-item-section>
           </q-item>
         </q-expansion-item>

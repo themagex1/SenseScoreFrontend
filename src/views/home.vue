@@ -61,9 +61,18 @@
                 </q-item>
                 <q-item v-ripple>
                   <q-item-section
-                    ><q-btn @click="play()" color="primary" label="PLAY" />
+                    ><q-btn
+                      @click="play()"
+                      :disabled="testError"
+                      color="primary"
+                      label="PLAY"
+                    />
                   </q-item-section>
                 </q-item>
+                <p v-if="success !== 'Success'" style="color: red">
+                  {{ success }}
+                </p>
+                <p v-else>{{ success }}</p>
               </div>
             </q-tab-panel>
           </q-card>
@@ -329,7 +338,7 @@
                               <div class="row items-center justify-end">
                                 <q-btn
                                   v-close-popup
-                                  label="Close"
+                                  label="Ok"
                                   color="primary"
                                   flat
                                   @click="getDateEvents()"
@@ -347,7 +356,7 @@
                       @click="getTimeEvents()"
                     />
                   </div>
-                  <section v-if="errored">
+                  <section v-if="loading">
                     <p>
                       We're sorry, we're not able to retrieve this information
                       at the moment, please try back later
@@ -611,7 +620,7 @@ export default {
     return {
       loading: true,
       errored: false,
-      success: false,
+      success: "",
       rowsTable: [],
       date: ref(this.currentDate()),
       sport: ref(null),
@@ -639,6 +648,7 @@ export default {
       tab: ref("finished"),
       tabCourses: ref("courses"),
       columns,
+      favTeams: [],
       coupon: [
         {
           rate: 3,
@@ -661,6 +671,7 @@ export default {
       return parseInt(this.text);
     },
     play() {
+      let self = this;
       this.coupon[0].totalOdds = this.countCourses();
       this.coupon[0].rate = this.toInt();
       axios({
@@ -672,16 +683,15 @@ export default {
         data: this.coupon[0],
       })
         .then(function (response) {
+          self.success = "Success";
           console.log(response);
-          return true;
         })
         .catch(function (error) {
-          console.log(error);
           if (error.response) {
-            console.log(error.response.data);
+            self.success = error.response.data;
             // => the response payload
           }
-          return false;
+          console.log(error);
         });
     },
     removeEvent(match) {
@@ -763,10 +773,14 @@ export default {
     },
     onSportChange() {
       if (this.modelSport !== null) this.getSportDateEvents();
+      else if (this.modelSport === null && this.modelLeague !== null)
+        this.getLeagueDateEvents();
       else this.getDateEvents();
     },
     onLeagueChange() {
       if (this.modelLeague !== null) this.getLeagueDateEvents();
+      else if (this.modelLeague === null && this.modelSport !== null)
+        this.getSportDateEvents();
       else this.getDateEvents();
     },
     currentDate() {
@@ -779,7 +793,12 @@ export default {
     getDateEvents() {
       return axios
         .get(url + `matches/${this.date}`)
-        .then((response) => (this.filteredMatches = response.data));
+        .then((response) => (this.filteredMatches = response.data))
+        .catch((error) => {
+          console.log(error);
+          this.errored = true;
+        })
+        .finally(() => (this.loading = false));
     },
     getTimeEvents() {
       let today = new Date();
@@ -802,17 +821,21 @@ export default {
       });
     },
     getSportDateEvents() {
-      this.filteredMatches = this.liveMatches.filter(
+      this.filteredMatches = this.filteredMatches.filter(
         (b) => b.strSport === this.modelSport
       );
     },
     getLeagueDateEvents() {
-      this.filteredMatches = this.liveMatches.filter(
+      this.filteredMatches = this.filteredMatches.filter(
         (b) => b.strLeague === this.modelLeague
       );
     },
   },
   mounted() {
+    /* axios
+      .get("https://localhost:5001/api/SportDB/favourite/teams")
+      .then((response) => (this.favTeams = response.data))
+      .finally(() => (this.loading = false));*/
     axios
       .get(url + "leagues")
       .then((response) => (this.leagues = response.data))
@@ -852,16 +875,18 @@ export default {
       })
       .finally(() => (this.loading = false));
     axios
+      .get(url + "matches/nextbyteam/134880")
+      .then((response) => (this.nextMatches = response.data))
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
+    axios
       .get(url + `matches/${this.date}`)
       .then((response) => {
         this.liveMatches = response.data;
         this.filteredMatches = this.liveMatches;
-
-        this.filteredMatches.forEach((e) => {
-          e.course1 = (Math.random() * (5.0 - 1.01 + 1) + 1.01).toFixed(2);
-          e.course2 = (Math.random() * (5.0 - 1.01 + 1) + 1.01).toFixed(2);
-          e.coursed = (Math.random() * (5.0 - 1.01 + 1) + 1.01).toFixed(2);
-        });
       })
       .catch((error) => {
         console.log(error);

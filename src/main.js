@@ -5,6 +5,7 @@ import quasarUserOptions from './quasar-user-options'
 import router from './router'
 import GAuth from 'vue3-google-oauth2'
 
+
 const gauthOption = {
     clientId: '32514753217-v7buuqeo4375k1aq1fg3fg2akps6cjjl.apps.googleusercontent.com',
     scope: 'profile email',
