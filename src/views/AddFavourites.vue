@@ -69,7 +69,6 @@
           >
             <q-item-label header v-if="searchResult.length">Teams</q-item-label>
             <q-item
-              clickable
               v-ripple
               v-for="team in searchResult"
               :key="team.idTeam"
@@ -78,14 +77,18 @@
               <q-item-section>{{ team.strTeam }}</q-item-section>
               <q-item-section>{{ team.strSport }}</q-item-section>
               <q-item-section side>
-                <q-icon name="star" />
+                <q-btn
+                  round
+                  color="primary"
+                  icon="star"
+                  @click="addFav('team', team.idTeam)"
+                />
               </q-item-section>
             </q-item>
             <q-item-label header v-if="searchPlayerResult.length"
               >Athletes</q-item-label
             >
             <q-item
-              clickable
               v-ripple
               v-for="team in searchPlayerResult"
               :key="team.idTeam"
@@ -101,7 +104,6 @@
               >Leagues</q-item-label
             >
             <q-item
-              clickable
               v-ripple
               v-for="league in filteredLeagues"
               :key="league.idLeague"
@@ -110,7 +112,12 @@
               <q-item-section>{{ league.strLeague }}</q-item-section>
               <q-item-section>{{ league.strSport }}</q-item-section>
               <q-item-section side>
-                <q-icon name="star" />
+                <q-btn
+                  round
+                  color="primary"
+                  icon="star"
+                  @click="addFav('league', league.idLeague)"
+                />
               </q-item-section>
             </q-item>
           </q-list>
@@ -128,6 +135,7 @@ import RoutingTabs from "@/components/RoutingTabs";
 import axios from "axios";
 
 let url = "https://localhost:5001/api/SportDB/";
+const bearer = localStorage.getItem("bearer");
 
 export default {
   name: "addFavourites",
@@ -158,8 +166,24 @@ export default {
     };
   },
   methods: {
-    addFavourite(team) {
-      this.favouriteSports.push(team);
+    addFav(category, id) {
+      axios({
+        method: "post",
+        baseURL: "https://localhost:5001/" + "Account/favourite",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+        data: {
+          category: category,
+          id: id,
+        },
+      })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
     searchTeams() {
       return axios

@@ -36,7 +36,7 @@
             v-for="sport in favouriteSports"
             :key="sport"
           >
-            <q-item-section>{{ sport }}</q-item-section>
+            <q-item-section>{{ sport.strSport }}</q-item-section>
           </q-item>
         </q-expansion-item>
 
@@ -64,8 +64,7 @@
         >
           <q-item clickable v-ripple v-for="team in favouriteTeams" :key="team">
             <q-item-section>
-              <q-item-section>{{ team.name }}</q-item-section>
-              <q-item-label caption>{{ team.sport }}</q-item-label>
+              <q-item-section>{{ team.strTeam }}</q-item-section>
             </q-item-section>
           </q-item>
         </q-expansion-item>
@@ -83,8 +82,8 @@
             :key="league"
           >
             <q-item-section>
-              <q-item-section>{{ league.name }}</q-item-section>
-              <q-item-label caption>{{ league.sport }}</q-item-label>
+              <q-item-section>{{ league.strLeague }}</q-item-section>
+              <q-item-label caption>{{ league.strSport }}</q-item-label>
             </q-item-section>
           </q-item>
         </q-expansion-item>
@@ -105,30 +104,71 @@
 
 <script>
 import { ref } from "vue";
+import axios from "axios";
+
+const bearer = localStorage.getItem("bearer");
+let url = "https://localhost:5001/api/";
 
 export default {
   name: "home-page-header",
   setup() {
     return {
+      favouriteTeams: [],
       value: ref(true),
-      favouriteSports: [
-        "Football",
-        "Tennis",
-        "Basketball",
-        "Volleyball",
-        "Cricket",
-        "Swimming",
-      ],
+      favouriteSports: [],
       favouriteAthletes: ["Robet Lewandowski", "Kamil Stoch"],
-      favouriteTeams: [
-        { name: "Poland", sport: "Soccer" },
-        { name: "FC Barcelona", sport: "Soccer" },
-      ],
-      favouriteLeagues: [
-        { name: "English Premier League", sport: "Soccer" },
-        { name: "PKO BP Ekstraklasa", sport: "Soccer" },
-      ],
+      favouriteLeagues: [],
     };
+  },
+  mounted() {
+    axios
+      .request({
+        method: "get",
+        baseURL: url + "SportDB/favourite/teams",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+      })
+      .then((response) => {
+        this.favouriteTeams = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
+    axios
+      .request({
+        method: "get",
+        baseURL: url + "SportDB/favourite/sports",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+      })
+      .then((response) => {
+        this.favouriteSports = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
+    axios
+      .request({
+        method: "get",
+        baseURL: url + "SportDB/favourite/leagues",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+      })
+      .then((response) => {
+        this.favouriteLeagues = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
   },
 };
 </script>
