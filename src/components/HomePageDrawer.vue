@@ -52,7 +52,10 @@
             v-for="athlete in favouriteAthletes"
             :key="athlete"
           >
-            <q-item-section>{{ athlete }}</q-item-section>
+            <q-item-section>
+              <q-item-section>{{ athlete.strPlayer }}</q-item-section>
+              <q-item-label caption>{{ athlete.strTeam }}</q-item-label>
+            </q-item-section>
           </q-item>
         </q-expansion-item>
 
@@ -65,6 +68,7 @@
           <q-item clickable v-ripple v-for="team in favouriteTeams" :key="team">
             <q-item-section>
               <q-item-section>{{ team.strTeam }}</q-item-section>
+              <q-item-label caption>{{ team.strSport }}</q-item-label>
             </q-item-section>
           </q-item>
         </q-expansion-item>
@@ -116,7 +120,7 @@ export default {
       favouriteTeams: [],
       value: ref(true),
       favouriteSports: [],
-      favouriteAthletes: ["Robet Lewandowski", "Kamil Stoch"],
+      favouriteAthletes: [],
       favouriteLeagues: [],
     };
   },
@@ -163,6 +167,22 @@ export default {
       })
       .then((response) => {
         this.favouriteLeagues = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
+    axios
+      .request({
+        method: "get",
+        baseURL: url + "SportDB/favourite/athletes",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+      })
+      .then((response) => {
+        this.favouriteAthletes = response.data;
       })
       .catch((error) => {
         console.log(error);

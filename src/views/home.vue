@@ -1,6 +1,6 @@
 <template>
   <q-layout view="hHh lpR fFf">
-    <MainPageHeader />
+    <HomePageHeader />
     <HomePageDrawer />
     <q-page-container>
       <RoutingTabs />
@@ -404,7 +404,12 @@
                               ><q-btn
                                 @click="
                                   (eventCard = false),
-                                    add(match.idEvent, match.homeOdds)
+                                    add(
+                                      match.idEvent,
+                                      match.homeOdds,
+                                      match.homeTeam,
+                                      match.awayTeam
+                                    )
                                 "
                               >
                                 {{ match.homeOdds }}</q-btn
@@ -412,7 +417,12 @@
                               <q-btn
                                 @click="
                                   (eventCard = false),
-                                    add(match.idEvent, match.awayOdds)
+                                    add(
+                                      match.idEvent,
+                                      match.awayOdds,
+                                      match.homeTeam,
+                                      match.awayTeam
+                                    )
                                 "
                               >
                                 {{ match.awayOdds }}</q-btn
@@ -420,7 +430,12 @@
                               <q-btn
                                 @click="
                                   (eventCard = false),
-                                    add(match.idEvent, match.drawOdds)
+                                    add(
+                                      match.idEvent,
+                                      match.drawOdds,
+                                      match.homeTeam,
+                                      match.awayTeam
+                                    )
                                 "
                               >
                                 {{ match.drawOdds }}</q-btn
@@ -596,7 +611,7 @@
 <script>
 import { ref } from "vue";
 import axios from "axios";
-import MainPageHeader from "@/components/MainPageHeader";
+import HomePageHeader from "@/components/HomePageHeader";
 import HomePageDrawer from "@/components/HomePageDrawer";
 import RoutingTabs from "@/components/RoutingTabs";
 
@@ -606,7 +621,7 @@ let url = "https://localhost:5001/api/SportDB/";
 
 export default {
   name: "home",
-  components: { MainPageHeader, HomePageDrawer, RoutingTabs },
+  components: { HomePageHeader, HomePageDrawer, RoutingTabs },
   setup() {
     const leftDrawerOpen = ref(false);
     return {
@@ -642,6 +657,7 @@ export default {
       lastMatches: [],
       nextMatches: [],
       liveMatches: [],
+      liveMatchess: [],
       filteredMatches: [],
       filteredSports: [],
       filteredLeagues: [],
@@ -649,9 +665,10 @@ export default {
       tabCourses: ref("courses"),
       columns,
       favTeams: [],
+      balance: null,
       coupon: [
         {
-          rate: 3,
+          bid: 3,
           totalOdds: 2.5,
           positions: [],
         },
@@ -710,7 +727,7 @@ export default {
       }
       return couponCourse.toFixed(2);
     },
-    add(eventId, course) {
+    add(eventId, course, home, away) {
       let valid = true;
       for (let i = 0; i < this.coupon[0].positions.length; i++) {
         if (this.coupon[0].positions[i].eventID == eventId) {
@@ -722,6 +739,8 @@ export default {
           eventID: eventId,
           choice: 0,
           odds: course,
+          homeName: home,
+          awayName: away,
         });
       else {
         for (let i = 0; i < this.coupon[0].positions.length; i++) {
@@ -780,11 +799,12 @@ export default {
       else this.getSportDateEvents();
     },
     currentDate() {
-      const current = new Date();
-      const date = `${current.getFullYear()}-${
-        current.getMonth() + 1
-      }-${current.getDate()}`;
-      return date;
+      let dt = new Date();
+      let month = ("0" + (dt.getMonth() + 1)).slice(-2);
+      let date = ("0" + dt.getDate()).slice(-2);
+      let year = dt.getFullYear();
+      const fullDate = year + "-" + month + "-" + date;
+      return fullDate;
     },
     getDateEvents() {
       return axios
@@ -837,6 +857,23 @@ export default {
     axios
       .request({
         method: "get",
+        baseURL: "https://localhost:5001/api/Betting/balance",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+      })
+      .then((response) => {
+        this.balance = response.data;
+        console.log(this.balance);
+      })
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
+    axios
+      .request({
+        method: "get",
         baseURL: url + "favourite/teams/lastmatches",
         headers: {
           Authorization: "Bearer " + bearer,
@@ -866,6 +903,24 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loading = false));
+    /*TO-do
+    axios
+      .request({
+        method: "get",
+        baseURL: url + "favourite/teams/livematches",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+      })
+      .then((response) => {
+        this.liveMatchess = response.data;
+        console.log(this.liveMatchess);
+      })
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));*/
     axios
       .get(url + "leagues")
       .then((response) => (this.leagues = response.data))

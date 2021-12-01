@@ -21,10 +21,11 @@
             </q-item-section>
             <q-item-section side>
               <q-btn
-                flat
+                v-bind:class="{ active: myBtnClass(sport.strSport) }"
                 round
+                color="primary"
                 icon="star"
-                @click="addFavourite(sport.strSport)"
+                @click="addFav('sport', sport.idSport)"
               />
             </q-item-section>
           </q-item>
@@ -78,6 +79,7 @@
               <q-item-section>{{ team.strSport }}</q-item-section>
               <q-item-section side>
                 <q-btn
+                  v-bind:class="{ active: myTeams(team.idTeam) }"
                   round
                   color="primary"
                   icon="star"
@@ -90,14 +92,20 @@
             >
             <q-item
               v-ripple
-              v-for="team in searchPlayerResult"
-              :key="team.idTeam"
+              v-for="player in searchPlayerResult"
+              :key="player.idPlayer"
               class="text-blue"
             >
-              <q-item-section>{{ team.strPlayer }}</q-item-section>
-              <q-item-section>{{ team.strTeam }}</q-item-section>
+              <q-item-section>{{ player.strPlayer }}</q-item-section>
+              <q-item-section>{{ player.strTeam }}</q-item-section>
               <q-item-section side>
-                <q-icon name="star" />
+                <q-btn
+                  v-bind:class="{ active: myAthletes(player.idPlayer) }"
+                  round
+                  color="primary"
+                  icon="star"
+                  @click="addFav('athlete', player.idPlayer)"
+                />
               </q-item-section>
             </q-item>
             <q-item-label header v-if="filteredLeagues.length"
@@ -113,6 +121,7 @@
               <q-item-section>{{ league.strSport }}</q-item-section>
               <q-item-section side>
                 <q-btn
+                  v-bind:class="{ active: myLeagues(league.idLeague) }"
                   round
                   color="primary"
                   icon="star"
@@ -155,17 +164,37 @@ export default {
       sports: [],
       leagues: [],
       filteredLeagues: [],
-      favouriteSports: [
-        "Football",
-        "Tennis",
-        "Basketball",
-        "Volleyball",
-        "Cricket",
-        "Swimming",
-      ],
+      favouriteSports: [],
+      favouriteTeams: [],
+      favouriteLeagues: [],
+      favouriteAthletes: [],
     };
   },
   methods: {
+    myBtnClass: function (name) {
+      let result = false;
+      for (let i = 0; i < this.favouriteSports.length; i++)
+        if (this.favouriteSports[i].strSport === name) result = true;
+      return result;
+    },
+    myTeams: function (team) {
+      let result = false;
+      for (let i = 0; i < this.favouriteTeams.length; i++)
+        if (this.favouriteTeams[i].idTeam === team) result = true;
+      return result;
+    },
+    myLeagues: function (league) {
+      let result = false;
+      for (let i = 0; i < this.favouriteTeams.length; i++)
+        if (this.favouriteLeagues[i].idLeague === league) result = true;
+      return result;
+    },
+    myAthletes: function (athlete) {
+      let result = false;
+      for (let i = 0; i < this.favouriteAthletes.length; i++)
+        if (this.favouriteAthletes[i].idPlayer === athlete) result = true;
+      return result;
+    },
     addFav(category, id) {
       axios({
         method: "post",
@@ -228,7 +257,70 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loading = false));
-
+    axios
+      .request({
+        method: "get",
+        baseURL: url + "favourite/teams",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+      })
+      .then((response) => {
+        this.favouriteTeams = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
+    axios
+      .request({
+        method: "get",
+        baseURL: url + "favourite/sports",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+      })
+      .then((response) => {
+        this.favouriteSports = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
+    axios
+      .request({
+        method: "get",
+        baseURL: url + "favourite/leagues",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+      })
+      .then((response) => {
+        this.favouriteLeagues = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
+    axios
+      .request({
+        method: "get",
+        baseURL: url + "favourite/athletes",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+      })
+      .then((response) => {
+        this.favouriteAthletes = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
     axios
       .get(url + "leagues")
       .then((response) => {
@@ -248,7 +340,9 @@ export default {
 .q-item,
 q.input,
 q.list {
-  font-family: "Mochiy Pop One", sans-serif;
   font-family: "Ubuntu", sans-serif;
+}
+.active {
+  color: yellow !important;
 }
 </style>
