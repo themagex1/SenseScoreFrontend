@@ -65,14 +65,10 @@
       </section>
 
       <section v-else>
-        <div class="q-pa-md row" style="justify-content: center">
-          <q-list
-            bordered
-            separator
-            class="q-gutter-y-md text-primary"
-            style="width: col-2"
-          >
-            <q-item-label header v-if="searchResult.length">Teams</q-item-label>
+        <div class="q-pa-md row" style="justify-content: space-between">
+          <q-list class="q-gutter-y-md text-primary" style="width: col-2">
+            <q-item-label header>Teams</q-item-label>
+            <div v-if="!searchResult.length">No results...</div>
             <q-item
               v-ripple
               v-for="team in searchResult"
@@ -95,9 +91,11 @@
                 />
               </q-item-section>
             </q-item>
-            <q-item-label header v-if="searchPlayerResult.length"
-              >Athletes</q-item-label
-            >
+          </q-list>
+
+          <q-list>
+            <q-item-label header>Athletes</q-item-label>
+            <div v-if="!searchPlayerResult.length">No results...</div>
             <q-item
               v-ripple
               v-for="player in searchPlayerResult"
@@ -120,9 +118,10 @@
                 />
               </q-item-section>
             </q-item>
-            <q-item-label header v-if="filteredLeagues.length"
-              >Leagues</q-item-label
-            >
+          </q-list>
+          <q-list>
+            <q-item-label header>Leagues</q-item-label>
+            <div v-if="!filteredLeagues.length">No results...</div>
             <q-item
               v-ripple
               v-for="league in filteredLeagues"
@@ -148,6 +147,36 @@
           </q-list>
         </div>
       </section>
+
+      <q-dialog v-model="alert" position="top">
+        <q-card style="background-color: green">
+          <q-card-section>
+            <div class="text-h6">Alert</div>
+          </q-card-section>
+
+          <q-card-section class="q-pt-none">
+            Added to favourites
+          </q-card-section>
+
+          <q-card-actions align="right">
+            <q-btn flat label="OK" color="primary" v-close-popup />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+
+      <q-dialog v-model="confirm" persistent>
+        <q-card>
+          <q-card-section class="row items-center">
+            <q-avatar icon="delete" color="primary" text-color="white" />
+            <span class="q-ml-sm">Are you sure you want to delete?</span>
+          </q-card-section>
+
+          <q-card-actions align="right">
+            <q-btn flat label="Cancel" color="primary" v-close-popup />
+            <q-btn flat label="Yes" color="primary" v-close-popup />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
     </q-page-container>
   </q-layout>
 </template>
@@ -173,6 +202,9 @@ export default {
   },
   data() {
     return {
+      remove: false,
+      alert: ref(false),
+      confirm: ref(false),
       bool: false,
       loading: true,
       errored: false,
@@ -202,7 +234,7 @@ export default {
     },
     myLeagues: function (league) {
       let result = false;
-      for (let i = 0; i < this.favouriteTeams.length; i++)
+      for (let i = 0; i < this.favouriteLeagues.length; i++)
         if (this.favouriteLeagues[i].idLeague === league) result = true;
       return result;
     },
@@ -251,6 +283,7 @@ export default {
         });
     },
     deleteFav(category, id) {
+      this.confirm = true;
       this.removeFav(category, id);
       switch (category) {
         case "sport": {
@@ -297,6 +330,7 @@ export default {
             })
             .then((response) => {
               this.favouriteSports = response.data;
+              this.alert = true;
             })
             .catch((error) => {
               console.log(error);
