@@ -28,7 +28,6 @@
           icon="sports_esports"
           label="Favourite sports"
           header-class="text-blue"
-          default-opened
         >
           <q-item
             clickable

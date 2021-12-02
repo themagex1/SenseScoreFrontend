@@ -21,11 +21,15 @@
             </q-item-section>
             <q-item-section side>
               <q-btn
-                v-bind:class="{ active: myBtnClass(sport.strSport) }"
+                v-bind:class="{ active: mySports(sport.idSport) }"
                 round
                 color="primary"
-                icon="star"
-                @click="addFav('sport', sport.idSport)"
+                icon="favorite"
+                @click="
+                  bool
+                    ? deleteFav('sport', sport.idSport)
+                    : addFav('sport', sport.idSport)
+                "
               />
             </q-item-section>
           </q-item>
@@ -82,8 +86,12 @@
                   v-bind:class="{ active: myTeams(team.idTeam) }"
                   round
                   color="primary"
-                  icon="star"
-                  @click="addFav('team', team.idTeam)"
+                  icon="favorite"
+                  @click="
+                    bool
+                      ? deleteFav('team', team.idTeam)
+                      : addFav('team', team.idTeam)
+                  "
                 />
               </q-item-section>
             </q-item>
@@ -103,8 +111,12 @@
                   v-bind:class="{ active: myAthletes(player.idPlayer) }"
                   round
                   color="primary"
-                  icon="star"
-                  @click="addFav('athlete', player.idPlayer)"
+                  icon="favorite"
+                  @click="
+                    bool
+                      ? deleteFav('athlete', athlete.idPlayer)
+                      : addFav('athlete', athlete.idPlayer)
+                  "
                 />
               </q-item-section>
             </q-item>
@@ -124,8 +136,12 @@
                   v-bind:class="{ active: myLeagues(league.idLeague) }"
                   round
                   color="primary"
-                  icon="star"
-                  @click="addFav('league', league.idLeague)"
+                  icon="favorite"
+                  @click="
+                    bool
+                      ? deleteFav('league', league.idLeague)
+                      : addFav('league', league.idLeague)
+                  "
                 />
               </q-item-section>
             </q-item>
@@ -157,6 +173,7 @@ export default {
   },
   data() {
     return {
+      bool: false,
       loading: true,
       errored: false,
       searchResult: [],
@@ -171,10 +188,10 @@ export default {
     };
   },
   methods: {
-    myBtnClass: function (name) {
+    mySports: function (id) {
       let result = false;
       for (let i = 0; i < this.favouriteSports.length; i++)
-        if (this.favouriteSports[i].strSport === name) result = true;
+        if (this.favouriteSports[i].idSport === id) result = true;
       return result;
     },
     myTeams: function (team) {
@@ -195,7 +212,26 @@ export default {
         if (this.favouriteAthletes[i].idPlayer === athlete) result = true;
       return result;
     },
-    addFav(category, id) {
+    removeFav(category, id) {
+      axios({
+        method: "delete",
+        baseURL: "https://localhost:5001/" + "Account/favourite",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+        data: {
+          category: category,
+          id: id,
+        },
+      })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    postFav(category, id) {
       axios({
         method: "post",
         baseURL: "https://localhost:5001/" + "Account/favourite",
@@ -213,6 +249,126 @@ export default {
         .catch(function (error) {
           console.log(error);
         });
+    },
+    deleteFav(category, id) {
+      this.removeFav(category, id);
+      switch (category) {
+        case "sport": {
+          this.favouriteSports = this.favouriteSports.filter(
+            (x) => x.idSport !== id
+          );
+          this.bool = !this.bool;
+          break;
+        }
+        case "league": {
+          this.favouriteLeagues = this.favouriteLeagues.filter(
+            (x) => x.idLeague !== id
+          );
+          this.bool = !this.bool;
+          break;
+        }
+        case "team": {
+          this.favouriteTeams = this.favouriteTeams.filter(
+            (x) => x.idTeam !== id
+          );
+          this.bool = !this.bool;
+          break;
+        }
+        case "athlete": {
+          this.favouriteAthletes = this.favouriteAthletes.filter(
+            (x) => x.idPlayer !== id
+          );
+          this.bool = !this.bool;
+          break;
+        }
+      }
+    },
+    addFav(category, id) {
+      switch (category) {
+        case "sport": {
+          this.postFav("sport", id);
+          axios
+            .request({
+              method: "get",
+              baseURL: url + `favourite/sports`,
+              headers: {
+                Authorization: "Bearer " + bearer,
+              },
+            })
+            .then((response) => {
+              this.favouriteSports = response.data;
+            })
+            .catch((error) => {
+              console.log(error);
+              this.errored = true;
+            })
+            .finally(() => (this.loading = false));
+          this.bool = !this.bool;
+          break;
+        }
+        case "team": {
+          this.postFav("team", id);
+          axios
+            .request({
+              method: "get",
+              baseURL: url + `favourite/teams`,
+              headers: {
+                Authorization: "Bearer " + bearer,
+              },
+            })
+            .then((response) => {
+              this.favouriteTeams = response.data;
+            })
+            .catch((error) => {
+              console.log(error);
+              this.errored = true;
+            })
+            .finally(() => (this.loading = false));
+          this.bool = !this.bool;
+          break;
+        }
+        case "league": {
+          this.postFav("league", id);
+          axios
+            .request({
+              method: "get",
+              baseURL: url + `favourite/leagues`,
+              headers: {
+                Authorization: "Bearer " + bearer,
+              },
+            })
+            .then((response) => {
+              this.favouriteLeagues = response.data;
+            })
+            .catch((error) => {
+              console.log(error);
+              this.errored = true;
+            })
+            .finally(() => (this.loading = false));
+          this.bool = !this.bool;
+          break;
+        }
+        case "athlete": {
+          this.postFav("athlete", id);
+          axios
+            .request({
+              method: "get",
+              baseURL: url + `favourite/athletes`,
+              headers: {
+                Authorization: "Bearer " + bearer,
+              },
+            })
+            .then((response) => {
+              this.favouriteAthletes = response.data;
+            })
+            .catch((error) => {
+              console.log(error);
+              this.errored = true;
+            })
+            .finally(() => (this.loading = false));
+          this.bool = !this.bool;
+        }
+      }
     },
     searchTeams() {
       return axios

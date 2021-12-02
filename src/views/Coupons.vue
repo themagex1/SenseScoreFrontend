@@ -16,7 +16,7 @@
           <p class="q-pa-md">COUPON</p>
           <q-item>
             <q-item-section>
-              <q-item-label>{{ ticket.rate }}$</q-item-label>
+              <q-item-label>{{ ticket.bid }}$</q-item-label>
               <q-item-label caption>Bid</q-item-label>
             </q-item-section>
             <q-item-section>
@@ -26,7 +26,7 @@
             <q-item-section side top>
               <q-item-label
                 ><q-badge color="teal"
-                  >{{ roundDecimal(ticket.rate, ticket.totalOdds) }}$</q-badge
+                  >{{ roundDecimal(ticket.bid, ticket.totalOdds) }}$</q-badge
                 ></q-item-label
               >
               <q-item-label caption>Potential win</q-item-label>
