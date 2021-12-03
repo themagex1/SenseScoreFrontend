@@ -11,11 +11,13 @@
         <div v-if="!tickets.length">No coupons</div>
         <q-list
           v-else
-          v-for="ticket in tickets"
+          v-for="(ticket, ticketid) in sortedTickets()"
           :key="ticket.id"
           style="width: 400px; border: 1px solid blue; margin-bottom: 20px"
         >
-          <p class="q-pa-md">COUPON</p>
+          <p class="q-pa-md">COUPON #{{ ticketid + 1 }}</p>
+          <p class="q-pl-md" v-if="ticket.won" style="color: green">WON</p>
+          <p class="q-pl-md" v-else style="color: red">LOST</p>
           <q-item>
             <q-item-section>
               <q-item-label>{{ ticket.bid }}$</q-item-label>
@@ -34,7 +36,12 @@
               <q-item-label caption>Potential win</q-item-label>
             </q-item-section>
           </q-item>
-          <q-item v-for="position in ticket.positions" :key="position.eventID">
+          <q-item
+            v-for="position in ticket.positions"
+            :key="position.eventID"
+            style="background-color: #757575"
+            class="q-ma-md"
+          >
             <q-item-section>
               <q-item-label>{{ position.eventID }}</q-item-label>
               <q-item-label caption>Event ID</q-item-label>
@@ -78,6 +85,11 @@ export default {
     roundDecimal(rate, odds) {
       return (rate * odds).toFixed(2);
     },
+    sortedTickets() {
+      return this.tickets.sort(
+        (a, b) => new Date(b.created) - new Date(a.created)
+      );
+    },
   },
   mounted() {
     axios
@@ -90,6 +102,7 @@ export default {
       })
       .then((response) => {
         this.tickets = response.data;
+        console.log(this.tickets);
       })
       .catch((error) => {
         console.log(error);
@@ -101,7 +114,8 @@ export default {
 </script>
 
 <style scoped>
-h1 {
+h1,
+p {
   font-family: "Ubuntu", sans-serif;
 }
 </style>
