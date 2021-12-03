@@ -32,7 +32,7 @@
           <q-item
             clickable
             v-ripple
-            v-for="sport in favouriteSports"
+            v-for="sport in favouritesports"
             :key="sport"
           >
             <q-item-section>{{ sport.strSport }}</q-item-section>
@@ -48,7 +48,7 @@
           <q-item
             clickable
             v-ripple
-            v-for="athlete in favouriteAthletes"
+            v-for="athlete in favouriteathletes"
             :key="athlete"
           >
             <q-item-section>
@@ -64,7 +64,7 @@
           label="Favourite teams"
           header-class="text-blue"
         >
-          <q-item clickable v-ripple v-for="team in favouriteTeams" :key="team">
+          <q-item clickable v-ripple v-for="team in favouriteteams" :key="team">
             <q-item-section>
               <q-item-section>{{ team.strTeam }}</q-item-section>
               <q-item-label caption>{{ team.strSport }}</q-item-label>
@@ -81,7 +81,7 @@
           <q-item
             clickable
             v-ripple
-            v-for="league in favouriteLeagues"
+            v-for="league in favouriteleagues"
             :key="league"
           >
             <q-item-section>
@@ -114,13 +114,15 @@ let url = "https://localhost:5001/api/";
 
 export default {
   name: "home-page-header",
+  props: {
+    favouritesports: [],
+    favouriteathletes: [],
+    favouriteleagues: [],
+    favouriteteams: [],
+  },
   setup() {
     return {
-      favouriteTeams: [],
       value: ref(true),
-      favouriteSports: [],
-      favouriteAthletes: [],
-      favouriteLeagues: [],
     };
   },
   mounted() {

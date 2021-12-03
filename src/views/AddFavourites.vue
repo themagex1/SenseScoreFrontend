@@ -1,7 +1,12 @@
 <template>
   <q-layout view="hHh lpR fFf">
     <HomePageHeader />
-    <HomePageDrawer />
+    <HomePageDrawer
+      :favouritesports="favouriteSports"
+      :favouriteleagues="favouriteLeagues"
+      :favouriteteams="favouriteTeams"
+      :favouriteathletes="favouriteAthletes"
+    />
     <q-page-container>
       <RoutingTabs />
       <div class="q-pa-md">
@@ -13,7 +18,8 @@
             v-ripple
             v-for="sport in sports"
             :key="sport.idSport"
-            class="text-blue col-2"
+            style="width: 19%"
+            class="text-blue"
           >
             <q-item-section>{{ sport.strSport }}</q-item-section>
             <q-item-section thumbnail>
@@ -112,8 +118,8 @@
                   icon="favorite"
                   @click="
                     bool
-                      ? deleteFav('athlete', athlete.idPlayer)
-                      : addFav('athlete', athlete.idPlayer)
+                      ? deleteFav('athlete', player.idPlayer)
+                      : addFav('athlete', player.idPlayer)
                   "
                 />
               </q-item-section>
@@ -147,36 +153,6 @@
           </q-list>
         </div>
       </section>
-
-      <q-dialog v-model="alert" position="top">
-        <q-card style="background-color: green">
-          <q-card-section>
-            <div class="text-h6">Alert</div>
-          </q-card-section>
-
-          <q-card-section class="q-pt-none">
-            Added to favourites
-          </q-card-section>
-
-          <q-card-actions align="right">
-            <q-btn flat label="OK" color="primary" v-close-popup />
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
-
-      <q-dialog v-model="confirm" persistent>
-        <q-card>
-          <q-card-section class="row items-center">
-            <q-avatar icon="delete" color="primary" text-color="white" />
-            <span class="q-ml-sm">Are you sure you want to delete?</span>
-          </q-card-section>
-
-          <q-card-actions align="right">
-            <q-btn flat label="Cancel" color="primary" v-close-popup />
-            <q-btn flat label="Yes" color="primary" v-close-popup />
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
     </q-page-container>
   </q-layout>
 </template>
@@ -202,9 +178,6 @@ export default {
   },
   data() {
     return {
-      remove: false,
-      alert: ref(false),
-      confirm: ref(false),
       bool: false,
       loading: true,
       errored: false,

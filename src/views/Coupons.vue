@@ -4,7 +4,9 @@
     <HomePageDrawer />
     <q-page-container>
       <RoutingTabs />
-      <h1 style="text-align: center">Your coupons</h1>
+      <h1 style="text-align: center" class="text-blue-7 text-uppercase text-h4">
+        Your coupons
+      </h1>
       <div class="q-pa-md column" style="align-items: center">
         <div v-if="!tickets.length">No coupons</div>
         <q-list
@@ -99,5 +101,8 @@ export default {
 </script>
 
 <style scoped>
+h1 {
+  font-family: "Ubuntu", sans-serif;
+}
 </style>
 

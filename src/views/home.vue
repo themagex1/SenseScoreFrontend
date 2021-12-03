@@ -1,7 +1,12 @@
 <template>
   <q-layout view="hHh lpR fFf">
     <HomePageHeader />
-    <HomePageDrawer />
+    <HomePageDrawer
+      :favouritesports="favouriteSports"
+      :favouriteleagues="favouriteLeagues"
+      :favouriteteams="favouriteTeams"
+      :favouriteathletes="favouriteAthletes"
+    />
     <q-page-container>
       <RoutingTabs />
       <div class="q-pa-md">
@@ -351,12 +356,6 @@
                         </q-icon>
                       </template>
                     </q-input>
-                    <q-btn
-                      color="grey-9"
-                      text-color="blue-7"
-                      label="Get latest events"
-                      @click="getTimeEvents()"
-                    />
                   </div>
                   <section v-if="loading">
                     <p>
@@ -604,6 +603,21 @@
           </q-card>
         </div>
       </q-dialog>
+      <q-dialog v-model="alert" position="top">
+        <q-card style="background-color: green">
+          <q-card-section>
+            <div class="text-h6">Alert</div>
+          </q-card-section>
+
+          <q-card-section class="q-pt-none">
+            Added to favourites
+          </q-card-section>
+
+          <q-card-actions align="right">
+            <q-btn flat label="OK" color="primary" v-close-popup />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
     </q-page-container>
   </q-layout>
 </template>
@@ -625,6 +639,7 @@ export default {
   setup() {
     const leftDrawerOpen = ref(false);
     return {
+      alert: ref("false"),
       testError: false,
       text: ref(""),
       leftDrawerOpen,
@@ -635,6 +650,10 @@ export default {
   },
   data() {
     return {
+      favouriteSports: [],
+      favouriteTeams: [],
+      favouriteLeagues: [],
+      favouriteAthletes: [],
       loading: true,
       errored: false,
       success: "",
@@ -690,7 +709,8 @@ export default {
     play() {
       let self = this;
       this.coupon[0].totalOdds = this.countCourses();
-      this.coupon[0].rate = this.toInt();
+      this.coupon[0].bid = this.toInt();
+      this.alert = true;
       axios({
         method: "post",
         baseURL: "https://localhost:5001/api/" + "Betting/tickets",
@@ -700,7 +720,6 @@ export default {
         data: this.coupon[0],
       })
         .then(function (response) {
-          self.success = "Success";
           console.log(response);
         })
         .catch(function (error) {
@@ -710,6 +729,7 @@ export default {
           }
           console.log(error);
         });
+      this.coupon.splice[0];
     },
     removeEvent(match) {
       this.coupon[0].positions.splice(
@@ -865,6 +885,70 @@ export default {
       .then((response) => {
         this.balance = response.data;
         console.log(this.balance);
+      })
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
+    axios
+      .request({
+        method: "get",
+        baseURL: url + "favourite/teams",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+      })
+      .then((response) => {
+        this.favouriteTeams = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
+    axios
+      .request({
+        method: "get",
+        baseURL: url + "favourite/sports",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+      })
+      .then((response) => {
+        this.favouriteSports = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
+    axios
+      .request({
+        method: "get",
+        baseURL: url + "favourite/leagues",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+      })
+      .then((response) => {
+        this.favouriteLeagues = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
+    axios
+      .request({
+        method: "get",
+        baseURL: url + "favourite/athletes",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+      })
+      .then((response) => {
+        this.favouriteAthletes = response.data;
       })
       .catch((error) => {
         console.log(error);
