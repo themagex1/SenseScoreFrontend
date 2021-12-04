@@ -8,16 +8,31 @@
         Your coupons
       </h1>
       <div class="q-pa-md column" style="align-items: center">
+        <div class="q-pa-md q-gutter-sm">
+          <q-btn
+            outline
+            color="primary"
+            label="All coupons"
+            @click="allTickets()"
+          />
+          <q-btn
+            outline
+            color="primary"
+            label="Only won tickets"
+            @click="filterTickets()"
+          />
+        </div>
         <div v-if="!tickets.length">No coupons</div>
         <q-list
           v-else
-          v-for="(ticket, ticketid) in sortedTickets()"
+          v-for="(ticket, ticketid) in filteredTickets"
           :key="ticket.id"
-          style="width: 400px; border: 1px solid blue; margin-bottom: 20px"
         >
           <p class="q-pa-md">COUPON #{{ ticketid + 1 }}</p>
-          <p class="q-pl-md" v-if="ticket.won" style="color: green">WON</p>
-          <p class="q-pl-md" v-else style="color: red">LOST</p>
+          <div class="q-pl-md won" v-if="ticket.won" style="color: green">
+            WON
+          </div>
+          <div class="q-pl-md lost" v-else style="color: red">LOST</div>
           <q-item>
             <q-item-section>
               <q-item-label>{{ ticket.bid }}$</q-item-label>
@@ -39,12 +54,14 @@
           <q-item
             v-for="position in ticket.positions"
             :key="position.eventID"
-            style="background-color: #757575"
-            class="q-ma-md"
+            style="background-color: #9e9e9e; border-radius: 5px"
+            class="q-ma-sm"
           >
             <q-item-section>
-              <q-item-label>{{ position.eventID }}</q-item-label>
-              <q-item-label caption>Event ID</q-item-label>
+              <q-item-label
+                >{{ position.homeName }}-{{ position.awayName }}</q-item-label
+              >
+              <q-item-label caption>Event</q-item-label>
             </q-item-section>
             <q-item-section>
               <q-item-label>{{ position.odds }}</q-item-label>
@@ -79,6 +96,7 @@ export default {
       loading: true,
       errored: false,
       tickets: [],
+      filteredTickets: [],
     };
   },
   methods: {
@@ -89,6 +107,12 @@ export default {
       return this.tickets.sort(
         (a, b) => new Date(b.created) - new Date(a.created)
       );
+    },
+    filterTickets() {
+      this.filteredTickets = this.tickets.filter((x) => x.won == "true");
+    },
+    allTickets() {
+      this.filteredTickets = this.tickets;
     },
   },
   mounted() {
@@ -102,7 +126,10 @@ export default {
       })
       .then((response) => {
         this.tickets = response.data;
-        console.log(this.tickets);
+        this.tickets = this.tickets.sort(
+          (a, b) => new Date(b.created) - new Date(a.created)
+        );
+        this.filteredTickets = this.tickets;
       })
       .catch((error) => {
         console.log(error);
@@ -117,6 +144,28 @@ export default {
 h1,
 p {
   font-family: "Ubuntu", sans-serif;
+}
+
+.q-list {
+  background-color: #757575;
+  color: #90caf9;
+  padding: 10px;
+  border-radius: 4px;
+  width: 400px;
+  margin-bottom: 30px;
+  border: 1px solid #29b6f6;
+}
+.lost {
+  border: 1px solid;
+  color: #d8000c;
+  background-color: #ffbaba;
+  width: 30%;
+}
+.won {
+  border: 1px solid;
+  color: #4f8a10;
+  background-color: #dff2bf;
+  width: 30%;
 }
 </style>
 

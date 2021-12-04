@@ -24,6 +24,7 @@
     <div class="q-pa-md" style="max-width: 350px">
       <q-list bordered class="rounded-borders">
         <q-expansion-item
+          v-if="favouritesports != null"
           expand-separator
           icon="sports_esports"
           label="Favourite sports"
@@ -38,17 +39,53 @@
             <q-item-section>{{ sport.strSport }}</q-item-section>
           </q-item>
         </q-expansion-item>
+        <q-expansion-item
+          v-else
+          expand-separator
+          icon="sports_esports"
+          label="Favourite sports"
+          header-class="text-blue"
+        >
+          <q-item
+            clickable
+            v-ripple
+            v-for="sport in favouriteSports"
+            :key="sport"
+          >
+            <q-item-section>{{ sport.strSport }}</q-item-section>
+          </q-item>
+        </q-expansion-item>
 
         <q-expansion-item
           expand-separator
           icon="person"
           label="Favourite athlete"
           header-class="text-blue"
+          v-if="favouriteathletes != null"
         >
           <q-item
             clickable
             v-ripple
             v-for="athlete in favouriteathletes"
+            :key="athlete"
+          >
+            <q-item-section>
+              <q-item-section>{{ athlete.strPlayer }}</q-item-section>
+              <q-item-label caption>{{ athlete.strTeam }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-expansion-item>
+        <q-expansion-item
+          expand-separator
+          icon="person"
+          label="Favourite athlete"
+          header-class="text-blue"
+          v-else
+        >
+          <q-item
+            clickable
+            v-ripple
+            v-for="athlete in favouriteAthletes"
             :key="athlete"
           >
             <q-item-section>
@@ -63,8 +100,23 @@
           icon="groups"
           label="Favourite teams"
           header-class="text-blue"
+          v-if="favouriteteams != null"
         >
           <q-item clickable v-ripple v-for="team in favouriteteams" :key="team">
+            <q-item-section>
+              <q-item-section>{{ team.strTeam }}</q-item-section>
+              <q-item-label caption>{{ team.strSport }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-expansion-item>
+        <q-expansion-item
+          expand-separator
+          icon="groups"
+          label="Favourite teams"
+          header-class="text-blue"
+          v-else
+        >
+          <q-item clickable v-ripple v-for="team in favouriteTeams" :key="team">
             <q-item-section>
               <q-item-section>{{ team.strTeam }}</q-item-section>
               <q-item-label caption>{{ team.strSport }}</q-item-label>
@@ -77,11 +129,31 @@
           icon="groups"
           label="Favourite leagues"
           header-class="text-blue"
+          v-if="favouriteleagues != null"
         >
           <q-item
             clickable
             v-ripple
             v-for="league in favouriteleagues"
+            :key="league"
+          >
+            <q-item-section>
+              <q-item-section>{{ league.strLeague }}</q-item-section>
+              <q-item-label caption>{{ league.strSport }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-expansion-item>
+        <q-expansion-item
+          expand-separator
+          icon="groups"
+          label="Favourite leagues"
+          header-class="text-blue"
+          v-else
+        >
+          <q-item
+            clickable
+            v-ripple
+            v-for="league in favouriteLeagues"
             :key="league"
           >
             <q-item-section>
@@ -122,6 +194,10 @@ export default {
   },
   setup() {
     return {
+      favouriteSports: [],
+      favouriteAthletes: [],
+      favouriteLeagues: [],
+      favouriteTeams: [],
       value: ref(true),
     };
   },

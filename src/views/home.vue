@@ -406,8 +406,8 @@
                                     add(
                                       match.idEvent,
                                       match.homeOdds,
-                                      match.homeTeam,
-                                      match.awayTeam
+                                      match.strHomeTeam,
+                                      match.strAwayTeam
                                     )
                                 "
                               >
@@ -419,8 +419,8 @@
                                     add(
                                       match.idEvent,
                                       match.awayOdds,
-                                      match.homeTeam,
-                                      match.awayTeam
+                                      match.strHomeTeam,
+                                      match.strAwayTeam
                                     )
                                 "
                               >
@@ -432,8 +432,8 @@
                                     add(
                                       match.idEvent,
                                       match.drawOdds,
-                                      match.homeTeam,
-                                      match.awayTeam
+                                      match.strHomeTeam,
+                                      match.strAwayTeam
                                     )
                                 "
                               >
@@ -650,10 +650,6 @@ export default {
   },
   data() {
     return {
-      favouriteSports: [],
-      favouriteTeams: [],
-      favouriteLeagues: [],
-      favouriteAthletes: [],
       loading: true,
       errored: false,
       success: "",
@@ -684,7 +680,6 @@ export default {
       tabCourses: ref("courses"),
       columns,
       favTeams: [],
-      balance: null,
       coupon: [
         {
           bid: 3,
@@ -721,6 +716,7 @@ export default {
       })
         .then(function (response) {
           console.log(response);
+          self.coupon.splice[0];
         })
         .catch(function (error) {
           if (error.response) {
@@ -729,7 +725,6 @@ export default {
           }
           console.log(error);
         });
-      this.coupon.splice[0];
     },
     removeEvent(match) {
       this.coupon[0].positions.splice(
@@ -754,6 +749,7 @@ export default {
           valid = false;
         }
       }
+
       if (valid)
         this.coupon[0].positions.push({
           eventID: eventId,
@@ -857,9 +853,6 @@ export default {
       });
     },
     getSportDateEvents() {
-      console.log(
-        this.filteredMatches.filter((b) => b.strSport === this.modelSport)
-      );
       this.filteredMatches = this.liveMatches.filter(
         (b) => b.strSport === this.modelSport
       );
@@ -869,92 +862,10 @@ export default {
       this.filteredMatches = this.filteredMatches.filter(
         (b) => b.strLeague === this.modelLeague
       );
-      console.log(this.filteredMatches);
       return this.filteredMatches;
     },
   },
   mounted() {
-    axios
-      .request({
-        method: "get",
-        baseURL: "https://localhost:5001/api/Betting/balance",
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
-      })
-      .then((response) => {
-        this.balance = response.data;
-        console.log(this.balance);
-      })
-      .catch((error) => {
-        console.log(error);
-        this.errored = true;
-      })
-      .finally(() => (this.loading = false));
-    axios
-      .request({
-        method: "get",
-        baseURL: url + "favourite/teams",
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
-      })
-      .then((response) => {
-        this.favouriteTeams = response.data;
-      })
-      .catch((error) => {
-        console.log(error);
-        this.errored = true;
-      })
-      .finally(() => (this.loading = false));
-    axios
-      .request({
-        method: "get",
-        baseURL: url + "favourite/sports",
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
-      })
-      .then((response) => {
-        this.favouriteSports = response.data;
-      })
-      .catch((error) => {
-        console.log(error);
-        this.errored = true;
-      })
-      .finally(() => (this.loading = false));
-    axios
-      .request({
-        method: "get",
-        baseURL: url + "favourite/leagues",
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
-      })
-      .then((response) => {
-        this.favouriteLeagues = response.data;
-      })
-      .catch((error) => {
-        console.log(error);
-        this.errored = true;
-      })
-      .finally(() => (this.loading = false));
-    axios
-      .request({
-        method: "get",
-        baseURL: url + "favourite/athletes",
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
-      })
-      .then((response) => {
-        this.favouriteAthletes = response.data;
-      })
-      .catch((error) => {
-        console.log(error);
-        this.errored = true;
-      })
-      .finally(() => (this.loading = false));
     axios
       .request({
         method: "get",
@@ -987,24 +898,6 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loading = false));
-    /*TO-do
-    axios
-      .request({
-        method: "get",
-        baseURL: url + "favourite/teams/livematches",
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
-      })
-      .then((response) => {
-        this.liveMatchess = response.data;
-        console.log(this.liveMatchess);
-      })
-      .catch((error) => {
-        console.log(error);
-        this.errored = true;
-      })
-      .finally(() => (this.loading = false));*/
     axios
       .get(url + "leagues")
       .then((response) => (this.leagues = response.data))

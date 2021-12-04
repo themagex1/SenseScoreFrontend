@@ -13,6 +13,18 @@
           flat
           no-caps
         >
+          Saldo:
+        </p>
+        <p>{{ balance.balance }}$</p>
+      </div>
+      <div>
+        <p
+          class="text-weight-bold"
+          icon-right="people"
+          color="grey-9"
+          flat
+          no-caps
+        >
           Logged as
         </p>
         <p>test</p>
@@ -23,6 +35,9 @@
 
 <script>
 import { ref } from "vue";
+import axios from "axios";
+
+const bearer = localStorage.getItem("bearer");
 
 export default {
   name: "home-page-header",
@@ -30,6 +45,29 @@ export default {
     return {
       value: ref(true),
     };
+  },
+  data() {
+    return {
+      balance: "",
+    };
+  },
+  mounted() {
+    axios
+      .request({
+        method: "get",
+        baseURL: "https://localhost:5001/api/Betting/balance",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+      })
+      .then((response) => {
+        this.balance = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
   },
 };
 </script>

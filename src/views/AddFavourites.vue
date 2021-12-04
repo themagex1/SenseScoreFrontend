@@ -10,22 +10,21 @@
     <q-page-container>
       <RoutingTabs />
       <div class="q-pa-md">
-        <q-list
-          class="q-gutter-y-md row"
-          style="justify-content: space-between; border: 1px solid #bbdefb"
-        >
+        <q-list class="q-gutter-y-md row" style="justify-content: center">
           <q-item
             v-ripple
             v-for="sport in sports"
             :key="sport.idSport"
-            style="width: 19%"
             class="text-blue"
           >
-            <q-item-section>{{ sport.strSport }}</q-item-section>
-            <q-item-section thumbnail>
-              <img :src="sport.strSportThumb" />
+            <q-item-section>
+              <div>{{ sport.strSport }}</div>
+              <q-item-section thumbnail>
+                <img :src="sport.strSportThumb" />
+              </q-item-section>
             </q-item-section>
-            <q-item-section side>
+
+            <q-item-section side bottom>
               <q-btn
                 v-bind:class="{ active: mySports(sport.idSport) }"
                 round
@@ -72,17 +71,29 @@
 
       <section v-else>
         <div class="q-pa-md row" style="justify-content: space-between">
-          <q-list class="q-gutter-y-md text-primary" style="width: col-2">
-            <q-item-label header>Teams</q-item-label>
-            <div v-if="!searchResult.length">No results...</div>
+          <q-list class="q-gutter-y-md" style="width: col-2">
+            <q-item-label
+              header
+              style="
+                font-size: 3em;
+                text-align: center;
+                color: #29b6f6;
+                padding: 0 2em;
+                width: 300px;
+              "
+              >Teams</q-item-label
+            >
+            <div v-if="searchResult == null">No results...</div>
             <q-item
               v-ripple
               v-for="team in searchResult"
               :key="team.idTeam"
-              class="text-blue"
+              class="text-blue q-pl-md q-pr-md"
+              style="background-color: #757575; color: #000000 !important"
             >
-              <q-item-section>{{ team.strTeam }}</q-item-section>
-              <q-item-section>{{ team.strSport }}</q-item-section>
+              <q-item-section
+                >{{ team.strTeam }}({{ team.strSport }})</q-item-section
+              >
               <q-item-section side>
                 <q-btn
                   v-bind:class="{ active: myTeams(team.idTeam) }"
@@ -90,7 +101,7 @@
                   color="primary"
                   icon="favorite"
                   @click="
-                    bool
+                    checkFav(team.idTeam, 'team')
                       ? deleteFav('team', team.idTeam)
                       : addFav('team', team.idTeam)
                   "
@@ -99,17 +110,29 @@
             </q-item>
           </q-list>
 
-          <q-list>
-            <q-item-label header>Athletes</q-item-label>
-            <div v-if="!searchPlayerResult.length">No results...</div>
+          <q-list class="q-gutter-y-md" style="width: col-2">
+            <q-item-label
+              header
+              style="
+                font-size: 3em;
+                text-align: center;
+                color: #29b6f6;
+                padding: 0 2em;
+                width: 300px;
+              "
+              >Athletes</q-item-label
+            >
+            <div v-if="searchPlayerResult == null">No results...</div>
             <q-item
               v-ripple
               v-for="player in searchPlayerResult"
               :key="player.idPlayer"
-              class="text-blue"
+              class="text-blue q-pl-md q-pr-md"
+              style="background-color: #757575; color: #000000 !important"
             >
-              <q-item-section>{{ player.strPlayer }}</q-item-section>
-              <q-item-section>{{ player.strTeam }}</q-item-section>
+              <q-item-section
+                >{{ player.strPlayer }}({{ player.strTeam }})</q-item-section
+              >
               <q-item-section side>
                 <q-btn
                   v-bind:class="{ active: myAthletes(player.idPlayer) }"
@@ -117,7 +140,7 @@
                   color="primary"
                   icon="favorite"
                   @click="
-                    bool
+                    checkFav(player.idPlayer, 'athlete')
                       ? deleteFav('athlete', player.idPlayer)
                       : addFav('athlete', player.idPlayer)
                   "
@@ -125,17 +148,29 @@
               </q-item-section>
             </q-item>
           </q-list>
-          <q-list>
-            <q-item-label header>Leagues</q-item-label>
-            <div v-if="!filteredLeagues.length">No results...</div>
+          <q-list class="q-gutter-y-md" style="width: col-2">
+            <q-item-label
+              header
+              style="
+                font-size: 3em;
+                text-align: center;
+                color: #29b6f6;
+                padding: 0 2em;
+                width: 300px;
+              "
+              >Leagues</q-item-label
+            >
+            <div v-if="filteredLeagues == null">No results...</div>
             <q-item
               v-ripple
               v-for="league in filteredLeagues"
               :key="league.idLeague"
-              class="text-blue"
+              class="text-blue q-pl-md q-pr-md"
+              style="background-color: #757575; color: #000000 !important"
             >
-              <q-item-section>{{ league.strLeague }}</q-item-section>
-              <q-item-section>{{ league.strSport }}</q-item-section>
+              <q-item-section
+                >{{ league.strLeague }}({{ league.strSport }})</q-item-section
+              >
               <q-item-section side>
                 <q-btn
                   v-bind:class="{ active: myLeagues(league.idLeague) }"
@@ -143,7 +178,7 @@
                   color="primary"
                   icon="favorite"
                   @click="
-                    bool
+                    checkFav(league.idLeague, 'league')
                       ? deleteFav('league', league.idLeague)
                       : addFav('league', league.idLeague)
                   "
@@ -178,7 +213,6 @@ export default {
   },
   data() {
     return {
-      bool: false,
       loading: true,
       errored: false,
       searchResult: [],
@@ -236,6 +270,25 @@ export default {
           console.log(error);
         });
     },
+    checkFav(id, object) {
+      switch (object) {
+        case "team": {
+          if (this.favouriteTeams.filter((x) => x.idTeam == id).length)
+            return true;
+          else return false;
+        }
+        case "league": {
+          if (this.favouriteLeagues.filter((x) => x.idLeague == id).length)
+            return true;
+          else return false;
+        }
+        case "athlete": {
+          if (this.favouriteAthletes.filter((x) => x.idPlayer == id).length)
+            return true;
+          else return false;
+        }
+      }
+    },
     postFav(category, id) {
       axios({
         method: "post",
@@ -256,14 +309,12 @@ export default {
         });
     },
     deleteFav(category, id) {
-      this.confirm = true;
       this.removeFav(category, id);
       switch (category) {
         case "sport": {
           this.favouriteSports = this.favouriteSports.filter(
             (x) => x.idSport !== id
           );
-          this.bool = !this.bool;
           break;
         }
         case "league": {
@@ -290,9 +341,25 @@ export default {
       }
     },
     addFav(category, id) {
+      this.postFav(category, id);
+      axios
+        .request({
+          method: "get",
+          baseURL: url + `favourite/teams`,
+          headers: {
+            Authorization: "Bearer " + bearer,
+          },
+        })
+        .then((response) => {
+          this.favouriteTeams = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.errored = true;
+        })
+        .finally(() => (this.loading = false));
       switch (category) {
         case "sport": {
-          this.postFav("sport", id);
           axios
             .request({
               method: "get",
@@ -310,11 +377,9 @@ export default {
               this.errored = true;
             })
             .finally(() => (this.loading = false));
-          this.bool = !this.bool;
           break;
         }
         case "team": {
-          this.postFav("team", id);
           axios
             .request({
               method: "get",
@@ -331,11 +396,9 @@ export default {
               this.errored = true;
             })
             .finally(() => (this.loading = false));
-          this.bool = !this.bool;
           break;
         }
         case "league": {
-          this.postFav("league", id);
           axios
             .request({
               method: "get",
@@ -352,11 +415,9 @@ export default {
               this.errored = true;
             })
             .finally(() => (this.loading = false));
-          this.bool = !this.bool;
           break;
         }
         case "athlete": {
-          this.postFav("athlete", id);
           axios
             .request({
               method: "get",
@@ -373,7 +434,6 @@ export default {
               this.errored = true;
             })
             .finally(() => (this.loading = false));
-          this.bool = !this.bool;
         }
       }
     },
