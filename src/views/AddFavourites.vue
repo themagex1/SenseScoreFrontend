@@ -9,8 +9,8 @@
     />
     <q-page-container>
       <RoutingTabs />
-      <div class="q-pa-md">
-        <q-list class="q-gutter-y-md row" style="justify-content: center">
+      <div class="q-pa-lg">
+        <q-list class="q-gutter-y-md row" style="justify-content: flex-start">
           <q-item
             v-ripple
             v-for="sport in sports"
@@ -382,6 +382,7 @@ export default {
           this.errored = true;
         })
         .finally(() => (this.loading = false));
+      this.searchTeams();
     },
     addFavAthlete(category, id) {
       this.postFav(category, id);

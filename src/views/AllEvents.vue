@@ -226,7 +226,8 @@
                                       match.idEvent,
                                       match.homeOdds,
                                       match.strHomeTeam,
-                                      match.strAwayTeam
+                                      match.strAwayTeam,
+                                      0
                                     )
                                 "
                               >
@@ -240,7 +241,8 @@
                                       match.idEvent,
                                       match.awayOdds,
                                       match.strHomeTeam,
-                                      match.strAwayTeam
+                                      match.strAwayTeam,
+                                      2
                                     )
                                 "
                               >
@@ -254,7 +256,8 @@
                                       match.idEvent,
                                       match.drawOdds,
                                       match.strHomeTeam,
-                                      match.strAwayTeam
+                                      match.strAwayTeam,
+                                      1
                                     )
                                 "
                               >
@@ -510,12 +513,10 @@
       <q-dialog v-model="alert" position="top">
         <q-card style="background-color: green">
           <q-card-section>
-            <div class="text-h6">Alert</div>
+            <div class="text-h6">Notification</div>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
-            Added to favourites
-          </q-card-section>
+          <q-card-section class="q-pt-none"> Sent coupon </q-card-section>
 
           <q-card-actions align="right">
             <q-btn flat label="OK" color="primary" v-close-popup />
@@ -611,7 +612,7 @@ export default {
       let self = this;
       this.coupon[0].totalOdds = this.countCourses();
       this.coupon[0].bid = this.toInt();
-      this.alert = true;
+
       axios({
         method: "post",
         baseURL: "https://localhost:5001/api/" + "Betting/tickets",
@@ -622,11 +623,13 @@ export default {
       })
         .then(function (response) {
           console.log(response);
-          self.coupon.splice[0];
+          self.alert = true;
+          self.coupon[0].positions = [];
         })
         .catch(function (error) {
           if (error.response) {
             self.success = error.response.data;
+
             // => the response payload
           }
           console.log(error);
@@ -648,7 +651,7 @@ export default {
       }
       return couponCourse.toFixed(2);
     },
-    add(eventId, course, home, away) {
+    add(eventId, course, home, away, choice) {
       let valid = true;
       for (let i = 0; i < this.coupon[0].positions.length; i++) {
         if (this.coupon[0].positions[i].eventID == eventId) {
@@ -659,7 +662,7 @@ export default {
       if (valid)
         this.coupon[0].positions.push({
           eventID: eventId,
-          choice: 0,
+          choice: choice,
           odds: course,
           homeName: home,
           awayName: away,

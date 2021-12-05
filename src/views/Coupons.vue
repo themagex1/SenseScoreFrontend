@@ -76,6 +76,18 @@
               <q-item-label>{{ position.odds }}</q-item-label>
               <q-item-label caption>Event odd</q-item-label>
             </q-item-section>
+            <q-item-section v-if="position.choice == '0'">
+              <q-item-label>{{ position.homeName }}</q-item-label>
+              <q-item-label caption>Choice</q-item-label>
+            </q-item-section>
+            <q-item-section v-if="position.choice == '2'">
+              <q-item-label>{{ position.awayName }}</q-item-label>
+              <q-item-label caption>Choice</q-item-label>
+            </q-item-section>
+            <q-item-section v-if="position.choice == '1'">
+              <q-item-label>Draw</q-item-label>
+              <q-item-label caption>Choice</q-item-label>
+            </q-item-section>
           </q-item>
         </q-list>
       </div>

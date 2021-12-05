@@ -24,15 +24,19 @@
                 <q-list
                   v-for="coupon in coupon"
                   :key="coupon.id"
-                  style="width: 220px; border: 1px solid blue"
+                  style="width: 95%; border: 1px solid blue"
                 >
                   <q-item
                     v-for="position in coupon.positions"
                     :key="position.eventID"
                   >
                     <q-item-section>
-                      <q-item-label>{{ position.eventID }}</q-item-label>
-                      <q-item-label caption>Event ID</q-item-label>
+                      <q-item-label>{{ position.homeName }}</q-item-label>
+                      <q-item-label caption>Team1</q-item-label>
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>{{ position.awayName }}</q-item-label>
+                      <q-item-label caption>Team2</q-item-label>
                     </q-item-section>
                     <q-item-section>
                       <q-item-label>{{ position.odds }}</q-item-label>
@@ -154,6 +158,12 @@
                   <div v-if="loading">Loading...</div>
                   <div class="q-pa-md" style="max-width: 850px; padding: 10px">
                     <q-scroll-area style="height: 300px">
+                      <div
+                        v-if="!filteredLastMatches.length"
+                        style="text-align: center"
+                      >
+                        No history of last matches. Choose different filter.
+                      </div>
                       <q-list>
                         <q-item
                           clickable
@@ -214,10 +224,25 @@
                 <section v-else>
                   <div class="q-pa-md" style="max-width: 850px">
                     <q-scroll-area style="height: 300px">
+                      <div
+                        v-if="!filteredNextMatches.length"
+                        style="text-align: center"
+                      >
+                        No data of upcoming matches. Choose different filter.
+                      </div>
                       <q-list>
                         <q-item
                           v-for="match in filteredNextMatches"
                           :key="match.idEvent"
+                          clickable
+                          @click="
+                            (eventCard = true),
+                              test(
+                                match.idEvent,
+                                match.idHomeTeam,
+                                match.idAwayTeam
+                              )
+                          "
                         >
                           <q-item-section>
                             <q-item-label> {{ match.strSport }}</q-item-label>
@@ -404,7 +429,8 @@
                                       match.idEvent,
                                       match.homeOdds,
                                       match.strHomeTeam,
-                                      match.strAwayTeam
+                                      match.strAwayTeam,
+                                      0
                                     )
                                 "
                               >
@@ -418,7 +444,8 @@
                                       match.idEvent,
                                       match.awayOdds,
                                       match.strHomeTeam,
-                                      match.strAwayTeam
+                                      match.strAwayTeam,
+                                      1
                                     )
                                 "
                               >
@@ -432,7 +459,8 @@
                                       match.idEvent,
                                       match.drawOdds,
                                       match.strHomeTeam,
-                                      match.strAwayTeam
+                                      match.strAwayTeam,
+                                      2
                                     )
                                 "
                               >
@@ -687,7 +715,7 @@ export default {
       let self = this;
       this.coupon[0].totalOdds = this.countCourses();
       this.coupon[0].bid = this.toInt();
-      this.alert = true;
+
       axios({
         method: "post",
         baseURL: "https://localhost:5001/api/" + "Betting/tickets",
@@ -698,11 +726,13 @@ export default {
       })
         .then(function (response) {
           console.log(response);
-          self.coupon.splice[0];
+          self.alert = true;
+          self.coupon[0].positions = [];
         })
         .catch(function (error) {
           if (error.response) {
             self.success = error.response.data;
+
             // => the response payload
           }
           console.log(error);
@@ -724,18 +754,17 @@ export default {
       }
       return couponCourse.toFixed(2);
     },
-    add(eventId, course, home, away) {
+    add(eventId, course, home, away, choice) {
       let valid = true;
       for (let i = 0; i < this.coupon[0].positions.length; i++) {
         if (this.coupon[0].positions[i].eventID == eventId) {
           valid = false;
         }
       }
-
       if (valid)
         this.coupon[0].positions.push({
           eventID: eventId,
-          choice: 0,
+          choice: choice,
           odds: course,
           homeName: home,
           awayName: away,
@@ -747,6 +776,7 @@ export default {
           }
         }
       }
+      console.log(this.coupon[0]);
     },
     live(id, team1Id, team2Id, idLeague, strSeason) {
       const requestOne = axios.get(url + `matches/lastbyteam/${team1Id}`);
@@ -803,12 +833,15 @@ export default {
       }
     },
     onSportChange() {
-      if (this.modelLiveSport !== null) this.getSportDateEvents();
-      else this.filteredMatches = this.liveMatches;
+      if (this.modelLiveSport !== null) {
+        this.filteredMatches = this.filteredMatches.filter(
+          (b) => b.strSport == this.modelLiveSport
+        );
+      } else this.getFavDateEvents();
     },
     onLeagueChange() {
       if (this.modelLiveLeague !== null) this.getLeagueDateEvents();
-      else this.filteredMatches = this.liveMatches;
+      else this.getFavDateEvents();
     },
     currentDate() {
       let dt = new Date();
@@ -883,8 +916,7 @@ export default {
       );
     },
     getSportDateEvents() {
-      console.log(this.liveMatches);
-      this.filteredMatches = this.liveMatches.filter(
+      this.filteredMatches = this.todayMatches.filter(
         (b) => b.strSport == this.modelLiveSport
       );
     },
@@ -913,8 +945,8 @@ export default {
         },
       })
       .then((response) => {
-        this.liveMatches = response.data;
-        this.filteredMatches = this.liveMatches;
+        this.todayMatches = response.data;
+        this.filteredMatches = this.todayMatches;
       })
       .catch((error) => {
         console.log(error);
@@ -981,23 +1013,6 @@ export default {
           this.filteredSports.push(element.strSport);
         });
       });
-    axios
-      .request({
-        method: "get",
-        baseURL: url + `favourite/teams/matches/${this.date}`,
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
-      })
-      .then((response) => {
-        this.todayMatches = response.data;
-        this.filteredMatches = this.todayMatches;
-      })
-      .catch((error) => {
-        console.log(error);
-        this.errored = true;
-      })
-      .finally(() => (this.loading = false));
   },
 };
 
