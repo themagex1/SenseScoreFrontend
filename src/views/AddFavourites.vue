@@ -31,9 +31,9 @@
                 color="primary"
                 icon="favorite"
                 @click="
-                  bool
+                  checkFav(sport.idSport, 'sport')
                     ? deleteFav('sport', sport.idSport)
-                    : addFav('sport', sport.idSport)
+                    : addFavSport('sport', sport.idSport)
                 "
               />
             </q-item-section>
@@ -103,7 +103,7 @@
                   @click="
                     checkFav(team.idTeam, 'team')
                       ? deleteFav('team', team.idTeam)
-                      : addFav('team', team.idTeam)
+                      : addFavTeam('team', team.idTeam)
                   "
                 />
               </q-item-section>
@@ -142,7 +142,7 @@
                   @click="
                     checkFav(player.idPlayer, 'athlete')
                       ? deleteFav('athlete', player.idPlayer)
-                      : addFav('athlete', player.idPlayer)
+                      : addFavAthlete('athlete', player.idPlayer)
                   "
                 />
               </q-item-section>
@@ -180,7 +180,7 @@
                   @click="
                     checkFav(league.idLeague, 'league')
                       ? deleteFav('league', league.idLeague)
-                      : addFav('league', league.idLeague)
+                      : addFavLeague('league', league.idLeague)
                   "
                 />
               </q-item-section>
@@ -272,6 +272,11 @@ export default {
     },
     checkFav(id, object) {
       switch (object) {
+        case "sport": {
+          if (this.favouriteSports.filter((x) => x.idSport == id).length)
+            return true;
+          else return false;
+        }
         case "team": {
           if (this.favouriteTeams.filter((x) => x.idTeam == id).length)
             return true;
@@ -340,7 +345,26 @@ export default {
         }
       }
     },
-    addFav(category, id) {
+    addFavSport(category, id) {
+      this.postFav(category, id);
+      axios
+        .request({
+          method: "get",
+          baseURL: url + `favourite/sports`,
+          headers: {
+            Authorization: "Bearer " + bearer,
+          },
+        })
+        .then((response) => {
+          this.favouriteSports = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.errored = true;
+        })
+        .finally(() => (this.loading = false));
+    },
+    addFavTeam(category, id) {
       this.postFav(category, id);
       axios
         .request({
@@ -358,84 +382,44 @@ export default {
           this.errored = true;
         })
         .finally(() => (this.loading = false));
-      switch (category) {
-        case "sport": {
-          axios
-            .request({
-              method: "get",
-              baseURL: url + `favourite/sports`,
-              headers: {
-                Authorization: "Bearer " + bearer,
-              },
-            })
-            .then((response) => {
-              this.favouriteSports = response.data;
-              this.alert = true;
-            })
-            .catch((error) => {
-              console.log(error);
-              this.errored = true;
-            })
-            .finally(() => (this.loading = false));
-          break;
-        }
-        case "team": {
-          axios
-            .request({
-              method: "get",
-              baseURL: url + `favourite/teams`,
-              headers: {
-                Authorization: "Bearer " + bearer,
-              },
-            })
-            .then((response) => {
-              this.favouriteTeams = response.data;
-            })
-            .catch((error) => {
-              console.log(error);
-              this.errored = true;
-            })
-            .finally(() => (this.loading = false));
-          break;
-        }
-        case "league": {
-          axios
-            .request({
-              method: "get",
-              baseURL: url + `favourite/leagues`,
-              headers: {
-                Authorization: "Bearer " + bearer,
-              },
-            })
-            .then((response) => {
-              this.favouriteLeagues = response.data;
-            })
-            .catch((error) => {
-              console.log(error);
-              this.errored = true;
-            })
-            .finally(() => (this.loading = false));
-          break;
-        }
-        case "athlete": {
-          axios
-            .request({
-              method: "get",
-              baseURL: url + `favourite/athletes`,
-              headers: {
-                Authorization: "Bearer " + bearer,
-              },
-            })
-            .then((response) => {
-              this.favouriteAthletes = response.data;
-            })
-            .catch((error) => {
-              console.log(error);
-              this.errored = true;
-            })
-            .finally(() => (this.loading = false));
-        }
-      }
+    },
+    addFavAthlete(category, id) {
+      this.postFav(category, id);
+      axios
+        .request({
+          method: "get",
+          baseURL: url + `favourite/athletes`,
+          headers: {
+            Authorization: "Bearer " + bearer,
+          },
+        })
+        .then((response) => {
+          this.favouriteAthletes = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.errored = true;
+        })
+        .finally(() => (this.loading = false));
+    },
+    addFavLeague(category, id) {
+      this.postFav(category, id);
+      axios
+        .request({
+          method: "get",
+          baseURL: url + `favourite/leagues`,
+          headers: {
+            Authorization: "Bearer " + bearer,
+          },
+        })
+        .then((response) => {
+          this.favouriteLeagues = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.errored = true;
+        })
+        .finally(() => (this.loading = false));
     },
     searchTeams() {
       return axios

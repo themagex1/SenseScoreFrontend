@@ -85,176 +85,8 @@
       </div>
       <div class="q-pa-md">
         <div class="q-gutter-y-md" style="max-width: 850px; margin: 0 auto">
-          <p class="text-blue-7 text-uppercase text-h4">Favourites section</p>
-          <div-filters class="row" style="gap: 10px; justify-content: center">
-            <q-select
-              class="col-auto"
-              clearable
-              rounded
-              outlined
-              v-model="modelSport"
-              label="Select sport"
-              :options="filteredSports"
-              style="width: 30%"
-              bg-color="grey-8"
-              label-color="blue"
-              @update:model-value="onFavSportChange()"
-            >
-            </q-select>
-            <q-select
-              class="col-auto"
-              clearable
-              rounded
-              outlined
-              v-model="modelLeague"
-              label="Select league"
-              :options="filteredLeagues"
-              style="width: 30%"
-              bg-color="grey-8"
-              label-color="blue"
-              @update:model-value="onFavLeagueChange()"
-            >
-            </q-select>
-          </div-filters>
-          <q-card class="bg-grey-14">
-            <q-tabs
-              v-model="tab"
-              dense
-              class="bg-grey-9 text-blue-7"
-              active-color="primary"
-              indicator-color="primary"
-              align="justify"
-              narrow-indicator
-            >
-              <q-tab
-                name="finished"
-                icon="check_circle_outline"
-                label="Finished events"
-              />
-              <q-tab name="upcoming" icon="upcoming" label="Upcoming events" />
-            </q-tabs>
-
-            <q-separator />
-
-            <q-tab-panels
-              v-model="tab"
-              animated
-              class="bg-grey-9 text-blue-7"
-              style="color: #b383fc"
-            >
-              <q-tab-panel name="finished">
-                <section v-if="errored">
-                  <p>
-                    We're sorry, we're not able to retrieve this information at
-                    the moment, please try back later
-                  </p>
-                </section>
-
-                <section v-else>
-                  <div v-if="loading">Loading...</div>
-                  <div class="q-pa-md" style="max-width: 850px; padding: 10px">
-                    <q-scroll-area style="height: 300px">
-                      <q-list>
-                        <q-item
-                          clickable
-                          v-for="match in filteredLastMatches"
-                          :key="match.idEvent"
-                          @click="
-                            (eventCard = true),
-                              test(
-                                match.idEvent,
-                                match.idHomeTeam,
-                                match.idAwayTeam
-                              )
-                          "
-                        >
-                          <q-item-section>
-                            <q-item-label> {{ match.strSport }}</q-item-label>
-                            <q-item-label caption lines="1">
-                              {{ match.strLeague }}
-                            </q-item-label>
-                          </q-item-section>
-                          <q-item-section class="col-2">
-                            <img
-                              :src="require(`@/assets/${match.strSport}.png`)"
-                              alt
-                              class="icon"
-                              style="height: 20px; max-width: 20px"
-                            />
-                          </q-item-section>
-                          <q-item-section>
-                            {{ match.strHomeTeam }}-{{ match.strAwayTeam }}
-                          </q-item-section>
-                          <q-item-section style="color: #c3ddf4">
-                            {{ match.intHomeScore }}-{{ match.intAwayScore }}
-                          </q-item-section>
-                          <q-item-section side top>
-                            <q-item-label caption>{{
-                              match.dateEvent
-                            }}</q-item-label>
-                            <q-item-label>{{
-                              formatPrice(match.strTime)
-                            }}</q-item-label>
-                          </q-item-section>
-                        </q-item>
-                        <q-separator spaced inset />
-                      </q-list>
-                    </q-scroll-area>
-                  </div>
-                </section>
-              </q-tab-panel>
-
-              <q-tab-panel name="upcoming">
-                <section v-if="errored">
-                  <p>
-                    We're sorry, we're not able to retrieve this information at
-                    the moment, please try back later
-                  </p>
-                </section>
-                <section v-else>
-                  <div class="q-pa-md" style="max-width: 850px">
-                    <q-scroll-area style="height: 300px">
-                      <q-list>
-                        <q-item
-                          v-for="match in filteredNextMatches"
-                          :key="match.idEvent"
-                        >
-                          <q-item-section>
-                            <q-item-label> {{ match.strSport }}</q-item-label>
-                            <q-item-label caption lines="1">
-                              {{ match.strLeague }}
-                            </q-item-label>
-                          </q-item-section>
-                          <q-item-section class="col-2">
-                            <img
-                              :src="require(`@/assets/${match.strSport}.png`)"
-                              alt
-                              class="icon"
-                              style="height: 20px; max-width: 20px"
-                            />
-                          </q-item-section>
-                          <q-item-section>
-                            {{ match.strHomeTeam }}-{{ match.strAwayTeam }}
-                          </q-item-section>
-                          <q-item-section side top>
-                            <q-item-label caption>{{
-                              match.dateEvent
-                            }}</q-item-label>
-                            <q-item-label>{{
-                              formatPrice(match.strTime)
-                            }}</q-item-label>
-                          </q-item-section>
-                        </q-item>
-                        <q-separator spaced inset />
-                      </q-list>
-                    </q-scroll-area>
-                  </div>
-                </section>
-              </q-tab-panel>
-            </q-tab-panels>
-          </q-card>
           <h2 class="q-pt-md text-blue-7 text-uppercase text-h4">
-            Live section
+            Day section
           </h2>
           <div-filters class="row" style="gap: 10px; justify-content: center">
             <q-select
@@ -262,7 +94,7 @@
               clearable
               rounded
               outlined
-              v-model="modelLiveSport"
+              v-model="modelSport"
               label="Select sport"
               :options="filteredSports"
               style="width: 30%"
@@ -276,7 +108,7 @@
               clearable
               rounded
               outlined
-              v-model="modelLiveLeague"
+              v-model="modelLeague"
               label="Select league"
               :options="filteredLeagues"
               style="width: 30%"
@@ -285,6 +117,39 @@
               @update:model-value="onLeagueChange()"
             >
             </q-select>
+            <q-input
+              class="auto-column"
+              rounded
+              outlined
+              bg-color="grey-8"
+              label-color="blue"
+              v-model="date"
+              mask="####-##-##"
+              :rules="['date']"
+            >
+              <template v-slot:append>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy
+                    ref="qDateProxy"
+                    cover
+                    transition-show="scale"
+                    transition-hide="scale"
+                  >
+                    <q-date mask="YYYY-MM-DD" v-model="date">
+                      <div class="row items-center justify-end">
+                        <q-btn
+                          v-close-popup
+                          label="Ok"
+                          color="primary"
+                          flat
+                          @click="getDateEvents()"
+                        />
+                      </div>
+                    </q-date>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
           </div-filters>
           <q-card class="bg-grey-9 text-blue-7">
             <q-tab-panels
@@ -297,50 +162,7 @@
                   <div
                     class="q-pa-md row"
                     style="max-width: 600px; justify-content: space-between"
-                  >
-                    <q-input
-                      class="auto-column"
-                      filled
-                      v-model="date"
-                      mask="####-##-##"
-                      :rules="['date']"
-                    >
-                      <template v-slot:append>
-                        <q-icon name="event" class="cursor-pointer">
-                          <q-popup-proxy
-                            ref="qDateProxy"
-                            cover
-                            transition-show="scale"
-                            transition-hide="scale"
-                          >
-                            <q-date mask="YYYY-MM-DD" v-model="date">
-                              <div class="row items-center justify-end">
-                                <q-btn
-                                  v-close-popup
-                                  label="Ok"
-                                  color="primary"
-                                  flat
-                                  @click="getFavDateEvents()"
-                                />
-                              </div>
-                            </q-date>
-                          </q-popup-proxy>
-                        </q-icon>
-                      </template>
-                    </q-input>
-                    <q-btn
-                      outline
-                      color="primary"
-                      label="All matches"
-                      @click="getFavDateEvents()"
-                    />
-                    <q-btn
-                      outline
-                      color="primary"
-                      label="Live matches"
-                      @click="getFavLiveEvents()"
-                    />
-                  </div>
+                  ></div>
                   <section v-if="loading">
                     <p>
                       We're sorry, we're not able to retrieve this information
@@ -350,7 +172,7 @@
                   <section v-else>
                     <q-scroll-area style="height: 300px">
                       <q-list
-                        v-for="match in filteredMatches"
+                        v-for="match in filteredDayMatches"
                         :key="match.idEvent"
                       >
                         <q-item
@@ -439,6 +261,110 @@
                                 {{ match.drawOdds }}</q-btn
                               >
                             </q-item-label>
+                          </q-item-section>
+                        </q-item>
+                      </q-list>
+                    </q-scroll-area>
+                  </section>
+                </div>
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
+          <p class="text-blue-7 text-uppercase text-h4">Live section</p>
+          <div-filters class="row" style="gap: 10px; justify-content: center">
+            <q-select
+              class="col-auto"
+              clearable
+              rounded
+              outlined
+              v-model="modelSport"
+              label="Select sport"
+              :options="filteredSports"
+              style="width: 30%"
+              bg-color="grey-8"
+              label-color="blue"
+              @update:model-value="onLiveSportChange()"
+            >
+            </q-select>
+            <q-select
+              class="col-auto"
+              clearable
+              rounded
+              outlined
+              v-model="modelLeague"
+              label="Select league"
+              :options="filteredLeagues"
+              style="width: 30%"
+              bg-color="grey-8"
+              label-color="blue"
+              @update:model-value="onLiveLeagueChange()"
+            >
+            </q-select>
+          </div-filters>
+          <q-card class="bg-grey-9 text-blue-7">
+            <q-tab-panels
+              v-model="tabCourses"
+              animated
+              class="bg-grey-9 text-blue-7"
+            >
+              <q-tab-panel name="courses">
+                <div class="q-pa-md" style="max-width: 850px">
+                  <div
+                    class="q-pa-md row"
+                    style="max-width: 600px; justify-content: space-between"
+                  ></div>
+                  <section v-if="loading">
+                    <p>
+                      We're sorry, we're not able to retrieve this information
+                      at the moment, please try back later
+                    </p>
+                  </section>
+                  <section v-else>
+                    <q-scroll-area style="height: 300px">
+                      <q-list
+                        v-for="match in filteredLiveMatches"
+                        :key="match.idEvent"
+                      >
+                        <q-item
+                          clickable
+                          @click="
+                            (eventCard = true),
+                              live(
+                                match.idEvent,
+                                match.idHomeTeam,
+                                match.idAwayTeam,
+                                match.idLeague,
+                                match.strSeason
+                              )
+                          "
+                        >
+                          <q-item-section>
+                            <q-item-label> {{ match.strSport }} </q-item-label>
+                            <q-item-label caption lines="1"
+                              >{{ match.strLeague }}
+                            </q-item-label>
+                          </q-item-section>
+                          <q-item-section class="col-1">
+                            <img
+                              :src="require(`@/assets/${match.strSport}.png`)"
+                              alt
+                              class="icon"
+                              style="height: 20px; max-width: 20px"
+                            />
+                          </q-item-section>
+                          <q-item-section>
+                            {{ match.strHomeTeam }}-{{ match.strAwayTeam }}
+                          </q-item-section>
+                          <q-item-section>
+                            {{ match.intHomeScore }}-{{ match.intAwayScore }}
+                          </q-item-section>
+                          <q-item-section side top>
+                            <q-item-label caption>{{
+                              match.dateEvent
+                            }}</q-item-label>
+                            <q-item-label v-if="match?.strTime">{{
+                              formatPrice(match.strTime)
+                            }}</q-item-label>
                           </q-item-section>
                         </q-item>
                       </q-list>
@@ -584,10 +510,12 @@
       <q-dialog v-model="alert" position="top">
         <q-card style="background-color: green">
           <q-card-section>
-            <div class="text-h6">Notification</div>
+            <div class="text-h6">Alert</div>
           </q-card-section>
 
-          <q-card-section class="q-pt-none"> Sent coupon </q-card-section>
+          <q-card-section class="q-pt-none">
+            Added to favourites
+          </q-card-section>
 
           <q-card-actions align="right">
             <q-btn flat label="OK" color="primary" v-close-popup />
@@ -610,7 +538,7 @@ const bearer = localStorage.getItem("bearer");
 let url = "https://localhost:5001/api/SportDB/";
 
 export default {
-  name: "home",
+  name: "allEvents",
   components: { HomePageHeader, HomePageDrawer, RoutingTabs },
   setup() {
     const leftDrawerOpen = ref(false);
@@ -635,14 +563,10 @@ export default {
       model: ref(null),
       modelSport: ref(null),
       modelLeague: ref(null),
-      modelLiveSport: ref(null),
-      modelLiveLeague: ref(null),
       eventCard: false,
       matchTab: ref("match"),
       matchDetailsTab: ref("squad"),
       splitterModel: ref(20),
-      filteredFavLeagues: [],
-      filteredFavSports: [],
       leagues: [],
       sports: [],
       eventDetails: [],
@@ -655,13 +579,13 @@ export default {
       filteredNextMatches: [],
       todayMatches: [],
       liveMatches: [],
-      filteredMatches: [],
+      filteredDayMatches: [],
+      filteredLiveMatches: [],
       filteredSports: [],
       filteredLeagues: [],
       tab: ref("finished"),
       tabCourses: ref("courses"),
       columns,
-      favTeams: [],
       coupon: [
         {
           bid: 3,
@@ -788,27 +712,27 @@ export default {
     formatPrice(value) {
       return value.slice(0, 5);
     },
-    onFavSportChange() {
-      if (this.modelSport !== null) this.getFavSportDateEvents();
-      else {
-        this.filteredLastMatches = this.lastMatches;
-        this.filteredNextMatches = this.nextMatches;
-      }
+    onLiveSportChange() {
+      if (this.modelSport !== null) {
+        this.filteredLiveMatches = this.liveMatches.filter(
+          (sport) => sport.strSport == this.modelSport
+        );
+      } else this.filteredLiveMatches = this.liveMatches;
     },
-    onFavLeagueChange() {
-      if (this.modelLeague !== null) this.getFavLeagueDateEvents();
-      else {
-        this.filteredLastMatches = this.lastMatches;
-        this.filteredNextMatches = this.nextMatches;
-      }
+    onLiveLeagueChange() {
+      if (this.modelLeague !== null) {
+        this.filteredLiveMatches = this.liveMatches.filter(
+          (sport) => sport.strLeague == this.modelLeague
+        );
+      } else this.filteredLiveMatches = this.liveMatches;
     },
     onSportChange() {
-      if (this.modelLiveSport !== null) this.getSportDateEvents();
-      else this.filteredMatches = this.liveMatches;
+      if (this.modelSport !== null) this.getSportDateEvents();
+      else this.filteredDayMatches = this.todayMatches;
     },
     onLeagueChange() {
-      if (this.modelLiveLeague !== null) this.getLeagueDateEvents();
-      else this.filteredMatches = this.liveMatches;
+      if (this.modelLeague !== null) this.getLeagueDateEvents();
+      else this.filteredDayMatches = this.todayMatches;
     },
     currentDate() {
       let dt = new Date();
@@ -818,36 +742,10 @@ export default {
       const fullDate = year + "-" + month + "-" + date;
       return fullDate;
     },
-    getFavDateEvents() {
-      axios
-        .request({
-          method: "get",
-          baseURL: url + `favourite/teams/matches/${this.date}`,
-          headers: {
-            Authorization: "Bearer " + bearer,
-          },
-        })
-        .then((response) => {
-          this.filteredMatches = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-          this.errored = true;
-        })
-        .finally(() => (this.loading = false));
-    },
-    getFavLiveEvents() {
-      axios
-        .request({
-          method: "get",
-          baseURL: url + `favourite/teams/liveMatches`,
-          headers: {
-            Authorization: "Bearer " + bearer,
-          },
-        })
-        .then((response) => {
-          this.filteredMatches = response.data;
-        })
+    getDateEvents() {
+      return axios
+        .get(url + `matches/${this.date}`)
+        .then((response) => (this.filteredDayMatches = response.data))
         .catch((error) => {
           console.log(error);
           this.errored = true;
@@ -870,134 +768,73 @@ export default {
       }
       let time = hours - 1 + ":" + minutes + ":" + seconds;
       time = time.split(":").join("");
-      return this.filteredMatches.filter((d) => {
+      return this.filteredDayMatches.filter((d) => {
         return d.strTime.split(":").join("") > parseInt(time);
       });
     },
-    getFavSportDateEvents() {
-      this.filteredLastMatches = this.lastMatches.filter(
-        (b) => b.strSport == this.modelSport
-      );
-      this.filteredNextMatches = this.nextMatches.filter(
-        (b) => b.strSport == this.modelSport
-      );
-    },
     getSportDateEvents() {
-      console.log(this.liveMatches);
-      this.filteredMatches = this.liveMatches.filter(
-        (b) => b.strSport == this.modelLiveSport
+      this.filteredDayMatches = this.todayMatches.filter(
+        (b) => b.strSport === this.modelSport
       );
-    },
-    getFavLeagueDateEvents() {
-      this.filteredLastMatches = this.lastMatches.filter(
-        (b) => b.strLeague == this.modelLeague
-      );
-      this.filteredNextMatches = this.nextMatches.filter(
-        (b) => b.strLeague == this.modelLeague
-      );
+      return this.filteredDayMatches;
     },
     getLeagueDateEvents() {
-      this.filteredMatches = this.liveMatches.filter(
-        (b) => b.strLeague == this.modelLiveLeague
+      this.filteredDayMatches = this.todayMatches.filter(
+        (b) => b.strLeague === this.modelLeague
       );
-      return this.filteredMatches;
+      return this.filteredDayMatches;
     },
   },
   mounted() {
     axios
-      .request({
-        method: "get",
-        baseURL: url + `favourite/teams/matches/${this.date}`,
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
-      })
-      .then((response) => {
-        this.liveMatches = response.data;
-        this.filteredMatches = this.liveMatches;
-      })
-      .catch((error) => {
-        console.log(error);
-        this.errored = true;
-      })
-      .finally(() => (this.loading = false));
-    axios
-      .request({
-        method: "get",
-        baseURL: url + "favourite/teams/lastmatches",
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
-      })
-      .then((response) => {
-        this.lastMatches = response.data;
-        this.filteredLastMatches = this.lastMatches;
-      })
-      .catch((error) => {
-        console.log(error);
-        this.errored = true;
-      })
-      .finally(() => (this.loading = false));
-    axios
-      .request({
-        method: "get",
-        baseURL: url + "favourite/teams/nextmatches",
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
-      })
-      .then((response) => {
-        this.nextMatches = response.data;
-        this.filteredNextMatches = this.nextMatches;
-      })
-      .catch((error) => {
-        console.log(error);
-        this.errored = true;
-      })
-      .finally(() => (this.loading = false));
-    axios
-      .request({
-        method: "get",
-        baseURL: url + "favourite/leagues",
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
-      })
-      .then((response) => {
-        response.data.forEach((element) => {
-          this.filteredLeagues.push(element.strLeague);
-        });
-      });
-    axios
-      .request({
-        method: "get",
-        baseURL: url + "favourite/sports",
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
-      })
-      .then((response) => {
-        response.data.forEach((element) => {
-          this.filteredSports.push(element.strSport);
-        });
-      });
-    axios
-      .request({
-        method: "get",
-        baseURL: url + `favourite/teams/matches/${this.date}`,
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
-      })
+      .get(url + `matches/${this.date}`)
       .then((response) => {
         this.todayMatches = response.data;
-        this.filteredMatches = this.todayMatches;
+        this.filteredDayMatches = this.todayMatches;
       })
       .catch((error) => {
         console.log(error);
         this.errored = true;
       })
       .finally(() => (this.loading = false));
+    axios
+      .get(url + `livematches`)
+      .then((response) => {
+        this.liveMatches = response.data.events;
+        this.filteredLiveMatches = this.liveMatches;
+        console.log(this.filteredLiveMatches);
+      })
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
+    axios
+      .get(url + "leagues")
+      .then((response) => (this.leagues = response.data))
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
+    axios.get(url + "leagues").then((response) => {
+      response.data.forEach((element) => {
+        this.filteredLeagues.push(element.strLeague);
+      });
+    });
+    axios
+      .get(url + "sports")
+      .then((response) => (this.sports = response.data))
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
+    axios.get(url + "sports").then((response) => {
+      response.data.forEach((element) => {
+        this.filteredSports.push(element.strSport);
+      });
+    });
   },
 };
 

@@ -18,6 +18,12 @@
           <q-btn
             outline
             color="primary"
+            label="Only closed tickets"
+            @click="filterClosedTickets()"
+          />
+          <q-btn
+            outline
+            color="primary"
             label="Only won tickets"
             @click="filterTickets()"
           />
@@ -29,10 +35,13 @@
           :key="ticket.id"
         >
           <p class="q-pa-md">COUPON #{{ ticketid + 1 }}</p>
-          <div class="q-pl-md won" v-if="ticket.won" style="color: green">
+          <div class="q-pl-md pending" v-if="!ticket.isClosed">Pending</div>
+          <div class="q-pl-md won" v-if="ticket.won && ticket.isClosed">
             WON
           </div>
-          <div class="q-pl-md lost" v-else style="color: red">LOST</div>
+          <div class="q-pl-md lost" v-if="ticket.lost && ticket.isClosed">
+            LOST
+          </div>
           <q-item>
             <q-item-section>
               <q-item-label>{{ ticket.bid }}$</q-item-label>
@@ -111,6 +120,9 @@ export default {
     filterTickets() {
       this.filteredTickets = this.tickets.filter((x) => x.won == "true");
     },
+    filterClosedTickets() {
+      this.filteredTickets = this.tickets.filter((x) => x.isClosed == "true");
+    },
     allTickets() {
       this.filteredTickets = this.tickets;
     },
@@ -165,6 +177,12 @@ p {
   border: 1px solid;
   color: #4f8a10;
   background-color: #dff2bf;
+  width: 30%;
+}
+.pending {
+  border: 1px solid;
+  color: #ff9800;
+  background-color: #fcd59b;
   width: 30%;
 }
 </style>

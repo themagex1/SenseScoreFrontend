@@ -20,6 +20,12 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/home'),
   },
   {
+    path: '/all-events',
+    name: 'allEvents',
+
+    component: () => import(/* webpackChunkName: "about" */ '../views/AllEvents'),
+  },
+  {
     path: '/coupons',
     name: 'Coupons',
 
