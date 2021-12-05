@@ -278,7 +278,7 @@ export default {
           else return false;
         }
         case "team": {
-          if (this.favouriteTeams.filter((x) => x.idTeam == id).length)
+          if (this.favouriteTeams.filter((x) => x.idTeam == id).length != 0)
             return true;
           else return false;
         }
@@ -382,7 +382,6 @@ export default {
           this.errored = true;
         })
         .finally(() => (this.loading = false));
-      this.searchTeams();
     },
     addFavAthlete(category, id) {
       this.postFav(category, id);

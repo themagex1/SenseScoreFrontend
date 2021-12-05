@@ -22,24 +22,42 @@
               </div>
               <div v-else>
                 <q-list
+                  class="q-ma-sm"
                   v-for="coupon in coupon"
                   :key="coupon.id"
-                  style="width: 220px; border: 1px solid blue"
+                  style="width: 100%"
                 >
                   <q-item
+                    class="q-ma-sm"
                     v-for="position in coupon.positions"
                     :key="position.eventID"
+                    style="background-color: #9e9e9e; border-radius: 5px"
                   >
                     <q-item-section>
-                      <q-item-label>{{ position.eventID }}</q-item-label>
-                      <q-item-label caption>Event ID</q-item-label>
+                      <q-item-label style="color: #ffffff">{{
+                        position.homeName
+                      }}</q-item-label>
+                      <q-item-label caption>Team1</q-item-label>
                     </q-item-section>
                     <q-item-section>
-                      <q-item-label>{{ position.odds }}</q-item-label>
+                      <q-item-label style="color: #ffffff">{{
+                        position.awayName
+                      }}</q-item-label>
+                      <q-item-label caption>Team2</q-item-label>
+                    </q-item-section>
+                    <q-item-section side>
+                      <q-item-label style="color: #ffffff">{{
+                        position.odds
+                      }}</q-item-label>
                       <q-item-label caption>Odd</q-item-label>
                     </q-item-section>
-                    <q-item-section>
-                      <q-btn icon="delete" @click="removeEvent(position)" />
+                    <q-item-section side>
+                      <q-btn
+                        style="color: #ffffff; width: 20px"
+                        icon="delete"
+                        outline
+                        @click="removeEvent(position)"
+                      />
                     </q-item-section>
                   </q-item>
                 </q-list>
@@ -94,7 +112,7 @@
               clearable
               rounded
               outlined
-              v-model="modelSport"
+              v-model="modelDaySport"
               label="Select sport"
               :options="filteredSports"
               style="width: 30%"
@@ -108,7 +126,7 @@
               clearable
               rounded
               outlined
-              v-model="modelLeague"
+              v-model="modelDayLeague"
               label="Select league"
               :options="filteredLeagues"
               style="width: 30%"
@@ -125,7 +143,6 @@
               label-color="blue"
               v-model="date"
               mask="####-##-##"
-              :rules="['date']"
             >
               <template v-slot:append>
                 <q-icon name="event" class="cursor-pointer">
@@ -163,11 +180,9 @@
                     class="q-pa-md row"
                     style="max-width: 600px; justify-content: space-between"
                   ></div>
+
                   <section v-if="loading">
-                    <p>
-                      We're sorry, we're not able to retrieve this information
-                      at the moment, please try back later
-                    </p>
+                    <p>Loading data...</p>
                   </section>
                   <section v-else>
                     <q-scroll-area style="height: 300px">
@@ -316,11 +331,9 @@
                     class="q-pa-md row"
                     style="max-width: 600px; justify-content: space-between"
                   ></div>
+
                   <section v-if="loading">
-                    <p>
-                      We're sorry, we're not able to retrieve this information
-                      at the moment, please try back later
-                    </p>
+                    <p>Loading data...</p>
                   </section>
                   <section v-else>
                     <q-scroll-area style="height: 300px">
@@ -564,6 +577,8 @@ export default {
       model: ref(null),
       modelSport: ref(null),
       modelLeague: ref(null),
+      modelDaySport: ref(null),
+      modelDayLeague: ref(null),
       eventCard: false,
       matchTab: ref("match"),
       matchDetailsTab: ref("squad"),
@@ -730,12 +745,18 @@ export default {
       } else this.filteredLiveMatches = this.liveMatches;
     },
     onSportChange() {
-      if (this.modelSport !== null) this.getSportDateEvents();
-      else this.filteredDayMatches = this.todayMatches;
+      if (this.modelDaySport !== null) {
+        this.filteredDayMatches = this.filteredDayMatches.filter(
+          (b) => b.strSport === this.modelDaySport
+        );
+      } else this.getDateEvents();
     },
     onLeagueChange() {
-      if (this.modelLeague !== null) this.getLeagueDateEvents();
-      else this.filteredDayMatches = this.todayMatches;
+      if (this.modelDayLeague !== null) {
+        this.filteredDayMatches = this.filteredDayMatches.filter(
+          (b) => b.strLeague === this.modelDayLeague
+        );
+      } else this.getDateEvents();
     },
     currentDate() {
       let dt = new Date();
@@ -777,13 +798,13 @@ export default {
     },
     getSportDateEvents() {
       this.filteredDayMatches = this.todayMatches.filter(
-        (b) => b.strSport === this.modelSport
+        (b) => b.strSport === this.modelDaySport
       );
       return this.filteredDayMatches;
     },
     getLeagueDateEvents() {
       this.filteredDayMatches = this.todayMatches.filter(
-        (b) => b.strLeague === this.modelLeague
+        (b) => b.strLeague === this.modelDayLeague
       );
       return this.filteredDayMatches;
     },
@@ -871,7 +892,10 @@ const columns = [
   color: #1e88e5;
 }
 .coupon {
-  border: 1px solid #bbdefb;
+  background-color: #757575;
+  color: #90caf9;
+  border-radius: 4px;
+  border: 1px solid #29b6f6;
 }
 .q-field--filled .q-field__control {
   background: #616161;

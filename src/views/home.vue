@@ -22,28 +22,42 @@
               </div>
               <div v-else>
                 <q-list
+                  class="q-ma-sm"
                   v-for="coupon in coupon"
                   :key="coupon.id"
-                  style="width: 95%; border: 1px solid blue"
+                  style="width: 95%"
                 >
                   <q-item
+                    class="q-ma-sm"
                     v-for="position in coupon.positions"
                     :key="position.eventID"
+                    style="background-color: #9e9e9e; border-radius: 5px"
                   >
                     <q-item-section>
-                      <q-item-label>{{ position.homeName }}</q-item-label>
+                      <q-item-label style="color: #ffffff">{{
+                        position.homeName
+                      }}</q-item-label>
                       <q-item-label caption>Team1</q-item-label>
                     </q-item-section>
                     <q-item-section>
-                      <q-item-label>{{ position.awayName }}</q-item-label>
+                      <q-item-label style="color: #ffffff">{{
+                        position.awayName
+                      }}</q-item-label>
                       <q-item-label caption>Team2</q-item-label>
                     </q-item-section>
-                    <q-item-section>
-                      <q-item-label>{{ position.odds }}</q-item-label>
+                    <q-item-section side>
+                      <q-item-label style="color: #ffffff">{{
+                        position.odds
+                      }}</q-item-label>
                       <q-item-label caption>Odd</q-item-label>
                     </q-item-section>
-                    <q-item-section>
-                      <q-btn icon="delete" @click="removeEvent(position)" />
+                    <q-item-section side>
+                      <q-btn
+                        style="color: #ffffff; width: 20px"
+                        icon="delete"
+                        outline
+                        @click="removeEvent(position)"
+                      />
                     </q-item-section>
                   </q-item>
                 </q-list>
@@ -325,10 +339,12 @@
                   >
                     <q-input
                       class="auto-column"
-                      filled
+                      rounded
+                      outlined
+                      bg-color="grey-8"
+                      label-color="blue"
                       v-model="date"
                       mask="####-##-##"
-                      :rules="['date']"
                     >
                       <template v-slot:append>
                         <q-icon name="event" class="cursor-pointer">
@@ -1046,8 +1062,12 @@ const columns = [
   color: #1e88e5;
 }
 .coupon {
-  border: 1px solid #bbdefb;
+  background-color: #757575;
+  color: #90caf9;
+  border-radius: 4px;
+  border: 1px solid #29b6f6;
 }
+
 .q-field--filled .q-field__control {
   background: #616161;
 }
