@@ -84,12 +84,7 @@
                 </q-item>
                 <q-item v-ripple>
                   <q-item-section
-                    ><q-btn
-                      @click="play()"
-                      :disabled="testError"
-                      color="primary"
-                      label="PLAY"
-                    />
+                    ><q-btn @click="play()" color="primary" label="PLAY" />
                   </q-item-section>
                 </q-item>
                 <p v-if="success !== 'Success'" style="color: red">
@@ -185,10 +180,12 @@
                           :key="match.idEvent"
                           @click="
                             (eventCard = true),
-                              test(
+                              live(
                                 match.idEvent,
                                 match.idHomeTeam,
-                                match.idAwayTeam
+                                match.idAwayTeam,
+                                match.idLeague,
+                                match.strSeason
                               )
                           "
                         >
@@ -251,10 +248,12 @@
                           clickable
                           @click="
                             (eventCard = true),
-                              test(
+                              live(
                                 match.idEvent,
                                 match.idHomeTeam,
-                                match.idAwayTeam
+                                match.idAwayTeam,
+                                match.idLeague,
+                                match.strSeason
                               )
                           "
                         >
@@ -660,7 +659,6 @@ export default {
     const leftDrawerOpen = ref(false);
     return {
       alert: ref("false"),
-      testError: false,
       text: ref(""),
       leftDrawerOpen,
       toggleLeftDrawer() {
@@ -816,20 +814,6 @@ export default {
             this.eventLast2Matches = responseFive;
           })
         );
-    },
-    test(id, homeTeam, awayTeam) {
-      axios
-        .get(url + `matches/lastbyteam/${homeTeam}`)
-        .then((response) => (this.eventLast1Matches = response.data));
-      axios
-        .get(url + `matchstats/${id}`)
-        .then((response) => (this.eventDetails = response.data));
-      axios
-        .get(url + `matches/lastbyteam/${awayTeam}`)
-        .then((response) => (this.eventLast2Matches = response.data));
-      axios
-        .get(url + `matchlineup/${id}`)
-        .then((response) => (this.eventLineups = response.data));
     },
     formatPrice(value) {
       return value.slice(0, 5);

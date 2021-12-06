@@ -10,7 +10,18 @@
             <div class="row justify-center">
               <LoginPopUp />
               <RegisterPopup />
-              <Button @click="signInWithGoogle()"> Sign in with Google </Button>
+              <Button
+                style="
+                  background-color: rgb(66, 66, 66);
+                  color: rgb(0, 145, 234);
+                  font-size: 1.5vw;
+                  width: 8vw;
+                  font-family: 'News of the World';
+                "
+                @click="signInWithGoogle()"
+              >
+                SIGN IN WITH GOOGLE
+              </Button>
             </div>
           </div>
 
