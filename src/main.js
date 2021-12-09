@@ -12,5 +12,4 @@ const gauthOption = {
     prompt: 'consent',
     fetch_basic_profile: true
 }
-
 createApp(App).use(router).use(Quasar, quasarUserOptions).use(GAuth, gauthOption).mount('#app')

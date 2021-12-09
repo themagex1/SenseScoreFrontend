@@ -36,14 +36,14 @@ export default {
   color: white;
   max-width: 400px;
   margin: 40px auto;
-  font-family: "News of the World";
+  font-family: "News of the World", serif;
   font-size: 1.1vw;
 }
 
 .title {
   font-size: 7vw;
   text-align: center;
-  font-family: "News of the World";
+  font-family: "News of the World", serif;
   margin: 10vh auto;
 }
 

@@ -5,43 +5,63 @@ const routes = [
     path: '/',
     name: 'MainPage',
 
-    component: () => import(/* webpackChunkName: "about" */ '../views/MainPage.vue')
+    component: () => import( '../views/MainPage.vue')
   },
   {
     path: '/login',
     name: 'loginPopUp',
 
-    component: () => import(/* webpackChunkName: "about" */ '../components/loginPopUp')
+    component: () => import( '../components/loginPopUp')
   },
   {
     path: '/home',
     name: 'home',
 
-    component: () => import(/* webpackChunkName: "about" */ '../views/home'),
+    component: () => import( '../views/home'),
   },
   {
     path: '/all-events',
     name: 'allEvents',
 
-    component: () => import(/* webpackChunkName: "about" */ '../views/AllEvents'),
+    component: () => import('../views/AllEvents'),
   },
   {
     path: '/coupons',
     name: 'Coupons',
 
-    component: () => import(/* webpackChunkName: "about" */ '../views/Coupons'),
+    component: () => import('../views/Coupons'),
   },
   {
     path: '/add-favourites',
     name: 'addFavourites',
 
-    component: () => import(/* webpackChunkName: "about" */ '../views/AddFavourites'),
+    component: () => import('../views/AddFavourites'),
   },
   {
     path: '/preferences',
     name: 'preferencesPage',
     component: () => import('../views/preferencesPage')
-  }
+  },
+  {
+    path: '/about',
+    name: 'aboutUs',
+    component: () => import('../views/About')
+  },
+  {
+    path: '/FAQ',
+    name: 'FAQ',
+    component: () => import('../views/FAQ')
+  },
+  {
+    path: '/contact',
+    name: 'Contact',
+    component: () => import('../views/Contact')
+  },
+  {
+    path: '/opinions',
+    name: 'Opinions',
+    component: () => import('../views/Opinions')
+  },
 ]
 
 const router = createRouter({
