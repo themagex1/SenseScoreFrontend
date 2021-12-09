@@ -1,16 +1,16 @@
 <template>
   <div class="q-pa-md q-gutter-sm">
     <q-btn
-      label="LOGIN"
-      color="light-blue-14"
-      text-color="grey-9"
-      @click="card = true"
-      class="button__login"
+        label="LOGIN"
+        color="light-blue-14"
+        text-color="grey-9"
+        @click="card = true"
+        class="button__login"
     />
     <q-dialog
-      v-model="card"
-      class="justify-center dialog"
-      style="background-color: rgba(0, 0, 0, 0.8)"
+        v-model="card"
+        class="justify-center dialog"
+        style="background-color: rgba(0, 0, 0, 0.8)"
     >
       <q-card class="card__loginPopup flex flex-center column bg-light-blue-14">
         <div class="row flex-center container">
@@ -30,95 +30,96 @@
             <div class="description-login">
               <h2 class="login-h text-center text-grey-9">Log In</h2>
             </div>
-            <q-form @reset="onReset" class="q-gutter-md login-form">
+            <q-form class="q-gutter-md login-form">
               <q-input
-                standout
-                v-model="email"
-                label="Adres E-mail"
-                type="email"
-                bg-color="grey-9"
-                label-color="light-blue-14"
-                class="email-input"
+                  standout
+                  v-model="email"
+                  label="Adres E-mail"
+                  type="email"
+                  bg-color="grey-9"
+                  label-color="light-blue-14"
+                  class="email-input"
               />
               <q-input
-                class="pass-input"
-                bg-color="grey-9"
-                label-color="light-blue-14"
-                standout="bg-grey-9 text-light-blue-14"
-                v-model="password"
-                label="Password"
-                type="password"
+                  class="pass-input"
+                  bg-color="grey-9"
+                  label-color="light-blue-14"
+                  standout="bg-grey-9 text-light-blue-14"
+                  v-model="password"
+                  label="Password"
+                  type="password"
               />
               <q-toggle
-                class="acceptToggle"
-                color="grey-9"
-                v-model="accept"
-                label="I accept the license and terms"
-                keep-color
+                  class="acceptToggle"
+                  color="grey-9"
+                  v-model="accept"
+                  label="I accept the license and terms"
+                  keep-color
               />
               <div class="buttons">
                 <q-btn
-                  label="LOGIN"
-                  type="submit"
-                  color="grey-9"
-                  class="button__login-1 text-light-blue-14"
-                  @click="doLogin"
+                    label="LOGIN"
+                    type="submit"
+                    color="grey-9"
+                    class="button__login-1 text-light-blue-14"
+                    @click="doLogin"
                 />
                 <q-btn
-                  label="RESET"
-                  type="reset"
-                  color="light-blue-14"
-                  flat
-                  class="q-ml-sm button__reset text-grey-9"
+                    label="RESET"
+                    type="reset"
+                    color="light-blue-14"
+                    flat
+                    class="q-ml-sm button__reset text-grey-9"
+                    @click="onReset"
                 />
               </div>
               <div class="repeat-pass-desc">
-                <span>Forgot your password ?</span>
+                <passwordRecovery/>
               </div>
             </q-form>
           </div>
         </div>
 
-        <q-separator />
+        <q-separator/>
       </q-card>
     </q-dialog>
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
-import { getAuthService } from "@/services/authService";
+
+import { getAuthService } from '@/services/authService'
+import passwordRecovery from '@/components/passwordRecovery'
 
 export default {
-  setup() {
-    const accept = ref(false);
-
+  data () {
     return {
-      card: ref(false),
-      accept,
-      onReset() {
-        accept.value = false;
-      },
-    };
+      email: '',
+      password: '',
+      accept: false,
+      card: false
+    }
   },
-  data() {
-    return {
-      email: "",
-      password: "",
-    };
-  },
-  name: "loginPopUp",
+  name: 'loginPopUp',
   methods: {
-    async doLogin() {
-      const loggedIn = await getAuthService().logIn(this.email, this.password);
+    async doLogin () {
+      const loggedIn = await getAuthService().logIn(this.email, this.password)
       if (loggedIn) {
         await this.$router.push({
-          name: "home",
-        });
+          name: 'home',
+        })
       }
     },
+    onReset () {
+      this.accept = false
+      this.email = null
+      this.password = null
+    }
   },
-};
+  components: {
+    passwordRecovery
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -140,6 +141,7 @@ export default {
 .column__loginPopup-description {
   margin: 4vw 2vw;
 }
+
 .column__loginPopup-description_2 {
   margin: 0 2vw;
 }
