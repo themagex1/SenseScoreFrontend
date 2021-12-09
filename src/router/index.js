@@ -37,6 +37,11 @@ const routes = [
 
     component: () => import(/* webpackChunkName: "about" */ '../views/AddFavourites'),
   },
+  {
+    path: '/preferences',
+    name: 'preferencesPage',
+    component: () => import('../views/preferencesPage')
+  }
 ]
 
 const router = createRouter({
