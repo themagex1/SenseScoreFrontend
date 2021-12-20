@@ -15,7 +15,7 @@
             v-ripple
             v-for="sport in sports"
             :key="sport.idSport"
-            class="text-blue"
+            class="text-yellow"
           >
             <q-item-section>
               <div>{{ sport.strSport }}</div>
@@ -27,8 +27,8 @@
             <q-item-section side bottom>
               <q-btn
                 v-bind:class="{ active: mySports(sport.idSport) }"
+                flat
                 round
-                color="primary"
                 icon="favorite"
                 @click="
                   checkFav(sport.idSport, 'sport')
@@ -47,9 +47,11 @@
           style="width: 100%; justify-content: center"
         >
           <q-input
-            color="blue-7"
+            standout
             v-model="text"
             label="Search"
+            label-color="yellow"
+            class="text-yellow"
             @keyup.enter="
               searchTeams();
               searchPlayers();
@@ -57,7 +59,7 @@
             "
           >
             <template v-slot:append>
-              <q-icon name="search" />
+              <q-icon color="yellow" name="search" />
             </template>
           </q-input>
         </div>
@@ -77,7 +79,7 @@
               style="
                 font-size: 3em;
                 text-align: center;
-                color: #29b6f6;
+                color: #f9f871;
                 padding: 0 2em;
                 width: 300px;
               "
@@ -88,8 +90,8 @@
               v-ripple
               v-for="team in searchResult"
               :key="team.idTeam"
-              class="text-blue q-pl-md q-pr-md"
-              style="background-color: #757575; color: #000000 !important"
+              class="q-pl-md q-pr-md"
+              style="border: 1px solid #f9f871; color: #ffffff !important"
             >
               <q-item-section
                 >{{ team.strTeam }}({{ team.strSport }})</q-item-section
@@ -98,7 +100,6 @@
                 <q-btn
                   v-bind:class="{ active: myTeams(team.idTeam) }"
                   round
-                  color="primary"
                   icon="favorite"
                   @click="
                     checkFav(team.idTeam, 'team')
@@ -116,7 +117,7 @@
               style="
                 font-size: 3em;
                 text-align: center;
-                color: #29b6f6;
+                color: #f9f871;
                 padding: 0 2em;
                 width: 300px;
               "
@@ -127,8 +128,8 @@
               v-ripple
               v-for="player in searchPlayerResult"
               :key="player.idPlayer"
-              class="text-blue q-pl-md q-pr-md"
-              style="background-color: #757575; color: #000000 !important"
+              class="q-pl-md q-pr-md"
+              style="border: 1px solid #f9f871; color: #ffffff !important"
             >
               <q-item-section
                 >{{ player.strPlayer }}({{ player.strTeam }})</q-item-section
@@ -136,8 +137,8 @@
               <q-item-section side>
                 <q-btn
                   v-bind:class="{ active: myAthletes(player.idPlayer) }"
+                  flat
                   round
-                  color="primary"
                   icon="favorite"
                   @click="
                     checkFav(player.idPlayer, 'athlete')
@@ -154,7 +155,7 @@
               style="
                 font-size: 3em;
                 text-align: center;
-                color: #29b6f6;
+                color: #f9f871;
                 padding: 0 2em;
                 width: 300px;
               "
@@ -165,8 +166,8 @@
               v-ripple
               v-for="league in filteredLeagues"
               :key="league.idLeague"
-              class="text-blue q-pl-md q-pr-md"
-              style="background-color: #757575; color: #000000 !important"
+              class="q-pl-md q-pr-md"
+              style="border: 1px solid #f9f871; color: #ffffff !important"
             >
               <q-item-section
                 >{{ league.strLeague }}({{ league.strSport }})</q-item-section
@@ -175,7 +176,7 @@
                 <q-btn
                   v-bind:class="{ active: myLeagues(league.idLeague) }"
                   round
-                  color="primary"
+                  flat
                   icon="favorite"
                   @click="
                     checkFav(league.idLeague, 'league')

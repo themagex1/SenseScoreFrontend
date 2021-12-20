@@ -2,7 +2,12 @@
   <q-header elevated class="bg-light-blue-14">
     <q-toolbar style="gap: 20px">
       <q-toolbar-title>
-        <img alt="App logo" src="@/assets/logo.png" @click="$router.push({path:'/'})" style="cursor: pointer"/>
+        <img
+          alt="App logo"
+          src="@/assets/logo.png"
+          @click="$router.push({ path: '/' })"
+          style="cursor: pointer"
+        />
       </q-toolbar-title>
 
       <div>
@@ -20,7 +25,7 @@
           color="grey-9"
           flat
           no-caps
-          @click="$router.push({name: 'MainPage'})"
+          @click="$router.push({ name: 'MainPage' })"
           >Home
         </q-btn>
       </div>
@@ -31,14 +36,14 @@
           color="grey-9"
           flat
           no-caps
-          @click="$router.push({name: 'aboutUs'})"
+          @click="$router.push({ name: 'aboutUs' })"
           >About Us
         </q-btn>
       </div>
       <div>
         <q-btn-dropdown flat dropdown-icon="menu" color="grey-9">
           <q-list>
-            <q-item clickable @click="$router.push({name:'FAQ'})">
+            <q-item clickable @click="$router.push({ name: 'FAQ' })">
               <q-item-section>
                 <q-item-label>FAQ</q-item-label>
               </q-item-section>
@@ -46,7 +51,7 @@
                 <q-icon name="question_answer" />
               </q-item-section>
             </q-item>
-            <q-item clickable @click="$router.push({name: 'Contact'})">
+            <q-item clickable @click="$router.push({ name: 'Contact' })">
               <q-item-section>
                 <q-item-label>Contact</q-item-label>
               </q-item-section>
@@ -54,7 +59,7 @@
                 <q-icon name="contact_support" />
               </q-item-section>
             </q-item>
-            <q-item clickable @click="$router.push({name: 'Opinions'})">
+            <q-item clickable @click="$router.push({ name: 'Opinions' })">
               <q-item-section>
                 <q-item-label>Opinions</q-item-label>
               </q-item-section>

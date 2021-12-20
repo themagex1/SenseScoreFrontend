@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-md">
     <div class="q-gutter-y-md" style="max-width: 100%">
-      <q-tabs v-model="tab" no-caps class="text-grey-10 shadow-2">
+      <q-tabs v-model="tab" no-caps class="shadow-2">
         <q-route-tab label="Your events" to="/home" exact />
         <q-route-tab label="All events" to="/all-events" exact />
         <q-route-tab label="Favourites" to="/add-favourites" exact />
@@ -41,7 +41,8 @@ p,
 }
 
 .q-tabs {
-  background-color: #bbdefb;
+  background-color: #4d4d4d;
+  color: yellow;
 }
 ::v-deep .q-tab__label {
   font-weight: 700;

@@ -4,26 +4,26 @@
     <HomePageDrawer />
     <q-page-container>
       <RoutingTabs />
-      <h1 style="text-align: center" class="text-blue-7 text-uppercase text-h4">
+      <h1 style="text-align: center" class="text-uppercase text-h4">
         Your coupons
       </h1>
       <div class="q-pa-md column" style="align-items: center">
         <div class="q-pa-md q-gutter-sm">
           <q-btn
             outline
-            color="primary"
+            color="yellow"
             label="All coupons"
             @click="allTickets()"
           />
           <q-btn
             outline
-            color="primary"
+            color="yellow"
             label="Only closed tickets"
             @click="filterClosedTickets()"
           />
           <q-btn
             outline
-            color="primary"
+            color="yellow"
             label="Only won tickets"
             @click="filterTickets()"
           />
@@ -63,7 +63,7 @@
           <q-item
             v-for="position in ticket.positions"
             :key="position.eventID"
-            style="background-color: #9e9e9e; border-radius: 5px"
+            style="border: 1px solid #f9f871; border-radius: 5px"
             class="q-ma-sm"
           >
             <q-item-section>
@@ -168,6 +168,7 @@ export default {
 h1,
 p {
   font-family: "Ubuntu", sans-serif;
+  color: #f9f871;
 }
 
 .q-list {
@@ -177,7 +178,7 @@ p {
   border-radius: 4px;
   width: 400px;
   margin-bottom: 30px;
-  border: 1px solid #29b6f6;
+  border: 1px solid #ffffff;
 }
 .lost {
   border: 1px solid;
@@ -196,6 +197,18 @@ p {
   color: #ff9800;
   background-color: #fcd59b;
   width: 30%;
+}
+
+.q-item__label--caption,
+.q-item__label,
+.q-item__section {
+  color: #ffffff !important;
+}
+.coupon {
+  background-color: #757575;
+  color: #f9f871 !important;
+  border-radius: 4px;
+  border: 1px solid #ffffff;
 }
 </style>
 

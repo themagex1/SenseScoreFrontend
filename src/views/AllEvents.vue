@@ -12,9 +12,9 @@
       <div class="q-pa-md">
         <div class="q-gutter-y-md" style="max-width: 320px; float: right">
           <q-card class="coupon shadow-2 rounded-borders">
-            <q-tab-panel class="bg-grey-9 text-blue-7">
+            <q-tab-panel class="bg-grey-9">
               <q-item class="q-mb-md" v-ripple>
-                <q-item-section style="color: #bbdefb">COUPON</q-item-section>
+                <q-item-section>COUPON</q-item-section>
               </q-item>
               <div v-if="!coupon[0].positions.length">
                 <p>Your coupon is empty</p>
@@ -31,29 +31,23 @@
                     class="q-ma-sm"
                     v-for="position in coupon.positions"
                     :key="position.eventID"
-                    style="background-color: #9e9e9e; border-radius: 5px"
+                    style="border: 1px solid #f9f871; border-radius: 5px"
                   >
                     <q-item-section>
-                      <q-item-label style="color: #ffffff">{{
-                        position.homeName
-                      }}</q-item-label>
+                      <q-item-label>{{ position.homeName }}</q-item-label>
                       <q-item-label caption>Team1</q-item-label>
                     </q-item-section>
                     <q-item-section>
-                      <q-item-label style="color: #ffffff">{{
-                        position.awayName
-                      }}</q-item-label>
+                      <q-item-label>{{ position.awayName }}</q-item-label>
                       <q-item-label caption>Team2</q-item-label>
                     </q-item-section>
                     <q-item-section side>
-                      <q-item-label style="color: #ffffff">{{
-                        position.odds
-                      }}</q-item-label>
+                      <q-item-label>{{ position.odds }}</q-item-label>
                       <q-item-label caption>Odd</q-item-label>
                     </q-item-section>
                     <q-item-section side>
                       <q-btn
-                        style="color: #ffffff; width: 20px"
+                        style="width: 20px"
                         icon="delete"
                         outline
                         @click="removeEvent(position)"
@@ -66,7 +60,11 @@
                   <q-item-section>
                     <q-item-label overline>To pay:</q-item-label>
                     <q-item-label
-                      ><q-input outlined v-model="text" label="Bet"
+                      ><q-input
+                        bg-color="yellow"
+                        outlined
+                        v-model="text"
+                        label="Bet"
                     /></q-item-label>
                   </q-item-section>
                   <q-item-section style="text-align: right">
@@ -87,7 +85,6 @@
                     ><q-btn
                       @click="play()"
                       :disabled="testError"
-                      color="primary"
                       label="PLAY"
                     />
                   </q-item-section>
@@ -103,9 +100,7 @@
       </div>
       <div class="q-pa-md">
         <div class="q-gutter-y-md" style="max-width: 850px; margin: 0 auto">
-          <h2 class="q-pt-md text-blue-7 text-uppercase text-h4">
-            Day section
-          </h2>
+          <h2 class="q-pt-md text-uppercase text-h4">Day section</h2>
           <div-filters class="row" style="gap: 10px; justify-content: center">
             <q-select
               class="col-auto"
@@ -117,7 +112,7 @@
               :options="filteredSports"
               style="width: 30%"
               bg-color="grey-8"
-              label-color="blue"
+              label-color="yellow"
               @update:model-value="onSportChange()"
             >
             </q-select>
@@ -131,7 +126,7 @@
               :options="filteredLeagues"
               style="width: 30%"
               bg-color="grey-8"
-              label-color="blue"
+              label-color="yellow"
               @update:model-value="onLeagueChange()"
             >
             </q-select>
@@ -140,7 +135,7 @@
               rounded
               outlined
               bg-color="grey-8"
-              label-color="blue"
+              label-color="yellow"
               v-model="date"
               mask="####-##-##"
             >
@@ -155,9 +150,9 @@
                     <q-date mask="YYYY-MM-DD" v-model="date">
                       <div class="row items-center justify-end">
                         <q-btn
+                          color="primary"
                           v-close-popup
                           label="Ok"
-                          color="primary"
                           flat
                           @click="getDateEvents()"
                         />
@@ -168,12 +163,8 @@
               </template>
             </q-input>
           </div-filters>
-          <q-card class="bg-grey-9 text-blue-7">
-            <q-tab-panels
-              v-model="tabCourses"
-              animated
-              class="bg-grey-9 text-blue-7"
-            >
+          <q-card class="bg-grey-9">
+            <q-tab-panels v-model="tabCourses" animated class="bg-grey-9">
               <q-tab-panel name="courses">
                 <div class="q-pa-md" style="max-width: 850px">
                   <div
@@ -288,7 +279,7 @@
               </q-tab-panel>
             </q-tab-panels>
           </q-card>
-          <p class="text-blue-7 text-uppercase text-h4">Live section</p>
+          <p class="text-uppercase text-h4">Live section</p>
           <div-filters class="row" style="gap: 10px; justify-content: center">
             <q-select
               class="col-auto"
@@ -300,7 +291,7 @@
               :options="filteredSports"
               style="width: 30%"
               bg-color="grey-8"
-              label-color="blue"
+              label-color="yellow"
               @update:model-value="onLiveSportChange()"
             >
             </q-select>
@@ -314,17 +305,13 @@
               :options="filteredLeagues"
               style="width: 30%"
               bg-color="grey-8"
-              label-color="blue"
+              label-color="yellow"
               @update:model-value="onLiveLeagueChange()"
             >
             </q-select>
           </div-filters>
-          <q-card class="bg-grey-9 text-blue-7">
-            <q-tab-panels
-              v-model="tabCourses"
-              animated
-              class="bg-grey-9 text-blue-7"
-            >
+          <q-card class="bg-grey-9">
+            <q-tab-panels v-model="tabCourses" animated class="bg-grey-9">
               <q-tab-panel name="courses">
                 <div class="q-pa-md" style="max-width: 850px">
                   <div
@@ -400,8 +387,6 @@
               v-model="matchTab"
               dense
               class="text-grey"
-              active-color="primary"
-              indicator-color="primary"
               align="justify"
               style="width: 500px"
             >
@@ -887,16 +872,28 @@ const columns = [
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Ubuntu&display=swap");
+.q-tab-panel,
+.q-tabs,
+.q-tabs-panels,
+p,
+h2,
+.q-btn {
+  color: #f9f871;
+}
+
 .q-item__label--caption,
-.q-item__label {
-  color: #1e88e5;
+.q-item__label,
+.q-item__section,
+.q-list {
+  color: #ffffff !important;
 }
 .coupon {
   background-color: #757575;
-  color: #90caf9;
+  color: #f9f871 !important;
   border-radius: 4px;
-  border: 1px solid #29b6f6;
+  border: 1px solid #ffffff;
 }
+
 .q-field--filled .q-field__control {
   background: #616161;
 }
