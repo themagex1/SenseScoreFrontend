@@ -16,7 +16,7 @@ export const AuthService = {
     try {
       const passHash = md5(password)
       const fetchHelper = new FetchHelper()
-      await fetch(`https://localhost:5001/Account/login`, {
+      await fetch(`https://localhost:5001/api/Account/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

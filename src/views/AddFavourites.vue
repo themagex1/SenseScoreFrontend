@@ -255,7 +255,7 @@ export default {
     removeFav(category, id) {
       axios({
         method: "delete",
-        baseURL: "https://localhost:5001/" + "Account/favourite",
+        baseURL: "https://localhost:5001/" + "api/Account/favourite",
         headers: {
           Authorization: "Bearer " + bearer,
         },
@@ -298,7 +298,7 @@ export default {
     postFav(category, id) {
       axios({
         method: "post",
-        baseURL: "https://localhost:5001/" + "Account/favourite",
+        baseURL: "https://localhost:5001/" + "api/Account/favourite",
         headers: {
           Authorization: "Bearer " + bearer,
         },

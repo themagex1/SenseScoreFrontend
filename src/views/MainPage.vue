@@ -126,7 +126,7 @@ export default {
         const googleUser = await this.$gAuth.signIn();
         var id_token = googleUser.getAuthResponse().id_token;
         const response = await fetch(
-          "https://localhost:5001/Account/google-request",
+          "https://localhost:5001/api/Account/google-request",
           {
             method: "POST",
             headers: {

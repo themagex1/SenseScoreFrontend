@@ -5,7 +5,7 @@ import InvalidFieldError from '@/InvalidFieldError'
 const AccountService = {
   async addAccount (eMail, username, password) {
     try {
-      const data = await axios.post(`https://localhost:5001/Account/register`, {
+      const data = await axios.post(`https://localhost:5001/api/Account/register`, {
           username: username,
           email: eMail,
           passHash: md5(password)
@@ -23,7 +23,7 @@ const AccountService = {
 
   async resetPassword(eMail, token, password) {
     try {
-      const data = await axios.post('https://localhost:5001/Account/resetpassword', {
+      const data = await axios.post('https://localhost:5001/api/Account/resetpassword', {
         email: eMail,
         token: token,
         passHash: md5(password)
