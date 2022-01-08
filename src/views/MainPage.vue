@@ -10,12 +10,10 @@
             <div class="row justify-center">
               <LoginPopUp />
               <RegisterPopup />
-              <div class="google-btn" @click="signInWithGoogle">
-                <div class="google-icon-wrapper">
-                  <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"/>
-                </div>
-                <p class="btn-text"><b>Sign in with Google</b></p>
-              </div>
+              <q-btn outline label="Sign in with " text-color="light-blue-14" @click="signInWithGoogle"
+                     class="google-button" >
+                <img src="../assets/google-brands.svg" class="google-image">
+              </q-btn>
             </div>
           </div>
 
@@ -70,7 +68,7 @@
         </div>
       </div>
 
-      <q-footer elevated class="footer" v-if="cookiesPolicyAccepted">
+      <q-footer elevated class="footer" v-if="!cookiesPolicyAccepted">
         <q-toolbar style="">
           <div class="footer__box self-center">
             <div class="footer__box-text text-center">
@@ -113,12 +111,19 @@ export default {
   },
   data() {
     return {
-      cookiesPolicyAccepted: true,
+      cookiesPolicyAccepted: false,
     };
   },
   methods: {
-    acceptCookiesPolicy() {
-      this.cookiesPolicyAccepted = false;
+    acceptCookiesPolicy () {
+
+      if (sessionStorage.getItem('cookiesPolicyAccepted') === 'true')
+        this.cookiesPolicyAccepted = false
+      else {
+        sessionStorage.setItem('cookiesPolicyAccepted', 'true')
+        this.cookiesPolicyAccepted = true
+      }
+
     },
     async signInWithGoogle() {
       try {
@@ -215,45 +220,20 @@ export default {
   color: $grey-9;
 }
 
-.google-btn {
-  width: 184px;
-  height: 42px;
-  background-color: $google-blue;
-  border-radius: 2px;
-  box-shadow: 0 3px 4px 0 rgba(0,0,0,.25);
-  cursor: pointer;
+.google-button {
+  font-size: 1.5vw;
+  width: 10vw;
+  font-family: "News of the World";
+  color: $grey-9;
+  height: 6vh;
   margin-top: auto;
   margin-bottom: auto;
-  .google-icon-wrapper {
-    position: absolute;
-    margin-top: 1px;
-    margin-left: 1px;
-    width: 40px;
-    height: 40px;
-    border-radius: 2px;
-    background-color: $white;
-  }
-  .google-icon {
-    position: absolute;
-    margin-top: 11px;
-    margin-left: 11px;
-    width: 18px;
-    height: 18px;
-  }
-  .btn-text {
-    float: right;
-    margin: 11px 11px 0 0;
-    color: $white;
-    font-size: 14px;
-    letter-spacing: 0.2px;
-    font-family: "Roboto";
-  }
-  &:hover {
-    box-shadow: 0 0 6px $google-blue;
-  }
-  &:active {
-    background: $button-active-blue;
-  }
+  margin-left: 1vw;
+}
+.google-image {
+  max-width: 1.2vw;
+  background-color: $light-blue-14;
+  margin-left: 0.2vw;
 }
 
 @import url(https://fonts.googleapis.com/css?family=Roboto:500);

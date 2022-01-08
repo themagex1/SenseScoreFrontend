@@ -11,14 +11,6 @@
       </q-toolbar-title>
 
       <div>
-        <q-toggle
-          v-model="value"
-          color="grey-9"
-          class="text-weight-bold text-grey-9"
-          >Dark Mode
-        </q-toggle>
-      </div>
-      <div>
         <q-btn
           class="text-weight-bold"
           icon-right="home"
