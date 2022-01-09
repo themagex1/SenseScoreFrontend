@@ -31,6 +31,17 @@
             table-class="text-amber-5"
             table-header-class="text-amber-4"
           />
+          <q-table
+            :rows="rowsPointsRecentTable"
+            :columns="pointsRecentColumns"
+            title="Recent"
+            hide-bottom
+            virtual-scroll
+            card-class="bg-grey-8 text-amber-5"
+            :pagination="initialPagination"
+            table-class="text-amber-5"
+            table-header-class="text-amber-4"
+          />
         </div>
       </div>
     </q-page-container>
@@ -46,6 +57,23 @@ const bearer = localStorage.getItem("bearer");
 
 let url = "https://localhost:5001/api/";
 const pointsColumns = [
+  {
+    name: "user",
+    label: "User",
+    align: "left",
+    field: "user",
+    sortable: true,
+  },
+  {
+    name: "position",
+    label: "Position",
+    field: "position",
+    sortable: true,
+  },
+  { name: "points", label: "Points", field: "points", sortable: true },
+];
+
+const pointsRecentColumns = [
   {
     name: "user",
     label: "User",
@@ -87,6 +115,7 @@ export default {
       toggleTable: true,
       value: ref(true),
       pointsColumns,
+      pointsRecentColumns,
       balanceColumns,
       initialPagination: {
         sortBy: "desc",
@@ -102,6 +131,7 @@ export default {
       errored: false,
       rowsPointsTable: [],
       rowsBalanceTable: [],
+      rowsPointsRecentTable: [],
     };
   },
   methods: {},
@@ -120,12 +150,21 @@ export default {
         Authorization: "Bearer " + bearer,
       },
     });
-    axios.all([requestOne, requestTwo]).then(
+    const requestThree = axios.request({
+      method: "get",
+      baseURL: url + "Rank/recent",
+      headers: {
+        Authorization: "Bearer " + bearer,
+      },
+    });
+    axios.all([requestOne, requestTwo, requestThree]).then(
       axios.spread((...responses) => {
         const responseOne = responses[0].data;
         const responseTwo = responses[1].data;
+        const responseThree = responses[1].data;
         this.rowsPointsTable = responseOne;
         this.rowsBalanceTable = responseTwo;
+        this.rowsPointsRecentTable = responseThree;
       })
     );
   },
