@@ -8,164 +8,75 @@
         User standing
       </h1>
       <div class="q-pa-md column" style="align-items: center">
-        <q-table
-          title="Rank"
-          :rows="rows"
-          :columns="columns"
-          row-key="name"
-          :pagination="initialPagination"
-        />
+        <div class="q-pa-md row q-gutter-lg">
+          <q-table
+            :rows="rowsPointsTable"
+            :columns="pointsColumns"
+            title="Points"
+            hide-bottom
+            virtual-scroll
+            card-class="bg-grey-8 text-amber-5"
+            :pagination="initialPagination"
+            table-class="text-amber-5"
+            table-header-class="text-amber-4"
+          />
+          <q-table
+            :rows="rowsBalanceTable"
+            :columns="balanceColumns"
+            title="Balance"
+            hide-bottom
+            virtual-scroll
+            card-class="bg-grey-8 text-amber-5"
+            :pagination="initialPagination"
+            table-class="text-amber-5"
+            table-header-class="text-amber-4"
+          />
+        </div>
       </div>
     </q-page-container>
   </q-layout>
 </template>
 <script>
 import { ref } from "vue";
-//import axios from "axios";
+import axios from "axios";
 import HomePageHeader from "@/components/HomePageHeader";
 import HomePageDrawer from "@/components/HomePageDrawer";
 import RoutingTabs from "@/components/RoutingTabs";
-//const bearer = localStorage.getItem("bearer");
+const bearer = localStorage.getItem("bearer");
 
-//let url = "https://localhost:5001/api/";
-const columns = [
+let url = "https://localhost:5001/api/";
+const pointsColumns = [
   {
-    name: "name",
-    required: true,
-    label: "Dessert (100g serving)",
+    name: "user",
+    label: "User",
     align: "left",
-    field: (row) => row.name,
-    format: (val) => `${val}`,
+    field: "user",
     sortable: true,
   },
   {
-    name: "calories",
-    align: "center",
-    label: "Calories",
-    field: "calories",
+    name: "position",
+    label: "Position",
+    field: "position",
     sortable: true,
   },
-  { name: "fat", label: "Fat (g)", field: "fat", sortable: true },
-  { name: "carbs", label: "Carbs (g)", field: "carbs" },
-  { name: "protein", label: "Protein (g)", field: "protein" },
-  { name: "sodium", label: "Sodium (mg)", field: "sodium" },
-  {
-    name: "calcium",
-    label: "Calcium (%)",
-    field: "calcium",
-    sortable: true,
-    sort: (a, b) => parseInt(a, 10) - parseInt(b, 10),
-  },
-  {
-    name: "iron",
-    label: "Iron (%)",
-    field: "iron",
-    sortable: true,
-    sort: (a, b) => parseInt(a, 10) - parseInt(b, 10),
-  },
+  { name: "points", label: "Points", field: "points", sortable: true },
 ];
 
-const rows = [
+const balanceColumns = [
   {
-    name: "Frozen Yogurt",
-    calories: 159,
-    fat: 6.0,
-    carbs: 24,
-    protein: 4.0,
-    sodium: 87,
-    calcium: "14%",
-    iron: "1%",
+    name: "user",
+    label: "User",
+    align: "left",
+    field: "user",
+    sortable: true,
   },
   {
-    name: "Ice cream sandwich",
-    calories: 237,
-    fat: 9.0,
-    carbs: 37,
-    protein: 4.3,
-    sodium: 129,
-    calcium: "8%",
-    iron: "1%",
+    name: "position",
+    label: "Position",
+    field: "position",
+    sortable: true,
   },
-  {
-    name: "Eclair",
-    calories: 262,
-    fat: 16.0,
-    carbs: 23,
-    protein: 6.0,
-    sodium: 337,
-    calcium: "6%",
-    iron: "7%",
-  },
-  {
-    name: "Cupcake",
-    calories: 305,
-    fat: 3.7,
-    carbs: 67,
-    protein: 4.3,
-    sodium: 413,
-    calcium: "3%",
-    iron: "8%",
-  },
-  {
-    name: "Gingerbread",
-    calories: 356,
-    fat: 16.0,
-    carbs: 49,
-    protein: 3.9,
-    sodium: 327,
-    calcium: "7%",
-    iron: "16%",
-  },
-  {
-    name: "Jelly bean",
-    calories: 375,
-    fat: 0.0,
-    carbs: 94,
-    protein: 0.0,
-    sodium: 50,
-    calcium: "0%",
-    iron: "0%",
-  },
-  {
-    name: "Lollipop",
-    calories: 392,
-    fat: 0.2,
-    carbs: 98,
-    protein: 0,
-    sodium: 38,
-    calcium: "0%",
-    iron: "2%",
-  },
-  {
-    name: "Honeycomb",
-    calories: 408,
-    fat: 3.2,
-    carbs: 87,
-    protein: 6.5,
-    sodium: 562,
-    calcium: "0%",
-    iron: "45%",
-  },
-  {
-    name: "Donut",
-    calories: 452,
-    fat: 25.0,
-    carbs: 51,
-    protein: 4.9,
-    sodium: 326,
-    calcium: "2%",
-    iron: "22%",
-  },
-  {
-    name: "KitKat",
-    calories: 518,
-    fat: 26.0,
-    carbs: 65,
-    protein: 7,
-    sodium: 54,
-    calcium: "12%",
-    iron: "6%",
-  },
+  { name: "balance", label: "Balance", field: "points", sortable: true },
 ];
 
 export default {
@@ -173,15 +84,15 @@ export default {
   components: { HomePageHeader, RoutingTabs, HomePageDrawer },
   setup() {
     return {
+      toggleTable: true,
       value: ref(true),
-      columns,
-      rows,
+      pointsColumns,
+      balanceColumns,
       initialPagination: {
         sortBy: "desc",
         descending: false,
         page: 1,
         rowsPerPage: 10,
-        // rowsNumber: xx if getting data from a server
       },
     };
   },
@@ -189,12 +100,35 @@ export default {
     return {
       loading: true,
       errored: false,
-      tickets: [],
-      filteredTickets: [],
+      rowsPointsTable: [],
+      rowsBalanceTable: [],
     };
   },
   methods: {},
-  mounted() {},
+  mounted() {
+    const requestOne = axios.request({
+      method: "get",
+      baseURL: url + "Rank/all",
+      headers: {
+        Authorization: "Bearer " + bearer,
+      },
+    });
+    const requestTwo = axios.request({
+      method: "get",
+      baseURL: url + "Rank/balance",
+      headers: {
+        Authorization: "Bearer " + bearer,
+      },
+    });
+    axios.all([requestOne, requestTwo]).then(
+      axios.spread((...responses) => {
+        const responseOne = responses[0].data;
+        const responseTwo = responses[1].data;
+        this.rowsPointsTable = responseOne;
+        this.rowsBalanceTable = responseTwo;
+      })
+    );
+  },
 };
 </script>
 

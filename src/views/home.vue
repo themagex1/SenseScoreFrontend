@@ -164,8 +164,9 @@
                       >
                         No history of last matches. Choose different filter.
                       </div>
-                      <q-list>
+                      <q-list style="color: #ffffff !important">
                         <q-item
+                          style="color: #ffffff !important"
                           clickable
                           v-for="match in filteredLastMatches"
                           :key="match.idEvent"
@@ -182,7 +183,11 @@
                         >
                           <q-item-section>
                             <q-item-label> {{ match.strSport }}</q-item-label>
-                            <q-item-label caption lines="1">
+                            <q-item-label
+                              caption
+                              lines="1"
+                              style="color: #ffffff !important"
+                            >
                               {{ match.strLeague }}
                             </q-item-label>
                           </q-item-section>
@@ -201,10 +206,12 @@
                             {{ match.intHomeScore }}-{{ match.intAwayScore }}
                           </q-item-section>
                           <q-item-section side top>
-                            <q-item-label caption>{{
-                              match.dateEvent
-                            }}</q-item-label>
-                            <q-item-label>{{
+                            <q-item-label
+                              caption
+                              style="color: #ffffff !important"
+                              >{{ match.dateEvent }}</q-item-label
+                            >
+                            <q-item-label style="color: #ffffff !important">{{
                               formatPrice(match.strTime)
                             }}</q-item-label>
                           </q-item-section>
@@ -232,7 +239,7 @@
                       >
                         No data of upcoming matches. Choose different filter.
                       </div>
-                      <q-list>
+                      <q-list style="color: #ffffff !important">
                         <q-item
                           v-for="match in filteredNextMatches"
                           :key="match.idEvent"
@@ -373,10 +380,12 @@
                   <section v-else>
                     <q-scroll-area style="height: 300px">
                       <q-list
+                        style="color: #ffffff !important"
                         v-for="match in filteredMatches"
                         :key="match.idEvent"
                       >
                         <q-item
+                          style="color: #ffffff !important"
                           clickable
                           @click="
                             (eventCard = true),
@@ -391,7 +400,10 @@
                         >
                           <q-item-section>
                             <q-item-label> {{ match.strSport }} </q-item-label>
-                            <q-item-label caption lines="1"
+                            <q-item-label
+                              caption
+                              lines="1"
+                              style="color: #ffffff !important"
                               >{{ match.strLeague }}
                             </q-item-label>
                           </q-item-section>
@@ -407,12 +419,16 @@
                             {{ match.strEvent }}
                           </q-item-section>
                           <q-item-section side top>
-                            <q-item-label caption>{{
-                              match.dateEvent
-                            }}</q-item-label>
-                            <q-item-label v-if="match?.strTime">{{
-                              formatPrice(match.strTime)
-                            }}</q-item-label>
+                            <q-item-label
+                              caption
+                              style="color: #ffffff !important"
+                              >{{ match.dateEvent }}</q-item-label
+                            >
+                            <q-item-label
+                              v-if="match?.strTime"
+                              style="color: #ffffff !important"
+                              >{{ formatPrice(match.strTime) }}</q-item-label
+                            >
                           </q-item-section>
                           <q-item-section
                             v-if="
@@ -530,6 +546,7 @@
                       <q-tab-panel name="squad">
                         <div v-if="eventLineups !== null">
                           <q-item
+                            style="color: black !important"
                             v-for="event in eventLineups"
                             :key="event.idEvent"
                           >
@@ -542,15 +559,23 @@
                             }}</q-item-section>
                           </q-item>
                         </div>
-                        <h2 v-else>No squads</h2>
+                        <q-card v-else class="my-card">
+                          <q-card-section>
+                            Sorry, we have no information about squads.
+                          </q-card-section>
+                        </q-card>
                       </q-tab-panel>
 
                       <q-tab-panel name="details">
                         <div v-if="eventDetails !== null">
-                          <div class="text-h4 q-mb-md">
+                          <div
+                            class="text-h4 q-mb-md"
+                            style="color: black !important"
+                          >
                             {{ eventDetails[0].strEvent }}
                           </div>
                           <q-item
+                            style="color: black !important"
                             v-for="event in eventDetails"
                             :key="event.idEvent"
                           >
@@ -565,7 +590,11 @@
                             >
                           </q-item>
                         </div>
-                        <h2 v-else>No details</h2>
+                        <q-card v-else class="my-card">
+                          <q-card-section>
+                            Sorry, we have no information about match details.
+                          </q-card-section>
+                        </q-card>
                       </q-tab-panel>
                     </q-tab-panels>
                   </template>
@@ -573,26 +602,45 @@
               </q-tab-panel>
 
               <q-tab-panel name="h2h">
-                <div class="text-h6">H2H</div>
-                <q-item v-for="event in eventLast1Matches" :key="event.idEvent">
-                  <q-item-section> {{ event.strEvent }}</q-item-section>
-                  <q-item-section> {{ event.dateEvent }}</q-item-section>
-                  <q-item-section>
-                    {{ event.intAwayScore }}-{{
-                      event.intHomeScore
-                    }}</q-item-section
+                <div
+                  class="text-h6"
+                  v-if="
+                    eventLast1Matches !== null && eventLast2Matches !== null
+                  "
+                >
+                  <q-item
+                    style="color: black !important"
+                    v-for="event in eventLast1Matches"
+                    :key="event.idEvent"
                   >
-                </q-item>
-                <q-separator />
-                <q-item v-for="event in eventLast2Matches" :key="event.idEvent">
-                  <q-item-section> {{ event.strEvent }}</q-item-section>
-                  <q-item-section> {{ event.dateEvent }}</q-item-section>
-                  <q-item-section>
-                    {{ event.intAwayScore }}-{{
-                      event.intHomeScore
-                    }}</q-item-section
+                    <q-item-section> {{ event.strEvent }}</q-item-section>
+                    <q-item-section> {{ event.dateEvent }}</q-item-section>
+                    <q-item-section>
+                      {{ event.intAwayScore }}-{{
+                        event.intHomeScore
+                      }}</q-item-section
+                    >
+                  </q-item>
+                  <q-separator />
+                  <q-item
+                    style="color: black !important"
+                    v-for="event in eventLast2Matches"
+                    :key="event.idEvent"
                   >
-                </q-item>
+                    <q-item-section> {{ event.strEvent }}</q-item-section>
+                    <q-item-section> {{ event.dateEvent }}</q-item-section>
+                    <q-item-section>
+                      {{ event.intAwayScore }}-{{
+                        event.intHomeScore
+                      }}</q-item-section
+                    >
+                  </q-item>
+                </div>
+                <q-card v-else class="my-card">
+                  <q-card-section>
+                    Sorry, we have no information about previous matches.
+                  </q-card-section>
+                </q-card>
               </q-tab-panel>
 
               <q-tab-panel name="table">
@@ -607,7 +655,11 @@
                     :rows-per-page-options="[0]"
                   />
                 </div>
-                <h2 v-else>No tab details</h2>
+                <q-card v-else class="my-card">
+                  <q-card-section>
+                    Sorry, we have no information about table.
+                  </q-card-section>
+                </q-card>
               </q-tab-panel>
             </q-tab-panels>
           </q-card>
@@ -832,6 +884,7 @@ export default {
       if (this.modelLiveLeague !== null) this.getLeagueDateEvents();
       else this.getFavDateEvents();
     },
+
     currentDate() {
       let dt = new Date();
       let month = ("0" + (dt.getMonth() + 1)).slice(-2);
@@ -1040,10 +1093,8 @@ h2,
   color: #f9f871;
 }
 
-.q-item__label--caption,
-.q-item__label,
-.q-item__section {
-  color: #ffffff !important;
+.my-card {
+  color: black;
 }
 .coupon {
   background-color: #757575;
