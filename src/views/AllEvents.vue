@@ -43,7 +43,7 @@
                     </q-item-section>
                     <q-item-section side>
                       <q-item-label>{{ position.odds }}</q-item-label>
-                      <q-item-label caption>Odd</q-item-label>
+                      <q-item-label caption>Odds</q-item-label>
                     </q-item-section>
                     <q-item-section side>
                       <q-btn
@@ -245,7 +245,7 @@
                                   (eventCard = false),
                                     add(
                                       match.idEvent,
-                                      match.awayOdds,
+                                      match.drawOdds,
                                       match.strHomeTeam,
                                       match.strAwayTeam,
                                       2
@@ -260,7 +260,7 @@
                                   (eventCard = false),
                                     add(
                                       match.idEvent,
-                                      match.drawOdds,
+                                      match.awayOdds,
                                       match.strHomeTeam,
                                       match.strAwayTeam,
                                       1
