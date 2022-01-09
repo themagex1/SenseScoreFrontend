@@ -414,7 +414,15 @@
                               formatPrice(match.strTime)
                             }}</q-item-label>
                           </q-item-section>
-                          <q-item-section side top>
+                          <q-item-section
+                            v-if="
+                              match?.homeOdds != 0 &&
+                              match?.awayOdds != 0 &&
+                              match?.drawOdds != 0
+                            "
+                            side
+                            top
+                          >
                             <q-item-label caption
                               >Courses [W1/D/W2]</q-item-label
                             >

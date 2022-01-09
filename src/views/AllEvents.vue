@@ -219,7 +219,15 @@
                               formatPrice(match.strTime)
                             }}</q-item-label>
                           </q-item-section>
-                          <q-item-section side top>
+                          <q-item-section
+                            v-if="
+                              match?.homeOdds != 0 &&
+                              match?.awayOdds != 0 &&
+                              match?.drawOdds != 0
+                            "
+                            side
+                            top
+                          >
                             <q-item-label caption
                               >Courses [W1/D/W2]</q-item-label
                             >
@@ -807,11 +815,11 @@ export default {
       })
       .finally(() => (this.loading = false));
     axios
-      .get(url + `livematches`)
+      .get(url + "livematches")
       .then((response) => {
-        this.liveMatches = response.data.events;
+        this.liveMatches = response.data;
         this.filteredLiveMatches = this.liveMatches;
-        console.log(this.filteredLiveMatches);
+        console.log(this.liveMatches);
       })
       .catch((error) => {
         console.log(error);

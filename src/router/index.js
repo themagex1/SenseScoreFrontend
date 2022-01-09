@@ -5,19 +5,19 @@ const routes = [
     path: '/',
     name: 'MainPage',
 
-    component: () => import( '../views/MainPage.vue')
+    component: () => import('../views/MainPage.vue')
   },
   {
     path: '/login',
     name: 'loginPopUp',
 
-    component: () => import( '../components/loginPopUp')
+    component: () => import('../components/loginPopUp')
   },
   {
     path: '/home',
     name: 'home',
 
-    component: () => import( '../views/home'),
+    component: () => import('../views/home'),
   },
   {
     path: '/all-events',
@@ -30,6 +30,12 @@ const routes = [
     name: 'Coupons',
 
     component: () => import('../views/Coupons'),
+  },
+  {
+    path: '/ranks',
+    name: 'Ranks',
+
+    component: () => import('../views/Ranks'),
   },
   {
     path: '/add-favourites',

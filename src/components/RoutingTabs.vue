@@ -6,7 +6,7 @@
         <q-route-tab label="All events" to="/all-events" exact />
         <q-route-tab label="Favourites" to="/add-favourites" exact />
         <q-route-tab label="Coupons" to="/coupons" exact />
-        <q-route-tab label="Ranks" to="" exact />
+        <q-route-tab label="Ranks" to="/ranks" exact />
       </q-tabs>
     </div>
   </div>
