@@ -252,7 +252,7 @@
                                     )
                                 "
                               >
-                                {{ match.awayOdds }}</q-btn
+                                {{ match.drawOdds }}</q-btn
                               >
                               <q-btn
                                 v-on:click.stop
@@ -267,7 +267,7 @@
                                     )
                                 "
                               >
-                                {{ match.drawOdds }}</q-btn
+                                {{ match.awayOdds }}</q-btn
                               >
                             </q-item-label>
                           </q-item-section>
