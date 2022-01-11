@@ -234,15 +234,18 @@
                             v-if="
                               match?.homeOdds != 0 &&
                               match?.awayOdds != 0 &&
-                              match?.drawOdds != 0
+                              match?.drawOdds != 0 &&
+                              checkValidEventTime(match)
                             "
                             side
                             top
                           >
-                            <q-item-label caption
+                            <q-item-label
+                              caption
+                              style="color: #ffffff !important"
                               >Courses [W1/D/W2]</q-item-label
                             >
-                            <q-item-label style="color: #ffffff !important"
+                            <q-item-label
                               ><q-btn
                                 v-on:click.stop
                                 @click="
@@ -476,7 +479,7 @@
                       <q-tab-panel name="details">
                         <div v-if="eventDetails !== null">
                           <div
-                            class="text-h4 q-mb-md"
+                            class="text-h5 q-mb-md text-center"
                             style="color: black !important"
                           >
                             {{ eventDetails[0].strEvent }}
@@ -510,7 +513,6 @@
 
               <q-tab-panel name="h2h">
                 <div
-                  class="text-h6"
                   v-if="
                     eventLast1Matches !== null && eventLast2Matches !== null
                   "
@@ -826,6 +828,26 @@ export default {
         })
         .finally(() => (this.loading = false));
     },
+    checkValidEventTime(match) {
+      let today = new Date();
+      let hours = today.getHours();
+      let minutes = today.getMinutes();
+      let seconds = today.getSeconds();
+      if (hours < 10) {
+        hours = "0" + hours;
+      }
+      if (minutes < 10) {
+        minutes = "0" + minutes;
+      }
+      if (seconds < 10) {
+        seconds = "0" + seconds;
+      }
+      let time = hours + ":" + minutes + ":" + seconds;
+      time = time.split(":").join("");
+      console.log(match);
+      if (match.strTime.split(":").join("") > parseInt(time)) return true;
+      else return false;
+    },
     getTimeEvents() {
       let today = new Date();
       let hours = today.getHours();
@@ -864,6 +886,7 @@ export default {
       .get(url + `matches/${this.date}`)
       .then((response) => {
         this.todayMatches = response.data;
+        console.log(this.todayMatches);
         this.filteredDayMatches = this.todayMatches;
       })
       .catch((error) => {

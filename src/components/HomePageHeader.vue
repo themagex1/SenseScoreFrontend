@@ -27,7 +27,7 @@
         >
           Logged as
         </p>
-        <p>test</p>
+        <p>{{ username }}</p>
       </div>
     </q-toolbar>
   </q-header>
@@ -38,12 +38,14 @@ import { ref } from "vue";
 import axios from "axios";
 
 const bearer = localStorage.getItem("bearer");
+const user = localStorage.getItem("user");
 
 export default {
   name: "home-page-header",
   setup() {
     return {
       value: ref(true),
+      username: user,
     };
   },
   data() {

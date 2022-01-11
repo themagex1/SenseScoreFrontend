@@ -164,16 +164,6 @@
         </q-expansion-item>
       </q-list>
     </div>
-    <div class="q-pa-md">
-      <q-btn
-        align="between"
-        class="btn-fixed-width"
-        color="blue"
-        label="Coupons"
-        icon="payments"
-        style="width: 100%"
-      />
-    </div>
   </q-drawer>
 </template>
 

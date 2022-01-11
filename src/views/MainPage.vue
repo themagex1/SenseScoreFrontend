@@ -10,9 +10,14 @@
             <div class="row justify-center">
               <LoginPopUp />
               <RegisterPopup />
-              <q-btn outline label="Sign in with " text-color="light-blue-14" @click="signInWithGoogle"
-                     class="google-button" >
-                <img src="../assets/google-brands.svg" class="google-image">
+              <q-btn
+                outline
+                label="Sign in with "
+                text-color="light-blue-14"
+                @click="signInWithGoogle"
+                class="google-button"
+              >
+                <img src="../assets/google-brands.svg" class="google-image" />
               </q-btn>
             </div>
           </div>
@@ -115,15 +120,13 @@ export default {
     };
   },
   methods: {
-    acceptCookiesPolicy () {
-
-      if (sessionStorage.getItem('cookiesPolicyAccepted') === 'true')
-        this.cookiesPolicyAccepted = false
+    acceptCookiesPolicy() {
+      if (sessionStorage.getItem("cookiesPolicyAccepted") === "true")
+        this.cookiesPolicyAccepted = false;
       else {
-        sessionStorage.setItem('cookiesPolicyAccepted', 'true')
-        this.cookiesPolicyAccepted = true
+        sessionStorage.setItem("cookiesPolicyAccepted", "true");
+        this.cookiesPolicyAccepted = true;
       }
-
     },
     async signInWithGoogle() {
       try {
@@ -145,6 +148,7 @@ export default {
           .then(fetchHelper.handleErrors)
           .then((res) => res.json());
         localStorage.setItem("bearer", response.access_token);
+        localStorage.setItem("user", googleUser.zu.qf);
         setAuthToken(response.access_token);
         console.log(googleUser);
         setLoggedInEmail(googleUser.Email);

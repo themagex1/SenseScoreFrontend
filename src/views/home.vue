@@ -217,6 +217,58 @@
                           </q-item-section>
                         </q-item>
                         <q-separator spaced inset />
+
+                        <q-item
+                          style="color: #ffffff !important"
+                          v-for="match in lastAthleteMatches"
+                          :key="match.idEvent"
+                          clickable
+                          @click="
+                            (eventCard = true),
+                              live(
+                                match.idEvent,
+                                match.idHomeTeam,
+                                match.idAwayTeam,
+                                match.idLeague,
+                                match.strSeason
+                              )
+                          "
+                        >
+                          <q-item-section>
+                            <q-item-label> {{ match.strSport }}</q-item-label>
+                            <q-item-label
+                              caption
+                              lines="1"
+                              style="color: #ffffff !important"
+                            >
+                              {{ match.strLeague }}
+                            </q-item-label>
+                          </q-item-section>
+                          <q-item-section class="col-2">
+                            <img
+                              :src="require(`@/assets/${match.strSport}.png`)"
+                              alt
+                              class="icon"
+                              style="height: 20px; max-width: 20px"
+                            />
+                          </q-item-section>
+                          <q-item-section>
+                            {{ match.strHomeTeam }}-{{ match.strAwayTeam }}
+                          </q-item-section>
+                          <q-item-section>
+                            {{ match.intHomeScore }}-{{ match.intAwayScore }}
+                          </q-item-section>
+                          <q-item-section side top>
+                            <q-item-label
+                              caption
+                              style="color: #ffffff !important"
+                              >{{ match.dateEvent }}</q-item-label
+                            >
+                            <q-item-label style="color: #ffffff !important">{{
+                              formatPrice(match.strTime)
+                            }}</q-item-label>
+                          </q-item-section>
+                        </q-item>
                       </q-list>
                     </q-scroll-area>
                   </div>
@@ -257,7 +309,11 @@
                         >
                           <q-item-section>
                             <q-item-label> {{ match.strSport }}</q-item-label>
-                            <q-item-label caption lines="1">
+                            <q-item-label
+                              caption
+                              lines="1"
+                              style="color: #ffffff !important"
+                            >
                               {{ match.strLeague }}
                             </q-item-label>
                           </q-item-section>
@@ -273,15 +329,188 @@
                             {{ match.strHomeTeam }}-{{ match.strAwayTeam }}
                           </q-item-section>
                           <q-item-section side top>
-                            <q-item-label caption>{{
-                              match.dateEvent
-                            }}</q-item-label>
-                            <q-item-label>{{
+                            <q-item-label
+                              caption
+                              style="color: #ffffff !important"
+                              >{{ match.dateEvent }}</q-item-label
+                            >
+                            <q-item-label style="color: #ffffff !important">{{
                               formatPrice(match.strTime)
                             }}</q-item-label>
                           </q-item-section>
+                          <q-item-section
+                            v-if="
+                              match?.homeOdds != 0 &&
+                              match?.awayOdds != 0 &&
+                              match?.drawOdds != 0
+                            "
+                            side
+                            top
+                          >
+                            <q-item-label
+                              caption
+                              style="color: #ffffff !important"
+                              >Courses [W1/D/W2]</q-item-label
+                            >
+                            <q-item-label
+                              ><q-btn
+                                v-on:click.stop
+                                @click="
+                                  (eventCard = false),
+                                    add(
+                                      match.idEvent,
+                                      match.homeOdds,
+                                      match.strHomeTeam,
+                                      match.strAwayTeam,
+                                      0
+                                    )
+                                "
+                              >
+                                {{ match.homeOdds }}</q-btn
+                              >
+                              <q-btn
+                                v-on:click.stop
+                                @click="
+                                  (eventCard = false),
+                                    add(
+                                      match.idEvent,
+                                      match.drawOdds,
+                                      match.strHomeTeam,
+                                      match.strAwayTeam,
+                                      2
+                                    )
+                                "
+                              >
+                                {{ match.drawOdds }}</q-btn
+                              >
+                              <q-btn
+                                v-on:click.stop
+                                @click="
+                                  (eventCard = false),
+                                    add(
+                                      match.idEvent,
+                                      match.awayOdds,
+                                      match.strHomeTeam,
+                                      match.strAwayTeam,
+                                      1
+                                    )
+                                "
+                              >
+                                {{ match.awayOdds }}</q-btn
+                              >
+                            </q-item-label>
+                          </q-item-section>
                         </q-item>
                         <q-separator spaced inset />
+                        <q-item
+                          v-for="match in nextAthleteMatches"
+                          :key="match.idEvent"
+                          clickable
+                          @click="
+                            (eventCard = true),
+                              live(
+                                match.idEvent,
+                                match.idHomeTeam,
+                                match.idAwayTeam,
+                                match.idLeague,
+                                match.strSeason
+                              )
+                          "
+                        >
+                          <q-item-section>
+                            <q-item-label> {{ match.strSport }}</q-item-label>
+                            <q-item-label
+                              caption
+                              lines="1"
+                              style="color: #ffffff !important"
+                            >
+                              {{ match.strLeague }}
+                            </q-item-label>
+                          </q-item-section>
+                          <q-item-section class="col-2">
+                            <img
+                              :src="require(`@/assets/${match.strSport}.png`)"
+                              alt
+                              class="icon"
+                              style="height: 20px; max-width: 20px"
+                            />
+                          </q-item-section>
+                          <q-item-section>
+                            {{ match.strHomeTeam }}-{{ match.strAwayTeam }}
+                          </q-item-section>
+                          <q-item-section side top>
+                            <q-item-label
+                              caption
+                              style="color: #ffffff !important"
+                              >{{ match.dateEvent }}</q-item-label
+                            >
+                            <q-item-label style="color: #ffffff !important">{{
+                              formatPrice(match.strTime)
+                            }}</q-item-label>
+                          </q-item-section>
+                          <q-item-section
+                            v-if="
+                              match?.homeOdds != 0 &&
+                              match?.awayOdds != 0 &&
+                              match?.drawOdds != 0
+                            "
+                            side
+                            top
+                          >
+                            <q-item-label
+                              caption
+                              style="color: #ffffff !important"
+                              >Courses [W1/D/W2]</q-item-label
+                            >
+                            <q-item-label
+                              ><q-btn
+                                v-on:click.stop
+                                @click="
+                                  (eventCard = false),
+                                    add(
+                                      match.idEvent,
+                                      match.homeOdds,
+                                      match.strHomeTeam,
+                                      match.strAwayTeam,
+                                      0
+                                    )
+                                "
+                              >
+                                {{ match.homeOdds }}</q-btn
+                              >
+                              <q-btn
+                                v-on:click.stop
+                                @click="
+                                  (eventCard = false),
+                                    add(
+                                      match.idEvent,
+                                      match.drawOdds,
+                                      match.strHomeTeam,
+                                      match.strAwayTeam,
+                                      2
+                                    )
+                                "
+                              >
+                                {{ match.drawOdds }}</q-btn
+                              >
+                              <q-btn
+                                v-on:click.stop
+                                @click="
+                                  (eventCard = false),
+                                    add(
+                                      match.idEvent,
+                                      match.awayOdds,
+                                      match.strHomeTeam,
+                                      match.strAwayTeam,
+                                      1
+                                    )
+                                "
+                              >
+                                {{ match.awayOdds }}</q-btn
+                              >
+                            </q-item-label>
+                          </q-item-section>
+                        </q-item>
                       </q-list>
                     </q-scroll-area>
                   </div>
@@ -327,50 +556,7 @@
                   <div
                     class="q-pa-md row"
                     style="max-width: 600px; justify-content: space-between"
-                  >
-                    <q-input
-                      class="auto-column"
-                      rounded
-                      outlined
-                      bg-color="grey-8"
-                      label-color="yellow"
-                      v-model="date"
-                      mask="####-##-##"
-                    >
-                      <template v-slot:append>
-                        <q-icon name="event" class="cursor-pointer">
-                          <q-popup-proxy
-                            ref="qDateProxy"
-                            cover
-                            transition-show="scale"
-                            transition-hide="scale"
-                          >
-                            <q-date mask="YYYY-MM-DD" v-model="date">
-                              <div class="row items-center justify-end">
-                                <q-btn
-                                  color="primary"
-                                  v-close-popup
-                                  label="Ok"
-                                  flat
-                                  @click="getFavDateEvents()"
-                                />
-                              </div>
-                            </q-date>
-                          </q-popup-proxy>
-                        </q-icon>
-                      </template>
-                    </q-input>
-                    <q-btn
-                      outline
-                      label="All matches"
-                      @click="getFavDateEvents()"
-                    />
-                    <q-btn
-                      outline
-                      label="Live matches"
-                      @click="getFavLiveEvents()"
-                    />
-                  </div>
+                  ></div>
                   <section v-if="loading">
                     <p>
                       We're sorry, we're not able to retrieve this information
@@ -381,7 +567,7 @@
                     <q-scroll-area style="height: 300px">
                       <q-list
                         style="color: #ffffff !important"
-                        v-for="match in filteredMatches"
+                        v-for="match in liveMatches"
                         :key="match.idEvent"
                       >
                         <q-item
@@ -430,65 +616,61 @@
                               >{{ formatPrice(match.strTime) }}</q-item-label
                             >
                           </q-item-section>
-                          <q-item-section
-                            v-if="
-                              match?.homeOdds != 0 &&
-                              match?.awayOdds != 0 &&
-                              match?.drawOdds != 0
-                            "
-                            side
-                            top
-                          >
-                            <q-item-label caption
-                              >Courses [W1/D/W2]</q-item-label
+                        </q-item>
+                      </q-list>
+                      <q-list
+                        style="color: #ffffff !important"
+                        v-for="match in liveLeagueMatches"
+                        :key="match.idEvent"
+                      >
+                        <q-item
+                          style="color: #ffffff !important"
+                          clickable
+                          @click="
+                            (eventCard = true),
+                              live(
+                                match.idEvent,
+                                match.idHomeTeam,
+                                match.idAwayTeam,
+                                match.idLeague,
+                                match.strSeason
+                              )
+                          "
+                        >
+                          <q-item-section>
+                            <q-item-label> {{ match.strSport }} </q-item-label>
+                            <q-item-label
+                              caption
+                              lines="1"
+                              style="color: #ffffff !important"
+                              >{{ match.strLeague }}
+                            </q-item-label>
+                          </q-item-section>
+                          <q-item-section class="col-1">
+                            <img
+                              :src="require(`@/assets/${match.strSport}.png`)"
+                              alt
+                              class="icon"
+                              style="height: 20px; max-width: 20px"
+                            />
+                          </q-item-section>
+                          <q-item-section style="color: #ffffff">
+                            {{ match.strEvent }}
+                          </q-item-section>
+                          <q-item-section>
+                            {{ match.strHomeTeam }}-{{ match.strAwayTeam }}
+                          </q-item-section>
+                          <q-item-section side top>
+                            <q-item-label
+                              caption
+                              style="color: #ffffff !important"
+                              >{{ match.dateEvent }}</q-item-label
                             >
                             <q-item-label
-                              ><q-btn
-                                v-on:click.stop
-                                @click="
-                                  (eventCard = false),
-                                    add(
-                                      match.idEvent,
-                                      match.homeOdds,
-                                      match.strHomeTeam,
-                                      match.strAwayTeam,
-                                      0
-                                    )
-                                "
-                              >
-                                {{ match.homeOdds }}</q-btn
-                              >
-                              <q-btn
-                                v-on:click.stop
-                                @click="
-                                  (eventCard = false),
-                                    add(
-                                      match.idEvent,
-                                      match.awayOdds,
-                                      match.strHomeTeam,
-                                      match.strAwayTeam,
-                                      1
-                                    )
-                                "
-                              >
-                                {{ match.awayOdds }}</q-btn
-                              >
-                              <q-btn
-                                v-on:click.stop
-                                @click="
-                                  (eventCard = false),
-                                    add(
-                                      match.idEvent,
-                                      match.drawOdds,
-                                      match.strHomeTeam,
-                                      match.strAwayTeam,
-                                      2
-                                    )
-                                "
-                              >
-                                {{ match.drawOdds }}</q-btn
-                              >
-                            </q-item-label>
+                              v-if="match?.strTime"
+                              style="color: #ffffff !important"
+                              >{{ formatPrice(match.strTime) }}</q-item-label
+                            >
                           </q-item-section>
                         </q-item>
                       </q-list>
@@ -569,7 +751,7 @@
                       <q-tab-panel name="details">
                         <div v-if="eventDetails !== null">
                           <div
-                            class="text-h4 q-mb-md"
+                            class="text-h5 q-mb-md text-center"
                             style="color: black !important"
                           >
                             {{ eventDetails[0].strEvent }}
@@ -603,7 +785,6 @@
 
               <q-tab-panel name="h2h">
                 <div
-                  class="text-h6"
                   v-if="
                     eventLast1Matches !== null && eventLast2Matches !== null
                   "
@@ -691,7 +872,7 @@ import RoutingTabs from "@/components/RoutingTabs";
 
 const bearer = localStorage.getItem("bearer");
 
-let url = "https://localhost:5001/api/SportDB/";
+let url = "https://localhost:5001/api/sportdb/";
 
 export default {
   name: "home",
@@ -725,6 +906,7 @@ export default {
       matchDetailsTab: ref("squad"),
       splitterModel: ref(20),
       filteredFavLeagues: [],
+      liveLeagueMatches: [],
       filteredFavSports: [],
       leagues: [],
       sports: [],
@@ -733,8 +915,10 @@ export default {
       eventLast1Matches: [],
       eventLast2Matches: [],
       lastMatches: [],
+      lastAthleteMatches: [],
       filteredLastMatches: [],
       nextMatches: [],
+      nextAthleteMatches: [],
       filteredNextMatches: [],
       todayMatches: [],
       liveMatches: [],
@@ -860,28 +1044,28 @@ export default {
       return value.slice(0, 5);
     },
     onFavSportChange() {
-      if (this.modelSport !== null) this.getFavSportDateEvents();
+      if (this.modelSport != null) this.getFavSportDateEvents();
       else {
         this.filteredLastMatches = this.lastMatches;
         this.filteredNextMatches = this.nextMatches;
       }
     },
     onFavLeagueChange() {
-      if (this.modelLeague !== null) this.getFavLeagueDateEvents();
+      if (this.modelLeague != null) this.getFavLeagueDateEvents();
       else {
         this.filteredLastMatches = this.lastMatches;
         this.filteredNextMatches = this.nextMatches;
       }
     },
     onSportChange() {
-      if (this.modelLiveSport !== null) {
+      if (this.modelLiveSport != null) {
         this.filteredMatches = this.filteredMatches.filter(
           (b) => b.strSport == this.modelLiveSport
         );
       } else this.getFavDateEvents();
     },
     onLeagueChange() {
-      if (this.modelLiveLeague !== null) this.getLeagueDateEvents();
+      if (this.modelLiveLeague != null) this.getLeagueDateEvents();
       else this.getFavDateEvents();
     },
 
@@ -921,7 +1105,25 @@ export default {
           },
         })
         .then((response) => {
-          this.filteredMatches = response.data;
+          this.liveMatches = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.errored = true;
+        })
+        .finally(() => (this.loading = false));
+    },
+    getFavLeagueLiveEvents() {
+      axios
+        .request({
+          method: "get",
+          baseURL: url + `favourite/leagues/liveMatches`,
+          headers: {
+            Authorization: "Bearer " + bearer,
+          },
+        })
+        .then((response) => {
+          this.liveLeagueMatches = response.data;
         })
         .catch((error) => {
           console.log(error);
@@ -1006,6 +1208,38 @@ export default {
       .then((response) => {
         this.lastMatches = response.data;
         this.filteredLastMatches = this.lastMatches;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
+    axios
+      .request({
+        method: "get",
+        baseURL: url + "favourite/athletes/lastmatches",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+      })
+      .then((response) => {
+        this.lastAthleteMatches = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
+    axios
+      .request({
+        method: "get",
+        baseURL: url + "favourite/athletes/nextmatches",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+      })
+      .then((response) => {
+        this.nextAthleteMatches = response.data;
       })
       .catch((error) => {
         console.log(error);
