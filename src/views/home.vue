@@ -748,6 +748,9 @@
                         There are no live info about your favourites. Go to all
                         section or add favourites.
                       </div>
+                      <div class="q-pa-md text-yellow text-uppercase">
+                        Teams
+                      </div>
                       <q-list
                         style="color: #ffffff !important"
                         v-for="match in liveMatches"
@@ -804,7 +807,11 @@
                           </q-item-section>
                         </q-item>
                       </q-list>
-                      <div v-if="liveLeagueMatches.length">
+                      <q-separator spaced inset />
+                      <div class="q-pa-md text-yellow text-uppercase">
+                        Leagues
+                      </div>
+                      <div v-if="!liveLeagueMatches.length">
                         There are no live info about your favourites. Go to all
                         section or add favourites.
                       </div>
@@ -844,11 +851,11 @@
                               style="height: 20px; max-width: 20px"
                             />
                           </q-item-section>
-                          <q-item-section style="color: #ffffff">
-                            {{ match.strEvent }}
-                          </q-item-section>
                           <q-item-section>
                             {{ match.strHomeTeam }}-{{ match.strAwayTeam }}
+                          </q-item-section>
+                          <q-item-section>
+                            {{ match.intHomeScore }}-{{ match.intAwayScore }}
                           </q-item-section>
                           <q-item-section side top>
                             <q-item-label
