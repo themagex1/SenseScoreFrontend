@@ -405,8 +405,8 @@
                             v-if="
                               match?.homeOdds != 0 &&
                               match?.awayOdds != 0 &&
-                              match?.drawOdds != 0 &&
-                              checkValidEventTime(match)
+                              match?.drawOdds != 0 //&&
+                              //checkValidEventTime(match)
                             "
                             side
                             top
@@ -1460,7 +1460,7 @@ export default {
       })
       .then((response) => {
         this.nextAthleteMatches = response.data;
-        this.filteredNextAthleteMatches = this.lastAthleteMatches;
+        this.filteredNextAthleteMatches = this.nextAthleteMatches;
       })
       .catch((error) => {
         console.log(error);
@@ -1487,7 +1487,7 @@ export default {
     axios
       .request({
         method: "get",
-        baseURL: url + "favourite/leagues/lastmatches",
+        baseURL: url + "favourite/leagues/nextmatches",
         headers: {
           Authorization: "Bearer " + bearer,
         },

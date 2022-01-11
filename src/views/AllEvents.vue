@@ -234,8 +234,8 @@
                             v-if="
                               match?.homeOdds != 0 &&
                               match?.awayOdds != 0 &&
-                              match?.drawOdds != 0 &&
-                              checkValidEventTime(match)
+                              match?.drawOdds != 0 //&&
+                              // checkValidEventTime(match)
                             "
                             side
                             top
