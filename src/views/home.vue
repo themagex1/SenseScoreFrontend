@@ -165,6 +165,9 @@
                         No history of last matches. Choose different filter.
                       </div>
                       <q-list style="color: #ffffff !important">
+                        <div class="q-pa-md text-yellow text-uppercase">
+                          Teams
+                        </div>
                         <q-item
                           style="color: #ffffff !important"
                           clickable
@@ -217,10 +220,67 @@
                           </q-item-section>
                         </q-item>
                         <q-separator spaced inset />
-
+                        <div class="q-pa-md text-yellow text-uppercase">
+                          Athletes
+                        </div>
                         <q-item
                           style="color: #ffffff !important"
-                          v-for="match in lastAthleteMatches"
+                          v-for="match in filteredLastAthleteMatches"
+                          :key="match.idEvent"
+                          clickable
+                          @click="
+                            (eventCard = true),
+                              live(
+                                match.idEvent,
+                                match.idHomeTeam,
+                                match.idAwayTeam,
+                                match.idLeague,
+                                match.strSeason
+                              )
+                          "
+                        >
+                          <q-item-section>
+                            <q-item-label> {{ match.strSport }}</q-item-label>
+                            <q-item-label
+                              caption
+                              lines="1"
+                              style="color: #ffffff !important"
+                            >
+                              {{ match.strLeague }}
+                            </q-item-label>
+                          </q-item-section>
+                          <q-item-section class="col-2">
+                            <img
+                              :src="require(`@/assets/${match.strSport}.png`)"
+                              alt
+                              class="icon"
+                              style="height: 20px; max-width: 20px"
+                            />
+                          </q-item-section>
+                          <q-item-section>
+                            {{ match.strHomeTeam }}-{{ match.strAwayTeam }}
+                          </q-item-section>
+                          <q-item-section>
+                            {{ match.intHomeScore }}-{{ match.intAwayScore }}
+                          </q-item-section>
+                          <q-item-section side top>
+                            <q-item-label
+                              caption
+                              style="color: #ffffff !important"
+                              >{{ match.dateEvent }}</q-item-label
+                            >
+                            <q-item-label style="color: #ffffff !important">{{
+                              formatPrice(match.strTime)
+                            }}</q-item-label>
+                          </q-item-section>
+                        </q-item>
+                        <q-separator spaced inset />
+                        <div class="q-pa-md text-yellow text-uppercase">
+                          Leagues
+                        </div>
+                        <q-item
+                          style="color: #ffffff !important"
+                          v-for="match in filteredLastLeagueMatches"
                           :key="match.idEvent"
                           clickable
                           @click="
@@ -292,8 +352,125 @@
                         No data of upcoming matches. Choose different filter.
                       </div>
                       <q-list style="color: #ffffff !important">
+                        <div class="q-pa-md text-yellow text-uppercase">
+                          Teams
+                        </div>
                         <q-item
                           v-for="match in filteredNextMatches"
+                          :key="match.idEvent"
+                          clickable
+                          @click="
+                            (eventCard = true),
+                              live(
+                                match.idEvent,
+                                match.idHomeTeam,
+                                match.idAwayTeam,
+                                match.idLeague,
+                                match.strSeason
+                              )
+                          "
+                        >
+                          <q-item-section>
+                            <q-item-label> {{ match.strSport }}</q-item-label>
+                            <q-item-label
+                              caption
+                              lines="1"
+                              style="color: #ffffff !important"
+                            >
+                              {{ match.strLeague }}
+                            </q-item-label>
+                          </q-item-section>
+                          <q-item-section class="col-2">
+                            <img
+                              :src="require(`@/assets/${match.strSport}.png`)"
+                              alt
+                              class="icon"
+                              style="height: 20px; max-width: 20px"
+                            />
+                          </q-item-section>
+                          <q-item-section>
+                            {{ match.strHomeTeam }}-{{ match.strAwayTeam }}
+                          </q-item-section>
+                          <q-item-section side top>
+                            <q-item-label
+                              caption
+                              style="color: #ffffff !important"
+                              >{{ match.dateEvent }}</q-item-label
+                            >
+                            <q-item-label style="color: #ffffff !important">{{
+                              formatPrice(match.strTime)
+                            }}</q-item-label>
+                          </q-item-section>
+                          <q-item-section
+                            v-if="
+                              match?.homeOdds != 0 &&
+                              match?.awayOdds != 0 &&
+                              match?.drawOdds != 0 &&
+                              checkValidEventTime(match)
+                            "
+                            side
+                            top
+                          >
+                            <q-item-label
+                              caption
+                              style="color: #ffffff !important"
+                              >Courses [W1/D/W2]</q-item-label
+                            >
+                            <q-item-label
+                              ><q-btn
+                                v-on:click.stop
+                                @click="
+                                  (eventCard = false),
+                                    add(
+                                      match.idEvent,
+                                      match.homeOdds,
+                                      match.strHomeTeam,
+                                      match.strAwayTeam,
+                                      0
+                                    )
+                                "
+                              >
+                                {{ match.homeOdds }}</q-btn
+                              >
+                              <q-btn
+                                v-on:click.stop
+                                @click="
+                                  (eventCard = false),
+                                    add(
+                                      match.idEvent,
+                                      match.drawOdds,
+                                      match.strHomeTeam,
+                                      match.strAwayTeam,
+                                      2
+                                    )
+                                "
+                              >
+                                {{ match.drawOdds }}</q-btn
+                              >
+                              <q-btn
+                                v-on:click.stop
+                                @click="
+                                  (eventCard = false),
+                                    add(
+                                      match.idEvent,
+                                      match.awayOdds,
+                                      match.strHomeTeam,
+                                      match.strAwayTeam,
+                                      1
+                                    )
+                                "
+                              >
+                                {{ match.awayOdds }}</q-btn
+                              >
+                            </q-item-label>
+                          </q-item-section>
+                        </q-item>
+                        <q-separator spaced inset />
+                        <div class="q-pa-md text-yellow text-uppercase">
+                          Athletes
+                        </div>
+                        <q-item
+                          v-for="match in filteredNextAthleteMatches"
                           :key="match.idEvent"
                           clickable
                           @click="
@@ -401,9 +578,11 @@
                             </q-item-label>
                           </q-item-section>
                         </q-item>
-                        <q-separator spaced inset />
+                        <div class="q-pa-md text-yellow text-uppercase">
+                          Leagues
+                        </div>
                         <q-item
-                          v-for="match in nextAthleteMatches"
+                          v-for="match in filteredNextLeagueMatches"
                           :key="match.idEvent"
                           clickable
                           @click="
@@ -565,6 +744,10 @@
                   </section>
                   <section v-else>
                     <q-scroll-area style="height: 300px">
+                      <div v-if="!liveMatches.length">
+                        There are no live info about your favourites. Go to all
+                        section or add favourites.
+                      </div>
                       <q-list
                         style="color: #ffffff !important"
                         v-for="match in liveMatches"
@@ -602,7 +785,10 @@
                             />
                           </q-item-section>
                           <q-item-section style="color: #ffffff">
-                            {{ match.strEvent }}
+                            {{ match.strHomeTeam }}-{{ match.strAwayTeam }}
+                          </q-item-section>
+                          <q-item-section>
+                            {{ match.intHomeScore }}-{{ match.intAwayScore }}
                           </q-item-section>
                           <q-item-section side top>
                             <q-item-label
@@ -618,6 +804,10 @@
                           </q-item-section>
                         </q-item>
                       </q-list>
+                      <div v-if="liveLeagueMatches.length">
+                        There are no live info about your favourites. Go to all
+                        section or add favourites.
+                      </div>
                       <q-list
                         style="color: #ffffff !important"
                         v-for="match in liveLeagueMatches"
@@ -915,8 +1105,12 @@ export default {
       eventLast1Matches: [],
       eventLast2Matches: [],
       lastMatches: [],
+      lastLeagueMatches: [],
       lastAthleteMatches: [],
       filteredLastMatches: [],
+      filteredLastLeagueMatches: [],
+      filteredLastAthleteMatches: [],
+      nextLeagueMatches: [],
       nextMatches: [],
       nextAthleteMatches: [],
       filteredNextMatches: [],
@@ -925,6 +1119,8 @@ export default {
       filteredMatches: [],
       filteredSports: [],
       filteredLeagues: [],
+      filteredNextLeagueMatches: [],
+      filteredNextAthleteMatches: [],
       tab: ref("finished"),
       tabCourses: ref("courses"),
       columns,
@@ -1047,14 +1243,22 @@ export default {
       if (this.modelSport != null) this.getFavSportDateEvents();
       else {
         this.filteredLastMatches = this.lastMatches;
+        this.filteredLastLeagueMatches = this.lastLeagueMatches;
+        this.filteredLastAthleteMatches = this.lastAthleteMatches;
         this.filteredNextMatches = this.nextMatches;
+        this.filteredNextLeagueMatches = this.nextLeagueMatches;
+        this.filteredNextAthleteMatches = this.nextAthleteMatches;
       }
     },
     onFavLeagueChange() {
       if (this.modelLeague != null) this.getFavLeagueDateEvents();
       else {
         this.filteredLastMatches = this.lastMatches;
+        this.filteredLastLeagueMatches = this.lastLeagueMatches;
+        this.filteredLastAthleteMatches = this.lastAthleteMatches;
         this.filteredNextMatches = this.nextMatches;
+        this.filteredNextLeagueMatches = this.nextLeagueMatches;
+        this.filteredNextAthleteMatches = this.nextAthleteMatches;
       }
     },
     onSportChange() {
@@ -1095,41 +1299,25 @@ export default {
         })
         .finally(() => (this.loading = false));
     },
-    getFavLiveEvents() {
-      axios
-        .request({
-          method: "get",
-          baseURL: url + `favourite/teams/liveMatches`,
-          headers: {
-            Authorization: "Bearer " + bearer,
-          },
-        })
-        .then((response) => {
-          this.liveMatches = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-          this.errored = true;
-        })
-        .finally(() => (this.loading = false));
-    },
-    getFavLeagueLiveEvents() {
-      axios
-        .request({
-          method: "get",
-          baseURL: url + `favourite/leagues/liveMatches`,
-          headers: {
-            Authorization: "Bearer " + bearer,
-          },
-        })
-        .then((response) => {
-          this.liveLeagueMatches = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-          this.errored = true;
-        })
-        .finally(() => (this.loading = false));
+    checkValidEventTime(match) {
+      let today = new Date();
+      let hours = today.getHours();
+      let minutes = today.getMinutes();
+      let seconds = today.getSeconds();
+      if (hours < 10) {
+        hours = "0" + hours;
+      }
+      if (minutes < 10) {
+        minutes = "0" + minutes;
+      }
+      if (seconds < 10) {
+        seconds = "0" + seconds;
+      }
+      let time = hours + ":" + minutes + ":" + seconds;
+      time = time.split(":").join("");
+      console.log(match);
+      if (match.strTime.split(":").join("") > parseInt(time)) return true;
+      else return false;
     },
     getTimeEvents() {
       let today = new Date();
@@ -1155,7 +1343,19 @@ export default {
       this.filteredLastMatches = this.lastMatches.filter(
         (b) => b.strSport == this.modelSport
       );
+      this.filteredLastLeagueMatches = this.lastLeagueMatches.filter(
+        (b) => b.strSport == this.modelSport
+      );
+      this.filteredLastAthleteMatches = this.lastAthleteMatches.filter(
+        (b) => b.strSport == this.modelSport
+      );
       this.filteredNextMatches = this.nextMatches.filter(
+        (b) => b.strSport == this.modelSport
+      );
+      this.filteredNextLeagueMatches = this.nextLeagueMatches.filter(
+        (b) => b.strSport == this.modelSport
+      );
+      this.filteredNextAthleteMatches = this.nextAthleteMatches.filter(
         (b) => b.strSport == this.modelSport
       );
     },
@@ -1168,7 +1368,19 @@ export default {
       this.filteredLastMatches = this.lastMatches.filter(
         (b) => b.strLeague == this.modelLeague
       );
+      this.filteredLastLeagueMatches = this.lastLeagueMatches.filter(
+        (b) => b.strLeague == this.modelLeague
+      );
+      this.filteredLastAthleteMatches = this.lastAthleteMatches.filter(
+        (b) => b.strLeague == this.modelLeague
+      );
       this.filteredNextMatches = this.nextMatches.filter(
+        (b) => b.strLeague == this.modelLeague
+      );
+      this.filteredNextLeagueMatches = this.nextLeagueMatches.filter(
+        (b) => b.strLeague == this.modelLeague
+      );
+      this.filteredNextAthleteMatches = this.nextAthleteMatches.filter(
         (b) => b.strLeague == this.modelLeague
       );
     },
@@ -1224,6 +1436,58 @@ export default {
       })
       .then((response) => {
         this.lastAthleteMatches = response.data;
+        this.filteredLastAthleteMatches = this.lastAthleteMatches;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
+    axios
+      .request({
+        method: "get",
+        baseURL: url + "favourite/athletes/nextmatches",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+      })
+      .then((response) => {
+        this.nextAthleteMatches = response.data;
+        this.filteredNextAthleteMatches = this.lastAthleteMatches;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
+    axios
+      .request({
+        method: "get",
+        baseURL: url + "favourite/leagues/lastmatches",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+      })
+      .then((response) => {
+        this.lastLeagueMatches = response.data;
+        this.filteredLastLeagueMatches = this.lastLeagueMatches;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
+    axios
+      .request({
+        method: "get",
+        baseURL: url + "favourite/leagues/lastmatches",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+      })
+      .then((response) => {
+        this.nextLeagueMatches = response.data;
+        this.filteredNextLeagueMatches = this.nextLeagueMatches;
       })
       .catch((error) => {
         console.log(error);
@@ -1289,6 +1553,39 @@ export default {
           this.filteredSports.push(element.strSport);
         });
       });
+    axios
+      .request({
+        method: "get",
+        baseURL: url + `favourite/teams/liveMatches`,
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+      })
+      .then((response) => {
+        this.liveMatches = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
+    axios
+      .request({
+        method: "get",
+        baseURL: url + `favourite/leagues/livematches`,
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+      })
+      .then((response) => {
+        this.liveLeagueMatches = response.data;
+        console.log(this.liveLeagueMatches);
+      })
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
   },
 };
 
