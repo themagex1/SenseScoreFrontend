@@ -145,10 +145,18 @@ export default {
         setAuthToken(response.access_token)
         console.log(googleUser)
         setLoggedInEmail(googleUser.Email)
+        if(!response.initialized)
+        {
+          await this.$router.push({
+            path: 'preferencesSports'
+          })
+        } else
+        {
+          await this.$router.push({
+            name: 'home'
+          })
+        }
 
-        await this.$router.push({
-          path: 'preferencesSports'
-        })
       } catch (e) {
         setAuthToken(null)
         setLoggedInEmail(null)
