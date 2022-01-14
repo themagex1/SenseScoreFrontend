@@ -44,9 +44,9 @@ const routes = [
     component: () => import('../views/AddFavourites'),
   },
   {
-    path: '/preferences',
-    name: 'preferencesPage',
-    component: () => import('../views/preferencesPage')
+    path: '/preferencesSports',
+    name: 'preferencesSports',
+    component: () => import('../views/preferencesSports')
   },
   {
     path: '/about',
@@ -67,6 +67,11 @@ const routes = [
     path: '/opinions',
     name: 'Opinions',
     component: () => import('../views/Opinions')
+  },
+  {
+    path: '/preferencesOther',
+    name: 'preferencesOther',
+    component: () => import('../views/preferencesOther')
   },
 ]
 

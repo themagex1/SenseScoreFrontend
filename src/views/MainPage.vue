@@ -1,23 +1,22 @@
 <template>
   <div class="content">
-    <MainPageHeader />
+    <MainPageHeader/>
     <q-page-container>
-      <div class="fit row wrap container">
+      <div class=" row wrap container">
         <div class="col self-center column-1">
           <div class="big-desc">
             <h1 class="text-light-blue-14 title">YOUR LEAGUE</h1>
             <h1 class="text-light-blue-14 title">YOUR MATCH</h1>
-            <div class="row justify-center">
-              <LoginPopUp />
-              <RegisterPopup />
+            <div class="row wrap justify-center buttons">
+              <LoginPopUp class="login-button"/>
+              <RegisterPopup class="register-button"/>
               <q-btn
-                outline
-                label="Sign in with "
-                text-color="light-blue-14"
-                @click="signInWithGoogle"
-                class="google-button"
+                  outline
+                  text-color="light-blue-14"
+                  @click="signInWithGoogle"
+                  class="google-button"
               >
-                <img src="../assets/google-brands.svg" class="google-image" />
+                <img src="https://img.icons8.com/ios-filled/50/4a90e2/google-logo.png"/>
               </q-btn>
             </div>
           </div>
@@ -31,36 +30,33 @@
         <div class="col self-center column-2">
           <div class="section__carousel text-center items-center">
             <q-carousel
-              animated
-              v-model="slide"
-              arrows
-              navigation
-              infinite
-              :autoplay="autoplay"
-              transition-next="slide-left"
-              transition-prev="slide-right"
-              @mouseleave="autoplay = true"
-              @mouseenter="autoplay = false"
+                class="carousel"
+                animated
+                v-model="slide"
+                arrows
+                navigation
+                infinite
+                :autoplay="autoplay"
+                transition-next="slide-left"
+                transition-prev="slide-right"
+                @mouseleave="autoplay = true"
+                @mouseenter="autoplay = false"
             >
-              <q-carousel-slide :name="1" img-src="@/assets/pilka-nozna.jpeg" />
-              <q-carousel-slide :name="2" img-src="@/assets/koszykowka.jpeg" />
+              <q-carousel-slide :name="1" img-src="@/assets/Karuzela-1.jpg"/>
+              <q-carousel-slide :name="2" img-src="@/assets/Karuzela-2.jpg"/>
               <q-carousel-slide
-                :name="3"
-                img-src="@/assets/tenis-ziemny.jpeg"
+                  :name="3"
+                  img-src="@/assets/Karuzela-3.jpg"
               />
-              <q-carousel-slide :name="4" img-src="@/assets/pilka-nozna.jpeg" />
-              <q-carousel-slide
-                :name="5"
-                img-src="@/assets/tenis-ziemny.jpeg"
-              />
+
             </q-carousel>
           </div>
 
           <div class="icon-description"></div>
         </div>
         <div
-          class="col column-3"
-          style="
+            class="col column-3"
+            style="
             overflow: auto;
             min-width: 100%;
             max-width: 100%;
@@ -83,9 +79,10 @@
               blokowania plików cookies, zapoznaj się z polityką cookies
             </div>
           </div>
-          <q-space />
+          <q-space/>
           <q-btn @click="acceptCookiesPolicy">
-            Akceptuję politykę cookies</q-btn
+            Akceptuję politykę cookies
+          </q-btn
           >
         </q-toolbar>
       </q-footer>
@@ -94,75 +91,82 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import LoginPopUp from "@/components/loginPopUp";
-import RegisterPopup from "@/components/registerPopUp";
-import MainPageHeader from "@/components/MainPageHeader";
-import FetchHelper from "@/helpers/fetchHelper";
-import { setAuthToken, setLoggedInEmail } from "@/services/sessionProps";
+import { ref } from 'vue'
+import LoginPopUp from '@/components/loginPopUp'
+import RegisterPopup from '@/components/registerPopUp'
+import MainPageHeader from '@/components/MainPageHeader'
+import FetchHelper from '@/helpers/fetchHelper'
+import { setAuthToken, setLoggedInEmail } from '@/services/sessionProps'
 
 export default {
-  name: "MainPage",
+  name: 'MainPage',
   components: {
     MainPageHeader,
     LoginPopUp,
     RegisterPopup,
   },
-  setup() {
+  setup () {
     return {
       autoplay: ref(true),
       slide: ref(1),
-    };
+    }
   },
-  data() {
+  data () {
     return {
       cookiesPolicyAccepted: false,
-    };
+    }
   },
   methods: {
-    acceptCookiesPolicy() {
-      if (sessionStorage.getItem("cookiesPolicyAccepted") === "true")
-        this.cookiesPolicyAccepted = false;
-      else {
-        sessionStorage.setItem("cookiesPolicyAccepted", "true");
-        this.cookiesPolicyAccepted = true;
-      }
+    acceptCookiesPolicy () {
+      this.cookiesPolicyAccepted = true
+      sessionStorage.setItem('cookiesPolicyAccepted', 'true')
     },
-    async signInWithGoogle() {
+    async signInWithGoogle () {
       try {
-        const fetchHelper = new FetchHelper();
-        const googleUser = await this.$gAuth.signIn();
-        var id_token = googleUser.getAuthResponse().id_token;
+        const fetchHelper = new FetchHelper()
+        const googleUser = await this.$gAuth.signIn()
+        let id_token = googleUser.getAuthResponse().id_token
         const response = await fetch(
-          "api/Account/google-request",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              id_token,
-            }),
-          }
+            'https://localhost:5001/api/Account/google-request',
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                id_token,
+              }),
+            }
         )
-          .then(fetchHelper.handleErrors)
-          .then((res) => res.json());
-        localStorage.setItem("bearer", response.access_token);
-        localStorage.setItem("user", googleUser.zu.qf);
-        setAuthToken(response.access_token);
-        console.log(googleUser);
-        setLoggedInEmail(googleUser.Email);
+            .then(fetchHelper.handleErrors)
+            .then((res) => res.json())
+        localStorage.setItem('bearer', response.access_token)
+        localStorage.setItem('user', googleUser.zu.qf)
+        setAuthToken(response.access_token)
+        console.log(googleUser)
+        setLoggedInEmail(googleUser.Email)
+        if(!response.initialized)
+        {
+          await this.$router.push({
+            path: 'preferencesSports'
+          })
+        } else
+        {
+          await this.$router.push({
+            name: 'home'
+          })
+        }
 
-        await this.$router.push({
-          name: "home",
-        });
       } catch (e) {
-        setAuthToken(null);
-        setLoggedInEmail(null);
+        setAuthToken(null)
+        setLoggedInEmail(null)
       }
     },
   },
-};
+  mounted () {
+    this.cookiesPolicyAccepted = sessionStorage.getItem('cookiesPolicyAccepted') === 'true'
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -176,7 +180,7 @@ export default {
   color: white;
   max-width: 400px;
   margin: 40px auto;
-  font-family: "News of the World";
+  font-family: "News of the World", serif;
   font-size: 1.1vw;
 }
 
@@ -190,9 +194,9 @@ export default {
 .section__carousel {
   margin-right: 5%;
   margin-left: 5%;
-  border: 1.5em solid $light-blue-14;
-  border-radius: 20px;
-  box-shadow: 10px 10px 10px 5px $light-blue-14;
+  border: 1em solid yellow;
+  border-radius: 10px;
+  box-shadow: 5px 5px 8px 5px $light-blue-14;
 }
 
 .image__marquee {
@@ -225,8 +229,9 @@ export default {
 }
 
 .google-button {
-  font-size: 1.5vw;
-  width: 10vw;
+  font-size: 30px;
+  width: 80px;
+
   font-family: "News of the World";
   color: $grey-9;
   height: 6vh;
@@ -234,10 +239,46 @@ export default {
   margin-bottom: auto;
   margin-left: 1vw;
 }
+
 .google-image {
   max-width: 1.2vw;
   background-color: $light-blue-14;
   margin-left: 0.2vw;
+}
+@media (max-width: 800px) {
+  .container {
+    flex-direction: column;
+    .title {
+      font-size: 7em;
+    }
+  }
+  .section__carousel {
+    display: none;
+  }
+}
+@media (max-width: $phone-max-width) {
+  .container {
+    flex-direction: column;
+    margin: 0 auto;
+    padding: 0 1px;
+  }
+  .description__left {
+    margin-top: -2px;
+  }
+  .title {
+    font-size: 7em;
+  }
+
+}
+@media (max-width: 500px) {
+  .title {
+    font-size: 5em;
+  }
+}
+@media (max-width: 400px) {
+  .title {
+    font-size: 4.5em;
+  }
 }
 
 @import url(https://fonts.googleapis.com/css?family=Roboto:500);

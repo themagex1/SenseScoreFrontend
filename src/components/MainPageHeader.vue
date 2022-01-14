@@ -7,10 +7,11 @@
           src="@/assets/logo.png"
           @click="$router.push({ path: '/' })"
           style="cursor: pointer"
+          class="logo-image"
         />
       </q-toolbar-title>
 
-      <div>
+      <div class="home-button">
         <q-btn
           class="text-weight-bold"
           icon-right="home"
@@ -21,7 +22,7 @@
           >Home
         </q-btn>
       </div>
-      <div>
+      <div class="aboutus-button">
         <q-btn
           class="text-weight-bold"
           icon-right="people"
@@ -84,7 +85,7 @@ export default {
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Ubuntu&display=swap");
-
+@import "../quasar.variables.scss";
 .q-item,
 q.input,
 q.list,
@@ -95,4 +96,15 @@ p,
   font-family: "Mochiy Pop One", sans-serif;
   font-family: "Ubuntu", sans-serif;
 }
+@media (max-width: 540px)
+{
+  .logo-image {
+    display: none;
+  }
+  .home-button, .aboutus-button{
+    margin-right: 10px;
+  }
+}
+
+
 </style>
