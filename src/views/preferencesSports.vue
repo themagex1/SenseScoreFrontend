@@ -58,7 +58,7 @@ import HomePageHeader from '@/components/HomePageHeader'
 
 import axios from 'axios'
 
-let url = 'https://localhost:5001/api/SportDB/'
+let url = 'api/SportDB/'
 const bearer = localStorage.getItem('bearer')
 
 export default {
@@ -96,7 +96,7 @@ export default {
     removeFav (category, id) {
       axios({
         method: 'delete',
-        baseURL: 'https://localhost:5001/' + 'api/Account/favourite',
+        baseURL: 'api/Account/favourite',
         headers: {
           Authorization: 'Bearer ' + bearer,
         },
@@ -125,7 +125,7 @@ export default {
     postFav (category, id) {
       axios({
         method: 'post',
-        baseURL: 'https://localhost:5001/' + 'api/Account/favourite',
+        baseURL: 'api/Account/favourite',
         headers: {
           Authorization: 'Bearer ' + bearer,
         },
