@@ -41,7 +41,7 @@
         </q-list>
       </div>
 
-      <div class="q-pa-md">
+      <div class="q-pa-md" style="padding: 0px 16px 16px 16px">
         <div
           class="q-gutter-y-md row"
           style="width: 100%; justify-content: center"
@@ -62,6 +62,13 @@
               <q-icon color="yellow" name="search" />
             </template>
           </q-input>
+        </div>
+        <div
+          v-if="!ifText"
+          class="ifNotText"
+          style="text-align: center; color: white"
+        >
+          You must write something
         </div>
       </div>
       <section v-if="errored">
@@ -225,6 +232,7 @@ export default {
       favouriteTeams: [],
       favouriteLeagues: [],
       favouriteAthletes: [],
+      ifText: true,
     };
   },
   methods: {
@@ -295,7 +303,7 @@ export default {
         }
       }
     },
-    postFav(category, id) {
+    postFavTeam(category, id) {
       axios({
         method: "post",
         baseURL: "https://localhost:5001/" + "api/Account/favourite",
@@ -307,8 +315,97 @@ export default {
           id: id,
         },
       })
-        .then(function (response) {
-          console.log(response);
+        .then(() => {
+          axios
+            .request({
+              method: "get",
+              baseURL: url + `favourite/teams`,
+              headers: {
+                Authorization: "Bearer " + bearer,
+              },
+            })
+            .then((response) => {
+              this.favouriteTeams = response.data;
+            })
+            .catch((error) => {
+              console.log(error);
+              this.errored = true;
+            })
+            .finally(() => {
+              this.loading = false;
+            });
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    postFavAthlete(category, id) {
+      axios({
+        method: "post",
+        baseURL: "https://localhost:5001/" + "api/Account/favourite",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+        data: {
+          category: category,
+          id: id,
+        },
+      })
+        .then(() => {
+          axios
+            .request({
+              method: "get",
+              baseURL: url + `favourite/athletes`,
+              headers: {
+                Authorization: "Bearer " + bearer,
+              },
+            })
+            .then((response) => {
+              this.favouriteAthletes = response.data;
+            })
+            .catch((error) => {
+              console.log(error);
+              this.errored = true;
+            })
+            .finally(() => {
+              this.loading = false;
+            });
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    postFavLeague(category, id) {
+      axios({
+        method: "post",
+        baseURL: "https://localhost:5001/" + "api/Account/favourite",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+        data: {
+          category: category,
+          id: id,
+        },
+      })
+        .then(() => {
+          axios
+            .request({
+              method: "get",
+              baseURL: url + `favourite/leagues`,
+              headers: {
+                Authorization: "Bearer " + bearer,
+              },
+            })
+            .then((response) => {
+              this.favouriteLeagues = response.data;
+            })
+            .catch((error) => {
+              console.log(error);
+              this.errored = true;
+            })
+            .finally(() => {
+              this.loading = false;
+            });
         })
         .catch(function (error) {
           console.log(error);
@@ -366,89 +463,56 @@ export default {
         .finally(() => (this.loading = false));
     },
     addFavTeam(category, id) {
-      this.postFav(category, id);
-      axios
-        .request({
-          method: "get",
-          baseURL: url + `favourite/teams`,
-          headers: {
-            Authorization: "Bearer " + bearer,
-          },
-        })
-        .then((response) => {
-          this.favouriteTeams = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-          this.errored = true;
-        })
-        .finally(() => (this.loading = false));
+      this.postFavTeam(category, id);
     },
     addFavAthlete(category, id) {
-      this.postFav(category, id);
-      axios
-        .request({
-          method: "get",
-          baseURL: url + `favourite/athletes`,
-          headers: {
-            Authorization: "Bearer " + bearer,
-          },
-        })
-        .then((response) => {
-          this.favouriteAthletes = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-          this.errored = true;
-        })
-        .finally(() => (this.loading = false));
+      this.postFavAthlete(category, id);
     },
     addFavLeague(category, id) {
-      this.postFav(category, id);
-      axios
-        .request({
-          method: "get",
-          baseURL: url + `favourite/leagues`,
-          headers: {
-            Authorization: "Bearer " + bearer,
-          },
-        })
-        .then((response) => {
-          this.favouriteLeagues = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-          this.errored = true;
-        })
-        .finally(() => (this.loading = false));
+      this.postFavLeague(category, id);
     },
     searchTeams() {
-      return axios
-        .get(url + `search/teams/${this.text}`)
-        .then((response) => (this.searchResult = response.data))
-        .catch((error) => {
-          console.log(error);
-          this.errored = true;
-        })
-        .finally(() => (this.loading = false));
+      if (this.text === "") {
+        this.ifText = false;
+      } else {
+        this.ifText = true;
+        return axios
+          .get(url + `search/teams/${this.text}`)
+          .then((response) => (this.searchResult = response.data))
+          .catch((error) => {
+            console.log(error);
+            this.errored = true;
+          })
+          .finally(() => (this.loading = false));
+      }
     },
     searchPlayers() {
-      return axios
-        .get(url + `search/players/${this.text}`)
-        .then((response) => (this.searchPlayerResult = response.data))
-        .catch((error) => {
-          console.log(error);
-          this.errored = true;
-        })
-        .finally(() => (this.loading = false));
+      if (this.text === "") {
+        this.ifText = false;
+      } else {
+        this.ifText = true;
+        return axios
+          .get(url + `search/players/${this.text}`)
+          .then((response) => (this.searchPlayerResult = response.data))
+          .catch((error) => {
+            console.log(error);
+            this.errored = true;
+          })
+          .finally(() => (this.loading = false));
+      }
     },
     searchLeagues() {
-      this.filteredLeagues = this.leagues.filter((b) => {
-        return b.strLeague
-          .toLowerCase()
-          .trim()
-          .includes(this.text.toLowerCase().trim());
-      });
+      if (this.text === "") {
+        this.ifText = false;
+      } else {
+        this.ifText = true;
+        this.filteredLeagues = this.leagues.filter((b) => {
+          return b.strLeague
+            .toLowerCase()
+            .trim()
+            .includes(this.text.toLowerCase().trim());
+        });
+      }
     },
   },
   mounted() {

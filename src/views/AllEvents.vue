@@ -172,9 +172,17 @@
                     style="max-width: 600px; justify-content: space-between"
                   ></div>
 
-                  <section v-if="loading">
-                    <p>Loading data...</p>
+                  <section v-if="loadingDateMatches">
+                    <div class="q-pa-md">
+                      <q-spinner
+                        :loading="loadingDateMatches"
+                        color="primary"
+                        size="3em"
+                        :thickness="2"
+                      />
+                    </div>
                   </section>
+
                   <section v-else>
                     <q-scroll-area style="height: 300px">
                       <q-list
@@ -341,8 +349,15 @@
                     style="max-width: 600px; justify-content: space-between"
                   ></div>
 
-                  <section v-if="loading">
-                    <p>Loading data...</p>
+                  <section v-if="loadingLiveMatches">
+                    <div class="q-pa-md">
+                      <q-spinner
+                        :loading="loadingLiveMatches"
+                        color="primary"
+                        size="3em"
+                        :thickness="2"
+                      />
+                    </div>
                   </section>
                   <section v-else>
                     <q-scroll-area style="height: 300px">
@@ -620,6 +635,8 @@ export default {
   data() {
     return {
       loading: true,
+      loadingLiveMatches: true,
+      loadingDateMatches: true,
       errored: false,
       success: "",
       rowsTable: [],
@@ -821,12 +838,14 @@ export default {
     getDateEvents() {
       return axios
         .get(url + `matches/${this.date}`)
-        .then((response) => (this.filteredDayMatches = response.data))
+        .then((response) => {
+          this.filteredDayMatches = response.data;
+        })
         .catch((error) => {
           console.log(error);
           this.errored = true;
         })
-        .finally(() => (this.loading = false));
+        .finally(() => (this.loadingDateMatches = false));
     },
     checkValidEventTime(match) {
       let today = new Date();
@@ -893,7 +912,7 @@ export default {
         console.log(error);
         this.errored = true;
       })
-      .finally(() => (this.loading = false));
+      .finally(() => (this.loadingDateMatches = false));
     axios
       .get(url + "livematches")
       .then((response) => {
@@ -905,7 +924,7 @@ export default {
         console.log(error);
         this.errored = true;
       })
-      .finally(() => (this.loading = false));
+      .finally(() => (this.loadingLiveMatches = false));
     axios
       .get(url + "leagues")
       .then((response) => (this.leagues = response.data))
