@@ -203,8 +203,8 @@ export default {
 }
 
 .button__login {
-  font-size: 1.5vw;
-  width: 10vw;
+  font-size: 30px;
+  width: 200px;
   font-family: "News of the World";
   color: $grey-9;
 }
