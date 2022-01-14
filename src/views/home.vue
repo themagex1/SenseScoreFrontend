@@ -1069,7 +1069,7 @@ import RoutingTabs from "@/components/RoutingTabs";
 
 const bearer = localStorage.getItem("bearer");
 
-let url = "https://localhost:5001/api/sportdb/";
+let url = "api/sportdb/";
 
 export default {
   name: "home",
@@ -1160,7 +1160,7 @@ export default {
 
       axios({
         method: "post",
-        baseURL: "https://localhost:5001/api/" + "Betting/tickets",
+        baseURL: "api/" + "Betting/tickets",
         headers: {
           Authorization: "Bearer " + bearer,
         },

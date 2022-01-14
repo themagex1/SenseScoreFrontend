@@ -57,7 +57,7 @@ export default {
     axios
       .request({
         method: "get",
-        baseURL: "https://localhost:5001/api/Betting/balance",
+        baseURL: "api/Betting/balance",
         headers: {
           Authorization: "Bearer " + bearer,
         },
