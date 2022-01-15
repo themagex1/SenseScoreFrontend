@@ -172,7 +172,6 @@ p {
 }
 
 .q-list {
-  background-color: #757575;
   color: #90caf9;
   padding: 10px;
   border-radius: 4px;

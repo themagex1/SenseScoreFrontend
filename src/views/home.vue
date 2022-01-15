@@ -35,15 +35,21 @@
                   >
                     <q-item-section>
                       <q-item-label>{{ position.homeName }}</q-item-label>
-                      <q-item-label caption>Team1</q-item-label>
+                      <q-item-label style="color: #fff !important" caption
+                        >Team1</q-item-label
+                      >
                     </q-item-section>
                     <q-item-section>
                       <q-item-label>{{ position.awayName }}</q-item-label>
-                      <q-item-label caption>Team2</q-item-label>
+                      <q-item-label style="color: #fff !important" caption
+                        >Team2</q-item-label
+                      >
                     </q-item-section>
                     <q-item-section side>
                       <q-item-label>{{ position.odds }}</q-item-label>
-                      <q-item-label caption>Odd</q-item-label>
+                      <q-item-label style="color: #fff !important" caption
+                        >Odd</q-item-label
+                      >
                     </q-item-section>
                     <q-item-section side>
                       <q-btn
@@ -155,7 +161,26 @@
                 </section>
 
                 <section v-else>
-                  <div v-if="loading">Loading...</div>
+                  <section
+                    v-if="
+                      loadingLastMatches &&
+                      loadingLastLeagueMatches &&
+                      loadingLastAthleteMatches
+                    "
+                  >
+                    <div class="q-pa-md">
+                      <q-spinner
+                        :loading="
+                          loadingDateMatches &&
+                          loadingLastLeagueMatches &&
+                          loadingLastAthleteMatches
+                        "
+                        color="primary"
+                        size="3em"
+                        :thickness="2"
+                      />
+                    </div>
+                  </section>
                   <div class="q-pa-md" style="max-width: 850px; padding: 10px">
                     <q-scroll-area style="height: 300px">
                       <div
@@ -346,7 +371,11 @@
                   <div class="q-pa-md" style="max-width: 850px">
                     <q-scroll-area style="height: 300px">
                       <div
-                        v-if="!filteredNextMatches.length"
+                        v-if="
+                          !filteredNextMatches.length &&
+                          !filteredNextLeagueMatches.length &&
+                          !filteredNextAthleteMatches.length
+                        "
                         style="text-align: center"
                       >
                         No data of upcoming matches. Choose different filter.
@@ -736,15 +765,24 @@
                     class="q-pa-md row"
                     style="max-width: 600px; justify-content: space-between"
                   ></div>
-                  <section v-if="loading">
-                    <p>
-                      We're sorry, we're not able to retrieve this information
-                      at the moment, please try back later
-                    </p>
+                  <section
+                    v-if="loadingLiveMatches && loadingLiveLeagueMatches"
+                  >
+                    <q-spinner
+                      :loading="loadingLiveMatches && loadingLiveLeagueMatches"
+                      color="primary"
+                      size="3em"
+                      :thickness="2"
+                    />
                   </section>
                   <section v-else>
                     <q-scroll-area style="height: 300px">
-                      <div v-if="!liveMatches.length">
+                      <div
+                        v-if="
+                          !filteredLiveMatches.length &&
+                          !filteredLiveLeagueMatches.length
+                        "
+                      >
                         There are no live info about your favourites. Go to all
                         section or add favourites.
                       </div>
@@ -753,7 +791,7 @@
                       </div>
                       <q-list
                         style="color: #ffffff !important"
-                        v-for="match in liveMatches"
+                        v-for="match in filteredLiveMatches"
                         :key="match.idEvent"
                       >
                         <q-item
@@ -811,13 +849,9 @@
                       <div class="q-pa-md text-yellow text-uppercase">
                         Leagues
                       </div>
-                      <div v-if="!liveLeagueMatches.length">
-                        There are no live info about your favourites. Go to all
-                        section or add favourites.
-                      </div>
                       <q-list
                         style="color: #ffffff !important"
-                        v-for="match in liveLeagueMatches"
+                        v-for="match in filteredLiveLeagueMatches"
                         :key="match.idEvent"
                       >
                         <q-item
@@ -1088,6 +1122,11 @@ export default {
   data() {
     return {
       loading: true,
+      loadingLiveMatches: true,
+      loadingLiveLeagueMatches: true,
+      loadingLastMatches: true,
+      loadingLastAthleteMatches: true,
+      loadingLastLeagueMatches: true,
       errored: false,
       success: "",
       rowsTable: [],
@@ -1112,9 +1151,9 @@ export default {
       eventLast1Matches: [],
       eventLast2Matches: [],
       lastMatches: [],
+      filteredLastMatches: [],
       lastLeagueMatches: [],
       lastAthleteMatches: [],
-      filteredLastMatches: [],
       filteredLastLeagueMatches: [],
       filteredLastAthleteMatches: [],
       nextLeagueMatches: [],
@@ -1123,6 +1162,8 @@ export default {
       filteredNextMatches: [],
       todayMatches: [],
       liveMatches: [],
+      filteredLiveMatches: [],
+      filteredLiveLeagueMatches: [],
       filteredMatches: [],
       filteredSports: [],
       filteredLeagues: [],
@@ -1247,19 +1288,112 @@ export default {
       return value.slice(0, 5);
     },
     onFavSportChange() {
-      if (this.modelSport != null) this.getFavSportDateEvents();
-      else {
+      if (this.modelSport == null) {
         this.filteredLastMatches = this.lastMatches;
         this.filteredLastLeagueMatches = this.lastLeagueMatches;
         this.filteredLastAthleteMatches = this.lastAthleteMatches;
         this.filteredNextMatches = this.nextMatches;
         this.filteredNextLeagueMatches = this.nextLeagueMatches;
         this.filteredNextAthleteMatches = this.nextAthleteMatches;
+      } else {
+        this.filteredLastMatches = this.lastMatches.filter((value) => {
+          return value.strSport == this.modelSport;
+        });
+        this.filteredLastAthleteMatches = this.lastAthleteMatches.filter(
+          (value) => {
+            return value.strSport == this.modelSport;
+          }
+        );
+        this.filteredLastLeagueMatches = this.lastLeagueMatches.filter(
+          (value) => {
+            return value.strSport == this.modelSport;
+          }
+        );
+        this.filteredNextMatches = this.nextMatches.filter((value) => {
+          return value.strSport == this.modelSport;
+        });
+        this.filteredNextAthleteMatches = this.nextAthleteMatches.filter(
+          (value) => {
+            return value.strSport == this.modelSport;
+          }
+        );
+        this.filteredNextLeagueMatches = this.nextLeagueMatches.filter(
+          (value) => {
+            return value.strSport == this.modelSport;
+          }
+        );
       }
     },
     onFavLeagueChange() {
-      if (this.modelLeague != null) this.getFavLeagueDateEvents();
-      else {
+      if (this.modelSport != null) {
+        this.filteredLastMatches = this.filteredLastMatches.filter((value) => {
+          return (
+            value.strLeague == this.modelLeague &&
+            value.strSport == this.modelSport
+          );
+        });
+        this.filteredLastLeagueMatches = this.filteredLastLeagueMatches.filter(
+          (value) => {
+            return (
+              value.strLeague == this.modelLeague &&
+              value.strSport == this.modelSport
+            );
+          }
+        );
+        this.filteredLastAthleteMatches =
+          this.filteredLastAthleteMatches.filter((value) => {
+            return (
+              value.strLeague == this.modelLeague &&
+              value.strSport == this.modelSport
+            );
+          });
+        this.filteredNextMatches = this.filteredNextMatches.filter((value) => {
+          return (
+            value.strLeague == this.modelLeague &&
+            value.strSport == this.modelSport
+          );
+        });
+        this.filteredNextLeagueMatches = this.filteredNextLeagueMatches.filter(
+          (value) => {
+            return (
+              value.strLeague == this.modelLeague &&
+              value.strSport == this.modelSport
+            );
+          }
+        );
+        this.filteredNextAthleteMatches =
+          this.filteredNextAthleteMatches.filter((value) => {
+            return (
+              value.strLeague == this.modelLeague &&
+              value.strSport == this.modelSport
+            );
+          });
+      } else if (this.modelLeague != null) {
+        this.filteredLastMatches = this.filteredLastMatches.filter((value) => {
+          return value.strLeague == this.modelLeague;
+        });
+        this.filteredLastAthleteMatches =
+          this.filteredLastAthleteMatches.filter((value) => {
+            return value.strLeague == this.modelLeague;
+          });
+        this.filteredLastLeagueMatches = this.filteredLastLeagueMatches.filter(
+          (value) => {
+            return value.strLeague == this.modelLeague;
+          }
+        );
+        this.filteredNextMatches = this.filteredNextMatches.filter((value) => {
+          return value.strLeague == this.modelLeague;
+        });
+        this.filteredNextAthleteMatches =
+          this.filteredNextAthleteMatches.filter((value) => {
+            return value.strLeague == this.modelLeague;
+          });
+        this.filteredNextLeagueMatches = this.filteredNextLeagueMatches.filter(
+          (value) => {
+            return value.strLeague == this.modelLeague;
+          }
+        );
+      } else if (this.modelLeague == null) {
         this.filteredLastMatches = this.lastMatches;
         this.filteredLastLeagueMatches = this.lastLeagueMatches;
         this.filteredLastAthleteMatches = this.lastAthleteMatches;
@@ -1269,17 +1403,50 @@ export default {
       }
     },
     onSportChange() {
-      if (this.modelLiveSport != null) {
-        this.filteredMatches = this.filteredMatches.filter(
-          (b) => b.strSport == this.modelLiveSport
+      if (this.modelLiveSport == null) {
+        this.filteredLiveMatches = this.liveMatches;
+        this.filteredLiveLeagueMatches = this.liveLeagueMatches;
+      } else {
+        this.filteredLiveMatches = this.liveMatches.filter((value) => {
+          return value.strSport == this.modelLiveSport;
+        });
+        this.filteredLiveLeagueMatches = this.liveLeagueMatches.filter(
+          (value) => {
+            return value.strSport == this.modelLiveSport;
+          }
         );
-      } else this.getFavDateEvents();
+      }
     },
     onLeagueChange() {
-      if (this.modelLiveLeague != null) this.getLeagueDateEvents();
-      else this.getFavDateEvents();
+      if (this.modelLiveSport != null) {
+        this.filteredLiveMatches = this.filteredLiveMatches.filter((value) => {
+          return (
+            value.strLeague == this.modelLiveLeague &&
+            value.strSport == this.modelLiveSport
+          );
+        });
+        this.filteredLiveLeagueMatches = this.filteredLiveLeagueMatches.filter(
+          (value) => {
+            return (
+              value.strLeague == this.modelLiveLeague &&
+              value.strSport == this.modelLiveSport
+            );
+          }
+        );
+      } else if (this.modelLiveLeague != null) {
+        this.filteredLiveMatches = this.filteredLastMatches.filter((value) => {
+          return value.strLeague == this.modelLiveLeague;
+        });
+        this.filteredLiveLeagueMatches = this.filteredLiveLeagueMatches.filter(
+          (value) => {
+            return value.strLeague == this.modelLiveLeague;
+          }
+        );
+      } else if (this.modelLiveLeague == null) {
+        this.filteredLiveMatches = this.liveMatches;
+        this.filteredLiveLeagueMatches = this.liveLeagueMatches;
+      }
     },
-
     currentDate() {
       let dt = new Date();
       let month = ("0" + (dt.getMonth() + 1)).slice(-2);
@@ -1287,24 +1454,6 @@ export default {
       let year = dt.getFullYear();
       const fullDate = year + "-" + month + "-" + date;
       return fullDate;
-    },
-    getFavDateEvents() {
-      axios
-        .request({
-          method: "get",
-          baseURL: url + `favourite/teams/matches/${this.date}`,
-          headers: {
-            Authorization: "Bearer " + bearer,
-          },
-        })
-        .then((response) => {
-          this.filteredMatches = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-          this.errored = true;
-        })
-        .finally(() => (this.loading = false));
     },
     checkValidEventTime(match) {
       let today = new Date();
@@ -1346,57 +1495,6 @@ export default {
         return d.strTime.split(":").join("") > parseInt(time);
       });
     },
-    getFavSportDateEvents() {
-      this.filteredLastMatches = this.lastMatches.filter(
-        (b) => b.strSport == this.modelSport
-      );
-      this.filteredLastLeagueMatches = this.lastLeagueMatches.filter(
-        (b) => b.strSport == this.modelSport
-      );
-      this.filteredLastAthleteMatches = this.lastAthleteMatches.filter(
-        (b) => b.strSport == this.modelSport
-      );
-      this.filteredNextMatches = this.nextMatches.filter(
-        (b) => b.strSport == this.modelSport
-      );
-      this.filteredNextLeagueMatches = this.nextLeagueMatches.filter(
-        (b) => b.strSport == this.modelSport
-      );
-      this.filteredNextAthleteMatches = this.nextAthleteMatches.filter(
-        (b) => b.strSport == this.modelSport
-      );
-    },
-    getSportDateEvents() {
-      this.filteredMatches = this.todayMatches.filter(
-        (b) => b.strSport == this.modelLiveSport
-      );
-    },
-    getFavLeagueDateEvents() {
-      this.filteredLastMatches = this.lastMatches.filter(
-        (b) => b.strLeague == this.modelLeague
-      );
-      this.filteredLastLeagueMatches = this.lastLeagueMatches.filter(
-        (b) => b.strLeague == this.modelLeague
-      );
-      this.filteredLastAthleteMatches = this.lastAthleteMatches.filter(
-        (b) => b.strLeague == this.modelLeague
-      );
-      this.filteredNextMatches = this.nextMatches.filter(
-        (b) => b.strLeague == this.modelLeague
-      );
-      this.filteredNextLeagueMatches = this.nextLeagueMatches.filter(
-        (b) => b.strLeague == this.modelLeague
-      );
-      this.filteredNextAthleteMatches = this.nextAthleteMatches.filter(
-        (b) => b.strLeague == this.modelLeague
-      );
-    },
-    getLeagueDateEvents() {
-      this.filteredMatches = this.liveMatches.filter(
-        (b) => b.strLeague == this.modelLiveLeague
-      );
-      return this.filteredMatches;
-    },
   },
   mounted() {
     axios
@@ -1432,7 +1530,7 @@ export default {
         console.log(error);
         this.errored = true;
       })
-      .finally(() => (this.loading = false));
+      .finally(() => (this.loadingLastMatches = false));
     axios
       .request({
         method: "get",
@@ -1449,7 +1547,7 @@ export default {
         console.log(error);
         this.errored = true;
       })
-      .finally(() => (this.loading = false));
+      .finally(() => (this.loadingLastAthleteMatches = false));
     axios
       .request({
         method: "get",
@@ -1483,7 +1581,7 @@ export default {
         console.log(error);
         this.errored = true;
       })
-      .finally(() => (this.loading = false));
+      .finally(() => (this.loadingLastAthleteMatches = false));
     axios
       .request({
         method: "get",
@@ -1563,19 +1661,20 @@ export default {
     axios
       .request({
         method: "get",
-        baseURL: url + `favourite/teams/liveMatches`,
+        baseURL: url + `favourite/teams/livematches`,
         headers: {
           Authorization: "Bearer " + bearer,
         },
       })
       .then((response) => {
         this.liveMatches = response.data;
+        this.filteredLiveMatches = this.liveMatches;
       })
       .catch((error) => {
         console.log(error);
         this.errored = true;
       })
-      .finally(() => (this.loading = false));
+      .finally(() => (this.loadingLiveMatches = false));
     axios
       .request({
         method: "get",
@@ -1586,13 +1685,13 @@ export default {
       })
       .then((response) => {
         this.liveLeagueMatches = response.data;
-        console.log(this.liveLeagueMatches);
+        this.filteredLiveLeagueMatches = this.liveLeagueMatches;
       })
       .catch((error) => {
         console.log(error);
         this.errored = true;
       })
-      .finally(() => (this.loading = false));
+      .finally(() => (this.loadingLiveLeagueMatches = false));
   },
 };
 
