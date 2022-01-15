@@ -142,9 +142,8 @@ export default {
             .then((res) => res.json())
         localStorage.setItem('bearer', response.access_token)
         localStorage.setItem('user', googleUser.zu.qf)
+        localStorage.setItem('accessToken', response.access_token)
         setAuthToken(response.access_token)
-        console.log(googleUser)
-        setLoggedInEmail(googleUser.Email)
         if(!response.initialized)
         {
           await this.$router.push({

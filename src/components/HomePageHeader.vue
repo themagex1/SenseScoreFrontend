@@ -91,6 +91,7 @@ export default {
       localStorage.removeItem('bearer')
       localStorage.removeItem('accessToken')
       localStorage.removeItem('isAuthenticated')
+      localStorage.removeItem('refreshToken')
       await this.$gAuth.signOut()
       //console.log("isAuthorized", this.Vue3GoogleOauth.isAuthorized);
       localStorage.removeItem('user')
