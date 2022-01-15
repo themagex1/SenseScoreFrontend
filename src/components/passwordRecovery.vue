@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { getAccountService } from '@/services/accountService'
+//import { getAccountService } from '@/services/accountService'
 
 export default {
   name: 'passwordRecovery',
@@ -52,14 +52,14 @@ export default {
     }
   },
   methods: {
-    async resetPassword () {
-      let result = await getAccountService().resetPassword(this.eMail, this.token, this.password)
-      if(result){
-        await this.$router.push({
-          path: '/'
-        })
-      }
-    }
+    // async resetPassword () {
+    //   let result = await getAccountService().resetPassword(this.eMail, this.token, this.password)
+    //   if(result){
+    //     await this.$router.push({
+    //       path: '/'
+    //     })
+    //   }
+    // }
   }
 }
 </script>

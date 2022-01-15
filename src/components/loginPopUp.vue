@@ -4,7 +4,7 @@
         label="LOGIN"
         color="light-blue-14"
         text-color="grey-9"
-        @click="card = true"
+        @click="this.$router.push({path: '/login'})"
         class="button__login"
     />
     <q-dialog
@@ -88,7 +88,7 @@
 
 <script>
 
-import { getAuthService } from '@/services/authService'
+//import { getAuthService } from '@/services/authService'
 import passwordRecovery from '@/components/passwordRecovery'
 
 export default {
@@ -103,12 +103,7 @@ export default {
   name: 'loginPopUp',
   methods: {
     async doLogin () {
-      const loggedIn = await getAuthService().logIn(this.email, this.password)
-      if (loggedIn) {
-        await this.$router.push({
-          name: 'home',
-        })
-      }
+      //
     },
     onReset () {
       this.accept = false

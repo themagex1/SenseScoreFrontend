@@ -42,7 +42,7 @@
 <script>
 import { ref } from 'vue'
 import axios from 'axios'
-import { getAuthToken, setAuthToken } from '@/services/sessionProps'
+import { setAuthToken } from '@/services/sessionProps'
 
 const bearer = localStorage.getItem('bearer')
 const user = localStorage.getItem('user')
@@ -52,12 +52,13 @@ export default {
   setup () {
     return {
       value: ref(true),
-      username: user,
+
     }
   },
   data () {
     return {
       balance: '',
+      username: user,
     }
   },
   mounted () {
@@ -77,14 +78,21 @@ export default {
           this.errored = true
         })
         .finally(() => (this.loading = false))
+
   },
+
   methods: {
     async logOut () {
-      let token = getAuthToken()
+      let token = localStorage.getItem('bearer')
+
       let headers = { 'Authorization': 'Bearer ' + token }
       await axios.delete('https://localhost:5001/api/Account/logout', { headers })
       setAuthToken(null)
       localStorage.removeItem('bearer')
+      localStorage.removeItem('accessToken')
+      localStorage.removeItem('isAuthenticated')
+      await this.$gAuth.signOut()
+      //console.log("isAuthorized", this.Vue3GoogleOauth.isAuthorized);
       localStorage.removeItem('user')
       await this.$router.push({ path: '/' })
     }

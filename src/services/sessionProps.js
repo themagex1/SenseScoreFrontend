@@ -39,3 +39,5 @@ function removeCookie(cookie_name) {
 }
 export const [getLoggedInEmail, setLoggedInEmail] = createCookie('loggedInEmail')
 export const [getAuthToken, setAuthToken] = createCookie('authToken')
+export const [getAccessToken, setAccessToken] = createCookie('accessToken')
+export const [getRefreshToken, setRefreshToken] = createCookie('refreshToken')

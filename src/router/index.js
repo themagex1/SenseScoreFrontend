@@ -9,15 +9,22 @@ const routes = [
   },
   {
     path: '/login',
-    name: 'loginPopUp',
+    name: 'Login',
 
-    component: () => import('../components/loginPopUp')
+    component: () => import('../views/Login')
   },
+
   {
     path: '/home',
     name: 'home',
 
     component: () => import('../views/home'),
+  },
+  {
+    path: '/signup',
+    name: 'SignUp',
+
+    component: () => import('../views/SignUp'),
   },
   {
     path: '/all-events',
@@ -79,5 +86,6 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
+
 
 export default router

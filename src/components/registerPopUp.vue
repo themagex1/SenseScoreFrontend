@@ -3,7 +3,7 @@
     <q-btn outline
            label="REGISTER"
            text-color="light-blue-14"
-           @click="card = true"
+           @click="this.$router.push({path: '/signup'})"
            class="button__register"
     />
 
@@ -100,8 +100,8 @@
 
 <script>
 import { ref } from 'vue'
-import { getAccountService } from '@/services/accountService'
-import { getAuthService } from '@/services/authService'
+//import { getAccountService } from '@/services/accountService'
+//import { getAuthService } from '@/services/authService'
 
 
 export default {
@@ -128,22 +128,22 @@ export default {
   },
   methods: {
     async doSignUp () {
-      try {
-        const result = await getAccountService().addAccount(this.email, this.username, this.password)
-        if(result) {
-          await getAuthService().logIn(this.email, this.password)
-          console.log('OK')
-          await this.$router.push({
-            name: 'home'
-          })
-        }
-        else {
-          //
-        }
-      }
-      catch (e) {
-        //do nothing
-      }
+      // try {
+      //   const result = await getAccountService().addAccount(this.email, this.username, this.password)
+      //   if(result) {
+      //     await getAuthService().logIn(this.email, this.password)
+      //     console.log('OK')
+      //     await this.$router.push({
+      //       name: 'home'
+      //     })
+      //   }
+      //   else {
+      //     //
+      //   }
+      // }
+      // catch (e) {
+      //   //do nothing
+      // }
     },
 
   }
