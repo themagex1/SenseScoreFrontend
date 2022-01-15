@@ -303,6 +303,25 @@ export default {
         }
       }
     },
+    postFav (category, id) {
+      axios({
+        method: 'post',
+        baseURL: 'https://localhost:5001/' + 'api/Account/favourite',
+        headers: {
+          Authorization: 'Bearer ' + bearer,
+        },
+        data: {
+          category: category,
+          id: id,
+        },
+      })
+          .then(function (response) {
+            console.log(response)
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+    },
     postFavTeam(category, id) {
       axios({
         method: "post",
