@@ -361,7 +361,7 @@
               clearable
               rounded
               outlined
-              v-model="modelSport"
+              v-model="modelLiveSport"
               label="Select sport"
               :options="filteredSports"
               style="width: 30%"
@@ -375,7 +375,7 @@
               clearable
               rounded
               outlined
-              v-model="modelLeague"
+              v-model="modelLiveLeague"
               label="Select league"
               :options="filteredLeagues"
               style="width: 30%"
@@ -684,6 +684,7 @@ export default {
       alert: ref("false"),
       testError: false,
       text: ref(""),
+      filteredLiveMatches: [],
       leftDrawerOpen,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
@@ -701,10 +702,12 @@ export default {
       date: ref(this.currentDate()),
       sport: ref(null),
       model: ref(null),
-      modelSport: ref(null),
-      modelLeague: ref(null),
       modelDaySport: ref(null),
       modelDayLeague: ref(null),
+      modelSport: ref(null),
+      modelLeague: ref(null),
+      modelLiveSport: ref(null),
+      modelLiveLeague: ref(null),
       eventCard: false,
       matchTab: ref("match"),
       matchDetailsTab: ref("squad"),
@@ -722,7 +725,6 @@ export default {
       todayMatches: [],
       liveMatches: [],
       filteredDayMatches: [],
-      filteredLiveMatches: [],
       filteredSports: [],
       filteredLeagues: [],
       tab: ref("finished"),
@@ -858,18 +860,47 @@ export default {
       return value.slice(0, 5);
     },
     onLiveSportChange() {
-      if (this.modelSport !== null) {
-        this.filteredLiveMatches = this.liveMatches.filter(
-          (sport) => sport.strSport == this.modelSport
-        );
-      } else this.filteredLiveMatches = this.liveMatches;
+      return axios
+        .get(url + `livematches/`, {
+          params: { s: this.modelLiveSport },
+        })
+        .then((response) => {
+          this.filteredLiveMatches = response.data;
+          console.log(this.filteredLiveMatches);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.errored = true;
+        })
+        .finally(() => (this.loadingLiveMatches = false));
     },
     onLiveLeagueChange() {
-      if (this.modelLeague !== null) {
-        this.filteredLiveMatches = this.liveMatches.filter(
-          (sport) => sport.strLeague == this.modelLeague
-        );
-      } else this.filteredLiveMatches = this.liveMatches;
+      if (this.modelLiveLeague.id != null)
+        return axios
+          .get(url + `livematches/`, {
+            params: { s: this.modelLiveSport, l: this.modelLiveLeague.id },
+          })
+          .then((response) => {
+            this.filteredLiveMatches = response.data;
+          })
+          .catch((error) => {
+            console.log(error);
+            this.errored = true;
+          })
+          .finally(() => (this.loadingLiveMatches = false));
+      else
+        return axios
+          .get(url + `livematches/`, {
+            params: { s: this.modelLiveSport },
+          })
+          .then((response) => {
+            this.filteredLiveMatches = response.data;
+          })
+          .catch((error) => {
+            console.log(error);
+            this.errored = true;
+          })
+          .finally(() => (this.loadingLiveMatches = false));
     },
     onSportChange() {
       return axios
@@ -994,7 +1025,6 @@ export default {
       .get(url + `matches/${this.date}`)
       .then((response) => {
         this.todayMatches = response.data;
-        console.log(this.todayMatches);
         this.filteredDayMatches = this.todayMatches;
       })
       .catch((error) => {
@@ -1007,7 +1037,6 @@ export default {
       .then((response) => {
         this.liveMatches = response.data;
         this.filteredLiveMatches = this.liveMatches;
-        console.log(this.liveMatches);
       })
       .catch((error) => {
         console.log(error);
@@ -1024,7 +1053,11 @@ export default {
       .finally(() => (this.loading = false));
     axios.get(url + "leagues").then((response) => {
       response.data.forEach((element) => {
-        this.filteredLeagues.push(element.strLeague);
+        this.filteredLeagues.push({
+          label: element.strLeague,
+          value: element.strLeague,
+          id: element.idLeague,
+        });
       });
     });
     axios
