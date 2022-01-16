@@ -380,13 +380,15 @@
                       >
                         No data of upcoming matches. Choose different filter.
                       </div>
-                      <q-list style="color: #ffffff !important">
-                        <div class="q-pa-md text-yellow text-uppercase">
-                          Teams
-                        </div>
+                      <div class="q-pa-md text-yellow text-uppercase">
+                        Teams
+                      </div>
+                      <q-list
+                        style="color: #ffffff !important"
+                        v-for="match in filteredNextMatches"
+                        :key="match.idEvent"
+                      >
                         <q-item
-                          v-for="match in filteredNextMatches"
-                          :key="match.idEvent"
                           clickable
                           @click="
                             (eventCard = true),
@@ -430,16 +432,17 @@
                               formatPrice(match.strTime)
                             }}</q-item-label>
                           </q-item-section>
-                          <q-item-section
-                            v-if="
-                              match?.homeOdds != 0 &&
-                              match?.awayOdds != 0 &&
-                              match?.drawOdds != 0 //&&
-                              //checkValidEventTime(match)
-                            "
-                            side
-                            top
-                          >
+                        </q-item>
+                        <q-item
+                          class="mb-5"
+                          v-if="
+                            match?.homeOdds != 0 &&
+                            match?.awayOdds != 0 &&
+                            match?.drawOdds != 0 //&&
+                            //checkValidEventTime(match)
+                          "
+                        >
+                          <q-item-section side top>
                             <q-item-label
                               caption
                               style="color: #ffffff !important"
@@ -494,13 +497,17 @@
                             </q-item-label>
                           </q-item-section>
                         </q-item>
-                        <q-separator spaced inset />
-                        <div class="q-pa-md text-yellow text-uppercase">
-                          Athletes
-                        </div>
+                      </q-list>
+                      <q-separator spaced inset />
+                      <div class="q-pa-md text-yellow text-uppercase">
+                        Athletes
+                      </div>
+                      <q-list
+                        style="color: #fff !important"
+                        v-for="match in filteredNextAthleteMatches"
+                        :key="match.idEvent"
+                      >
                         <q-item
-                          v-for="match in filteredNextAthleteMatches"
-                          :key="match.idEvent"
                           clickable
                           @click="
                             (eventCard = true),
@@ -544,15 +551,16 @@
                               formatPrice(match.strTime)
                             }}</q-item-label>
                           </q-item-section>
-                          <q-item-section
-                            v-if="
-                              match?.homeOdds != 0 &&
-                              match?.awayOdds != 0 &&
-                              match?.drawOdds != 0
-                            "
-                            side
-                            top
-                          >
+                        </q-item>
+                        <q-item
+                          class="mb-5"
+                          v-if="
+                            match?.homeOdds != 0 &&
+                            match?.awayOdds != 0 &&
+                            match?.drawOdds != 0
+                          "
+                        >
+                          <q-item-section side top>
                             <q-item-label
                               caption
                               style="color: #ffffff !important"
@@ -607,12 +615,15 @@
                             </q-item-label>
                           </q-item-section>
                         </q-item>
-                        <div class="q-pa-md text-yellow text-uppercase">
-                          Leagues
-                        </div>
+                      </q-list>
+                      <div class="q-pa-md text-yellow text-uppercase">
+                        Leagues
+                      </div>
+                      <q-list
+                        v-for="match in filteredNextLeagueMatches"
+                        :key="match.idEvent"
+                      >
                         <q-item
-                          v-for="match in filteredNextLeagueMatches"
-                          :key="match.idEvent"
                           clickable
                           @click="
                             (eventCard = true),
@@ -626,7 +637,9 @@
                           "
                         >
                           <q-item-section>
-                            <q-item-label> {{ match.strSport }}</q-item-label>
+                            <q-item-label style="color: #ffffff !important">
+                              {{ match.strSport }}</q-item-label
+                            >
                             <q-item-label
                               caption
                               lines="1"
@@ -643,7 +656,7 @@
                               style="height: 20px; max-width: 20px"
                             />
                           </q-item-section>
-                          <q-item-section>
+                          <q-item-section style="color: #ffffff !important">
                             {{ match.strHomeTeam }}-{{ match.strAwayTeam }}
                           </q-item-section>
                           <q-item-section side top>
@@ -656,15 +669,16 @@
                               formatPrice(match.strTime)
                             }}</q-item-label>
                           </q-item-section>
-                          <q-item-section
-                            v-if="
-                              match?.homeOdds != 0 &&
-                              match?.awayOdds != 0 &&
-                              match?.drawOdds != 0
-                            "
-                            side
-                            top
-                          >
+                        </q-item>
+                        <q-item
+                          class="mb-5"
+                          v-if="
+                            match?.homeOdds != 0 &&
+                            match?.awayOdds != 0 &&
+                            match?.drawOdds != 0
+                          "
+                        >
+                          <q-item-section side top>
                             <q-item-label
                               caption
                               style="color: #ffffff !important"
@@ -1738,6 +1752,11 @@ h2,
   color: #f9f871 !important;
   border-radius: 4px;
   border: 1px solid #ffffff;
+}
+
+.mb-5 {
+  margin-bottom: 5px !important;
+  border-bottom: 1px solid #616161;
 }
 
 .q-field--filled .q-field__control {
