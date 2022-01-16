@@ -1,7 +1,6 @@
 class TokenService {
   getLocalRefreshToken () {
     const user = localStorage.getItem('refreshToken')
-
     return user
   }
 

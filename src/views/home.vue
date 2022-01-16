@@ -1157,14 +1157,14 @@
 
 <script>
 import { ref } from "vue";
-import axios from "axios";
+import axiosR from "../services/setupInterceptors";
 import HomePageHeader from "@/components/HomePageHeader";
 import HomePageDrawer from "@/components/HomePageDrawer";
 import RoutingTabs from "@/components/RoutingTabs";
 
 const bearer = localStorage.getItem("bearer");
 
-let url = "https://localhost:5001/api/sportdb/";
+let url = "api/sportdb/";
 
 export default {
   name: "home",
@@ -1260,7 +1260,7 @@ export default {
       this.coupon[0].totalOdds = this.countCourses();
       this.coupon[0].bid = this.toInt();
 
-      axios({
+      axiosR({
         method: "post",
         baseURL: "api/" + "Betting/tickets",
         headers: {
@@ -1324,15 +1324,15 @@ export default {
       console.log(this.coupon[0]);
     },
     live(id, team1Id, team2Id, idLeague, strSeason) {
-      const requestOne = axios.get(url + `matches/lastbyteam/${team1Id}`);
-      const requestTwo = axios.get(url + `matchstats/${id}`);
-      const requestThree = axios.get(url + `matchlineup/${id}`);
-      const requestFour = axios.get(url + `table/${idLeague}/${strSeason}`);
-      const requestFive = axios.get(url + `matches/lastbyteam/${team2Id}`);
-      axios
+      const requestOne = axiosR.get(url + `matches/lastbyteam/${team1Id}`);
+      const requestTwo = axiosR.get(url + `matchstats/${id}`);
+      const requestThree = axiosR.get(url + `matchlineup/${id}`);
+      const requestFour = axiosR.get(url + `table/${idLeague}/${strSeason}`);
+      const requestFive = axiosR.get(url + `matches/lastbyteam/${team2Id}`);
+      axiosR
         .all([requestOne, requestTwo, requestThree, requestFour, requestFive])
         .then(
-          axios.spread((...responses) => {
+            axiosR.spread((...responses) => {
             const responseOne = responses[0].data;
             const responseTwo = responses[1].data;
             const responseThree = responses[2].data;
@@ -1559,13 +1559,10 @@ export default {
     },
   },
   mounted() {
-    axios
+    axiosR
       .request({
         method: "get",
         baseURL: url + `favourite/teams/matches/${this.date}`,
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
       })
       .then((response) => {
         this.todayMatches = response.data;
@@ -1576,7 +1573,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loading = false));
-    axios
+    axiosR
       .request({
         method: "get",
         baseURL: url + "favourite/teams/lastmatches",
@@ -1593,7 +1590,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loadingLastMatches = false));
-    axios
+    axiosR
       .request({
         method: "get",
         baseURL: url + "favourite/athletes/lastmatches",
@@ -1610,7 +1607,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loadingLastAthleteMatches = false));
-    axios
+    axiosR
       .request({
         method: "get",
         baseURL: url + "favourite/athletes/nextmatches",
@@ -1627,7 +1624,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loading = false));
-    axios
+    axiosR
       .request({
         method: "get",
         baseURL: url + "favourite/leagues/lastmatches",
@@ -1644,7 +1641,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loadingLastAthleteMatches = false));
-    axios
+    axiosR
       .request({
         method: "get",
         baseURL: url + "favourite/leagues/nextmatches",
@@ -1661,7 +1658,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loading = false));
-    axios
+    axiosR
       .request({
         method: "get",
         baseURL: url + "favourite/athletes/nextmatches",
@@ -1677,7 +1674,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loading = false));
-    axios
+    axiosR
       .request({
         method: "get",
         baseURL: url + "favourite/teams/nextmatches",
@@ -1694,7 +1691,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loading = false));
-    axios
+    axiosR
       .request({
         method: "get",
         baseURL: url + "favourite/leagues",
@@ -1707,7 +1704,7 @@ export default {
           this.filteredLeagues.push(element.strLeague);
         });
       });
-    axios
+    axiosR
       .request({
         method: "get",
         baseURL: url + "favourite/sports",
@@ -1720,7 +1717,7 @@ export default {
           this.filteredSports.push(element.strSport);
         });
       });
-    axios
+    axiosR
       .request({
         method: "get",
         baseURL: url + `favourite/teams/livematches`,
@@ -1737,7 +1734,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loadingLiveMatches = false));
-    axios
+    axiosR
       .request({
         method: "get",
         baseURL: url + `favourite/leagues/livematches`,

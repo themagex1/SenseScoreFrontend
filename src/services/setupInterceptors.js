@@ -1,13 +1,12 @@
 import axiosInstance from "./api";
 import TokenService from "./token.service";
 
-const setup = (store) => {
-  axiosInstance.interceptors.request.use(
+const axiosR = axiosInstance;
+  axiosR.interceptors.request.use(
     (config) => {
       const token = TokenService.getLocalAccessToken();
       if (token) {
         config.headers["Authorization"] = 'Bearer ' + token;  // for Spring Boot back-end
-
       }
       return config;
     },
@@ -16,7 +15,7 @@ const setup = (store) => {
     }
   );
 
-  axiosInstance.interceptors.response.use(
+  axiosR.interceptors.response.use(
     (res) => {
       return res;
     },
@@ -29,13 +28,13 @@ const setup = (store) => {
           originalConfig._retry = true;
 
           try {
-            const rs = await axiosInstance.post("Account/refresh", {
-              refreshToken: TokenService.getLocalRefreshToken(),
+            const rs = await axiosInstance.post("http://localhost:5000/api/Account/refresh", {
+              refresh_token: TokenService.getLocalRefreshToken(),
             });
 
             const { accessToken } = rs.data;
 
-            store.dispatch('auth/refreshToken', accessToken);
+            axiosR.dispatch('auth/refreshToken', accessToken);
             TokenService.updateLocalAccessToken(accessToken);
 
             return axiosInstance(originalConfig);
@@ -48,6 +47,5 @@ const setup = (store) => {
       return Promise.reject(err);
     }
   );
-};
 
-export default setup;
+export default axiosR;
