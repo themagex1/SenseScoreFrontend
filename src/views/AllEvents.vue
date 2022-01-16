@@ -866,7 +866,6 @@ export default {
         })
         .then((response) => {
           this.filteredLiveMatches = response.data;
-          console.log(this.filteredLiveMatches);
         })
         .catch((error) => {
           console.log(error);
@@ -875,7 +874,8 @@ export default {
         .finally(() => (this.loadingLiveMatches = false));
     },
     onLiveLeagueChange() {
-      if (this.modelLiveLeague.id != null)
+      console.log(this.modelLiveLeague);
+      if (this.modelLiveLeague != null)
         return axios
           .get(url + `livematches/`, {
             params: { s: this.modelLiveSport, l: this.modelLiveLeague.id },
@@ -909,7 +909,6 @@ export default {
         })
         .then((response) => {
           this.filteredDayMatches = response.data;
-          console.log(this.filteredDayMatches);
         })
         .catch((error) => {
           console.log(error);
