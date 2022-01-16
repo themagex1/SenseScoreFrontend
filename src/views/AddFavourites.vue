@@ -306,7 +306,7 @@ export default {
     postFav (category, id) {
       axios({
         method: 'post',
-        baseURL: 'https://localhost:5001/' + 'api/Account/favourite',
+        baseURL: 'api/Account/favourite',
         headers: {
           Authorization: 'Bearer ' + bearer,
         },
@@ -361,7 +361,7 @@ export default {
     postFavAthlete(category, id) {
       axios({
         method: "post",
-        baseURL: "https://localhost:5001/" + "api/Account/favourite",
+        baseURL: "api/Account/favourite",
         headers: {
           Authorization: "Bearer " + bearer,
         },
@@ -397,7 +397,7 @@ export default {
     postFavLeague(category, id) {
       axios({
         method: "post",
-        baseURL: "https://localhost:5001/" + "api/Account/favourite",
+        baseURL: "api/Account/favourite",
         headers: {
           Authorization: "Bearer " + bearer,
         },

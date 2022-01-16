@@ -80,10 +80,10 @@
                 </q-item>
                 <q-item v-ripple>
                   <q-item-section v-if="text.length">
-                    Potential win: {{ roundDecimal }}
+                   Potential win: {{ roundDecimal }}
                   </q-item-section>
-                  <q-item-section v-else
-                    >Potential win: {{ roundDecimal }}
+                  <q-item-section v-else>
+                   Potential win: {{ roundDecimal }}
                   </q-item-section>
                 </q-item>
                 <q-item v-ripple>
@@ -1184,7 +1184,7 @@ export default {
   },
   computed: {
     roundDecimal: function () {
-      return (this.countCourses() * this.toInt()).toFixed(2);
+      return (this.coupon[0].totalOdds * this.toInt()).toFixed(2);
     },
   },
   methods: {
