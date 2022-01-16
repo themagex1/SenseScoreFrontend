@@ -216,8 +216,8 @@
                       <div
                         v-if="
                           !filteredLastMatches.length &&
-                          filteredLastAthleteMatches.length &&
-                          filteredLastLeagueMatches.length
+                          !filteredLastAthleteMatches.length &&
+                          !filteredLastLeagueMatches.length
                         "
                         style="text-align: center"
                       >
@@ -1005,11 +1005,11 @@
                       transition-next="slide-up"
                     >
                       <q-tab-panel name="squad">
-                        <div v-if="eventLineups !== null">
+                        <div v-if="eventLineups.length">
                           <q-list
                             v-for="event in eventLineups"
                             :key="event.idEvent"
-                            style="float: left"
+                            style="float: left; width: 170px"
                           >
                             <p
                               style="
@@ -1040,8 +1040,8 @@
                         </q-card>
                       </q-tab-panel>
 
-                      <q-tab-panel name="details">
-                        <div v-if="eventDetails !== null">
+                      <q-tab-panel style="padding: 16px 0px" name="details">
+                        <div v-if="eventDetails.length">
                           <div
                             class="text-h5 q-mb-md text-center"
                             style="color: black !important"
@@ -1077,9 +1077,7 @@
 
               <q-tab-panel name="h2h">
                 <div
-                  v-if="
-                    eventLast1Matches !== null && eventLast2Matches !== null
-                  "
+                  v-if="eventLast1Matches.length && eventLast2Matches.length"
                 >
                   <q-item
                     style="color: black !important"
@@ -1117,7 +1115,7 @@
               </q-tab-panel>
 
               <q-tab-panel name="table">
-                <div v-if="rowsTable !== null">
+                <div v-if="rowsTable.length">
                   <q-table
                     title="Table"
                     :rows="rowsTable"

@@ -514,11 +514,11 @@
                       transition-next="slide-up"
                     >
                       <q-tab-panel name="squad">
-                        <div v-if="eventLineups !== null">
+                        <div v-if="eventLineups.length">
                           <q-list
                             v-for="event in eventLineups"
                             :key="event.idEvent"
-                            style="float: left"
+                            style="float: left; width: 170px"
                           >
                             <p
                               style="
@@ -550,7 +550,7 @@
                       </q-tab-panel>
 
                       <q-tab-panel name="details">
-                        <div v-if="eventDetails !== null">
+                        <div v-if="eventDetails.length">
                           <div
                             class="text-h5 q-mb-md text-center"
                             style="color: black !important"
@@ -586,9 +586,7 @@
 
               <q-tab-panel name="h2h">
                 <div
-                  v-if="
-                    eventLast1Matches !== null && eventLast2Matches !== null
-                  "
+                  v-if="eventLast1Matches.length && eventLast2Matches.length"
                 >
                   <q-item
                     style="color: black !important"
@@ -626,7 +624,7 @@
               </q-tab-panel>
 
               <q-tab-panel name="table">
-                <div v-if="rowsTable !== null">
+                <div v-if="rowsTable.length">
                   <q-table
                     title="Table"
                     :rows="rowsTable"
@@ -874,7 +872,6 @@ export default {
         .finally(() => (this.loadingLiveMatches = false));
     },
     onLiveLeagueChange() {
-      console.log(this.modelLiveLeague);
       if (this.modelLiveLeague != null)
         return axios
           .get(url + `livematches/`, {
@@ -917,18 +914,32 @@ export default {
         .finally(() => (this.loadingDateMatches = false));
     },
     onLeagueChange() {
-      return axios
-        .get(url + `matches/${this.date}/`, {
-          params: { s: this.modelDaySport, l: this.modelDayLeague },
-        })
-        .then((response) => {
-          this.filteredDayMatches = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-          this.errored = true;
-        })
-        .finally(() => (this.loadingDateMatches = false));
+      if (this.modelDayLeague != null)
+        return axios
+          .get(url + `matches/${this.date}/`, {
+            params: { s: this.modelDaySport, l: this.modelDayLeague.value },
+          })
+          .then((response) => {
+            this.filteredDayMatches = response.data;
+          })
+          .catch((error) => {
+            console.log(error);
+            this.errored = true;
+          })
+          .finally(() => (this.loadingDateMatches = false));
+      else
+        return axios
+          .get(url + `matches/${this.date}/`, {
+            params: { s: this.modelDaySport },
+          })
+          .then((response) => {
+            this.filteredDayMatches = response.data;
+          })
+          .catch((error) => {
+            console.log(error);
+            this.errored = true;
+          })
+          .finally(() => (this.loadingDateMatches = false));
     },
 
     currentDate() {
