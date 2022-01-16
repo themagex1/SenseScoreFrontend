@@ -55,7 +55,7 @@ import HomePageDrawer from "@/components/HomePageDrawer";
 import RoutingTabs from "@/components/RoutingTabs";
 const bearer = localStorage.getItem("bearer");
 
-let url = "https://localhost:5001/api/";
+let url = "api/";
 const pointsColumns = [
   {
     name: "user",

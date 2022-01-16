@@ -99,10 +99,10 @@
                 </q-item>
                 <q-item v-ripple>
                   <q-item-section v-if="text.length">
-                    Potential win: {{ roundDecimal }}
+                   Potential win: {{ roundDecimal }}
                   </q-item-section>
-                  <q-item-section v-else
-                    >Potential win: {{ roundDecimal }}
+                  <q-item-section v-else>
+                   Potential win: {{ roundDecimal }}
                   </q-item-section>
                 </q-item>
                 <q-item v-ripple>
@@ -1153,7 +1153,7 @@ import RoutingTabs from "@/components/RoutingTabs";
 
 const bearer = localStorage.getItem("bearer");
 
-let url = "https://localhost:5001/api/sportdb/";
+let url = "api/sportdb/";
 
 export default {
   name: "home",
@@ -1234,7 +1234,7 @@ export default {
   },
   computed: {
     roundDecimal: function () {
-      return (this.countCourses() * this.toInt()).toFixed(2);
+      return (this.coupon[0].totalOdds * this.toInt()).toFixed(2);
     },
   },
   methods: {
@@ -1251,7 +1251,7 @@ export default {
 
       axios({
         method: "post",
-        baseURL: "https://localhost:5001/api/" + "Betting/tickets",
+        baseURL: "api/" + "Betting/tickets",
         headers: {
           Authorization: "Bearer " + bearer,
         },
