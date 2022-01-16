@@ -81,7 +81,7 @@
           </div>
           <q-space/>
           <q-btn @click="acceptCookiesPolicy">
-            Akceptuję politykę cookies
+            Accept cookie policy
           </q-btn
           >
         </q-toolbar>
@@ -179,10 +179,10 @@ export default {
 
 .description__left {
   color: white;
-  max-width: 400px;
+  max-width: 600px;
   margin: 40px auto;
   font-family: "News of the World", serif;
-  font-size: 1.1vw;
+  font-size: 20px;
 }
 
 .title {
@@ -270,15 +270,35 @@ export default {
     font-size: 7em;
   }
 
+
 }
 @media (max-width: 500px) {
   .title {
-    font-size: 5em;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    max-width: 90%;
+
+  }
+  .buttons {
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 50px;
+  }
+  .description__left {
+    display: none;
   }
 }
 @media (max-width: 400px) {
   .title {
-    font-size: 4.5em;
+    margin-top: 20px;
+    margin-bottom: 30px;
+  }
+  .description__left {
+    max-width: 200px;
+  }
+  .buttons {
+    margin-top: 10px;
+    margin-bottom: 60px;
   }
 }
 

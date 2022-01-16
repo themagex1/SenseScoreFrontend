@@ -16,19 +16,19 @@
         <div class="row flex-center container">
           <div class="col column__loginPopup-1">
             <div class="column__loginPopup-description">
-              <h2 class="column__loginPopup-title">
+              <h2 class="column__loginPopup-title" style="letter-spacing: 2px">
                 Welcome Back in Sense Score
               </h2>
             </div>
             <div class="column__loginPopup-description_2">
               <div class="column__loginPopup-description_2-1">
-                Odkryj świat sportu i stań się mistrzem gry bukmacherskiej
+                Discover the world of sport and become the master of sport betting
               </div>
             </div>
           </div>
           <div class="col column__loginPopup-2">
             <div class="description-login">
-              <h2 class="login-h text-center text-grey-9">Log In</h2>
+              <h2 class="login-h text-center text-grey-9" style="letter-spacing: 4px">Log In</h2>
             </div>
             <q-card-section>
               <q-form class="q-gutter-md login-form">
@@ -68,6 +68,7 @@
                     color="grey-9"
                     class="button__login-1 text-light-blue-14"
                     @click="doLogin"
+
                 />
                 <q-btn
                     label="RESET"
@@ -84,9 +85,6 @@
                 <div class="repeat-pass-desc">
                   <passwordRecovery/>
                 </div>
-
-
-
           </div>
         </div>
 
@@ -169,7 +167,7 @@ export default {
   font-family: "News of the World";
   font-style: italic;
   font-weight: bold;
-  font-size: 5vw;
+  font-size: 85px;
   color: $grey-9;
   text-align: center;
 }
@@ -177,7 +175,7 @@ export default {
 .column__loginPopup-description_2-1 {
   font-family: "News of the World";
   font-weight: inherit;
-  font-size: 1.2vw;
+  font-size: 30px;
   color: $grey-9;
 }
 
@@ -185,7 +183,7 @@ export default {
 .login-h {
   font-family: "News of the World";
   font-weight: bold;
-  font-size: 4vw;
+  font-size: 75px;
 }
 
 .login-form {
@@ -196,8 +194,8 @@ export default {
   .pass-input {
     margin-left: auto;
     margin-right: auto;
-    font-family: "News of the World";
-    font-size: 1.2vw;
+    font-size: 20px;
+
   }
 }
 
@@ -207,17 +205,18 @@ export default {
   margin-left: auto;
   margin-right: auto;
   font-family: "News of the World";
-  font-size: 1.1vw;
+  font-size: 22px;
   color: $grey-9;
+  text-align: center;
 }
 
 .buttons {
   text-align: center;
-
+  font-family: "News of the World";
   .button__login-1,
   .button__reset {
-    font-size: 1.2vw;
-    width: 6vw;
+    font-size: 23px;
+    width: 120px;
   }
 }
 
@@ -226,5 +225,47 @@ export default {
   width: 200px;
   font-family: "News of the World";
   color: $grey-9;
+}
+
+@media (max-width: $phone-max-width) {
+  .container{
+    flex-direction: column;
+    margin-top: -30px;
+  }
+  .login-h {
+    margin: -10px auto;
+  }
+  .column__loginPopup-description_2-1 {
+    text-align: center;
+    max-width: 250px;
+    margin: -50px auto 10px auto;
+    font-size: 25px;
+  }
+
+}
+@media (max-width: 500px) {
+  .container {
+    margin-top: -30px;
+  }
+  .login-h {
+    font-size: 60px;
+  }
+  .column__loginPopup-title {
+    font-size: 65px;
+  }
+  .column__loginPopup-description_2-1 {
+    font-size: 23px;
+  }
+  .acceptToggle {
+    font-size: 20px;
+  }
+  .buttons {
+    font-size: 20px;
+  }
+}
+@media (max-width: 375px) {
+  .container {
+    margin-top: 60px;
+  }
 }
 </style>
