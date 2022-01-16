@@ -872,18 +872,33 @@ export default {
       } else this.filteredLiveMatches = this.liveMatches;
     },
     onSportChange() {
-      if (this.modelDaySport !== null) {
-        this.filteredDayMatches = this.filteredDayMatches.filter(
-          (b) => b.strSport === this.modelDaySport
-        );
-      } else this.getDateEvents();
+      return axios
+        .get(url + `matches/${this.date}/`, {
+          params: { s: this.modelDaySport },
+        })
+        .then((response) => {
+          this.filteredDayMatches = response.data;
+          console.log(this.filteredDayMatches);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.errored = true;
+        })
+        .finally(() => (this.loadingDateMatches = false));
     },
     onLeagueChange() {
-      if (this.modelDayLeague !== null) {
-        this.filteredDayMatches = this.filteredDayMatches.filter(
-          (b) => b.strLeague === this.modelDayLeague
-        );
-      } else this.getDateEvents();
+      return axios
+        .get(url + `matches/${this.date}/`, {
+          params: { s: this.modelDaySport, l: this.modelDayLeague },
+        })
+        .then((response) => {
+          this.filteredDayMatches = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.errored = true;
+        })
+        .finally(() => (this.loadingDateMatches = false));
     },
 
     currentDate() {
@@ -896,7 +911,9 @@ export default {
     },
     getDateEvents() {
       return axios
-        .get(url + `matches/${this.date}`)
+        .get(url + `matches/${this.date}/`, {
+          params: { s: this.modelDaySport, l: this.modelDayLeague },
+        })
         .then((response) => {
           this.filteredDayMatches = response.data;
         })
