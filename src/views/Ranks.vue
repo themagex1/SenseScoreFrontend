@@ -161,7 +161,7 @@ export default {
       axios.spread((...responses) => {
         const responseOne = responses[0].data;
         const responseTwo = responses[1].data;
-        const responseThree = responses[1].data;
+        const responseThree = responses[2].data;
         this.rowsPointsTable = responseOne;
         this.rowsBalanceTable = responseTwo;
         this.rowsPointsRecentTable = responseThree;

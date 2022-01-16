@@ -22,16 +22,19 @@
               </div>
               <div v-else>
                 <q-list
-                  class="q-ma-sm"
                   v-for="coupon in coupon"
                   :key="coupon.id"
-                  style="width: 95%"
+                  style="width: 100%"
                 >
                   <q-item
-                    class="q-ma-sm"
                     v-for="position in coupon.positions"
                     :key="position.eventID"
-                    style="border: 1px solid #f9f871; border-radius: 5px"
+                    style="
+                      border: 1px solid #f9f871;
+                      border-radius: 5px;
+                      padding: 8px 6px;
+                      margin-bottom: 8px;
+                    "
                   >
                     <q-item-section>
                       <q-item-label>{{ position.homeName }}</q-item-label>
@@ -46,7 +49,23 @@
                       >
                     </q-item-section>
                     <q-item-section side>
-                      <q-item-label>{{ position.odds }}</q-item-label>
+                      <q-item-label
+                        ><span
+                          v-if="position.choice == '0'"
+                          style="color: yellow"
+                          >T1</span
+                        >
+                        <span
+                          v-if="position.choice == '1'"
+                          style="color: yellow"
+                          >T2</span
+                        >
+                        <span
+                          v-if="position.choice == '2'"
+                          style="color: yellow"
+                          >D</span
+                        >- <span style="color: #fff">{{ position.odds }}</span>
+                      </q-item-label>
                       <q-item-label style="color: #fff !important" caption
                         >Odd</q-item-label
                       >
@@ -75,7 +94,7 @@
                   </q-item-section>
                   <q-item-section style="text-align: right">
                     <q-item-label overline>Course:</q-item-label>
-                    <q-item-label>{{ countCourses() }}</q-item-label>
+                    <q-item-label>{{ coupon.totalOdds }}</q-item-label>
                   </q-item-section>
                 </q-item>
                 <q-item v-ripple>
@@ -102,7 +121,7 @@
       </div>
       <div class="q-pa-md">
         <div class="q-gutter-y-md" style="max-width: 850px; margin: 0 auto">
-          <p class="text-uppercase text-h4">Favourites section</p>
+          <p class="text-uppercase text-h4">Favourites</p>
           <div-filters class="row" style="gap: 10px; justify-content: center">
             <q-select
               class="col-auto"
@@ -184,7 +203,11 @@
                   <div class="q-pa-md" style="max-width: 850px; padding: 10px">
                     <q-scroll-area style="height: 300px">
                       <div
-                        v-if="!filteredLastMatches.length"
+                        v-if="
+                          !filteredLastMatches.length &&
+                          filteredLastAthleteMatches.length &&
+                          filteredLastLeagueMatches.length
+                        "
                         style="text-align: center"
                       >
                         No history of last matches. Choose different filter.
@@ -438,8 +461,7 @@
                           v-if="
                             match?.homeOdds != 0 &&
                             match?.awayOdds != 0 &&
-                            match?.drawOdds != 0 //&&
-                            //checkValidEventTime(match)
+                            match?.drawOdds != 0
                           "
                         >
                           <q-item-section side top>
@@ -740,7 +762,7 @@
               </q-tab-panel>
             </q-tab-panels>
           </q-card>
-          <h2 class="q-pt-md text-uppercase text-h4">Live section</h2>
+          <h2 class="q-pt-md text-uppercase text-h4">Live</h2>
           <div-filters class="row" style="gap: 10px; justify-content: center">
             <q-select
               class="col-auto"
@@ -792,6 +814,7 @@
                   <section v-else>
                     <q-scroll-area style="height: 300px">
                       <div
+                        style="text-align: center"
                         v-if="
                           !filteredLiveMatches.length &&
                           !filteredLiveLeagueMatches.length
@@ -972,19 +995,32 @@
                     >
                       <q-tab-panel name="squad">
                         <div v-if="eventLineups !== null">
-                          <q-item
-                            style="color: black !important"
+                          <q-list
                             v-for="event in eventLineups"
                             :key="event.idEvent"
+                            style="float: left"
                           >
-                            <q-item-section>{{
-                              event.strPlayer
-                            }}</q-item-section>
-                            <q-item-section>{{ event.strTeam }}</q-item-section>
-                            <q-item-section>{{
-                              event.strCountry
-                            }}</q-item-section>
-                          </q-item>
+                            <p
+                              style="
+                                color: black !important;
+                                margin-left: 15px;
+                                font-size: 1.5rem;
+                              "
+                            >
+                              {{ event.team }}
+                            </p>
+                            <q-item
+                              style="color: black !important"
+                              v-for="player in event.lineup"
+                              :key="player.idLineup"
+                            >
+                              <q-item-section
+                                >{{ player.strPlayer }} ({{
+                                  player.strPositionShort
+                                }})</q-item-section
+                              >
+                            </q-item>
+                          </q-list>
                         </div>
                         <q-card v-else class="my-card">
                           <q-card-section>
@@ -1204,7 +1240,7 @@ export default {
   methods: {
     toInt() {
       if (this.text == "") {
-        return (this.text = 5);
+        return (this.text = 2);
       }
       return parseInt(this.text);
     },
@@ -1246,7 +1282,7 @@ export default {
       for (let i in this.coupon) {
         for (let j in this.coupon[i].positions) {
           couponCourse *= this.coupon[i].positions[j].odds;
-          this.coupon.totalOdds = couponCourse;
+          this.coupon.totalOdds = couponCourse.toFixed(2);
         }
       }
       return couponCourse.toFixed(2);

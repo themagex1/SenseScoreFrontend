@@ -92,7 +92,12 @@
               "
               >Teams</q-item-label
             >
-            <div v-if="searchResult == null">No results...</div>
+            <div
+              v-if="searchResult == null"
+              style="color: #ffeb3b; margin-left: 115px"
+            >
+              No results...
+            </div>
             <q-item
               v-ripple
               v-for="team in searchResult"
@@ -130,7 +135,12 @@
               "
               >Athletes</q-item-label
             >
-            <div v-if="searchPlayerResult == null">No results...</div>
+            <div
+              v-if="searchPlayerResult == null"
+              style="color: #ffeb3b; margin-left: 115px"
+            >
+              No results...
+            </div>
             <q-item
               v-ripple
               v-for="player in searchPlayerResult"
@@ -168,7 +178,12 @@
               "
               >Leagues</q-item-label
             >
-            <div v-if="filteredLeagues == null">No results...</div>
+            <div
+              v-if="filteredLeagues.length == 0"
+              style="color: #ffeb3b; margin-left: 115px"
+            >
+              No results...
+            </div>
             <q-item
               v-ripple
               v-for="league in filteredLeagues"
@@ -303,24 +318,24 @@ export default {
         }
       }
     },
-    postFav (category, id) {
+    postFav(category, id) {
       axios({
-        method: 'post',
-        baseURL: 'https://localhost:5001/' + 'api/Account/favourite',
+        method: "post",
+        baseURL: "https://localhost:5001/" + "api/Account/favourite",
         headers: {
-          Authorization: 'Bearer ' + bearer,
+          Authorization: "Bearer " + bearer,
         },
         data: {
           category: category,
           id: id,
         },
       })
-          .then(function (response) {
-            console.log(response)
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
     postFavTeam(category, id) {
       axios({

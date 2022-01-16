@@ -2,104 +2,108 @@
   <q-header elevated class="bg-light-blue-14">
     <q-toolbar style="gap: 20px">
       <q-toolbar-title>
-        <img alt="App logo" src="@/assets/logo.png"/>
+        <img alt="App logo" src="@/assets/logo.png" />
       </q-toolbar-title>
 
       <div>
         <p
-            class="text-weight-bold"
-            icon-right="people"
-            color="grey-9"
-            flat
-            no-caps
+          class="text-weight-bold"
+          icon-right="people"
+          color="grey-9"
+          flat
+          no-caps
         >
           Saldo:
         </p>
-        <p>{{ balance.balance }}$</p>
+        <p>{{ balance.balance }}<em>SD</em></p>
       </div>
       <div>
         <p
-            class="text-weight-bold"
-            icon-right="people"
-            color="grey-9"
-            flat
-            no-caps
+          class="text-weight-bold"
+          icon-right="people"
+          color="grey-9"
+          flat
+          no-caps
         >
           Logged as
         </p>
         <p>{{ username }}</p>
       </div>
 
-      <q-btn label="Log out" color="grey-9" text-color="light-blue-14" class="text-weight-bold"
-             style="letter-spacing: 0.1vh" @click="logOut">
-
+      <q-btn
+        label="Log out"
+        color="grey-9"
+        text-color="light-blue-14"
+        class="text-weight-bold"
+        style="letter-spacing: 0.1vh"
+        @click="logOut"
+      >
       </q-btn>
-
     </q-toolbar>
   </q-header>
 </template>
 
 <script>
-import { ref } from 'vue'
-import axios from 'axios'
-import { setAuthToken } from '@/services/sessionProps'
+import { ref } from "vue";
+import axios from "axios";
+import { setAuthToken } from "@/services/sessionProps";
 
-const bearer = localStorage.getItem('bearer')
-const user = localStorage.getItem('user')
+const bearer = localStorage.getItem("bearer");
+const user = localStorage.getItem("user");
 
 export default {
-  name: 'home-page-header',
-  setup () {
+  name: "home-page-header",
+  setup() {
     return {
       value: ref(true),
-
-    }
+    };
   },
-  data () {
+  data() {
     return {
-      balance: '',
+      balance: "",
       username: user,
-    }
+    };
   },
-  mounted () {
+  mounted() {
     axios
-        .request({
-          method: 'get',
-          baseURL: 'https://localhost:5001/api/Betting/balance',
-          headers: {
-            Authorization: 'Bearer ' + bearer,
-          },
-        })
-        .then((response) => {
-          this.balance = response.data
-        })
-        .catch((error) => {
-          console.log(error)
-          this.errored = true
-        })
-        .finally(() => (this.loading = false))
-
+      .request({
+        method: "get",
+        baseURL: "https://localhost:5001/api/Betting/balance",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+      })
+      .then((response) => {
+        this.balance = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
   },
 
   methods: {
-    async logOut () {
-      let token = localStorage.getItem('bearer')
+    async logOut() {
+      let token = localStorage.getItem("bearer");
 
-      let headers = { 'Authorization': 'Bearer ' + token }
-      await axios.delete('https://localhost:5001/api/Account/logout', { headers })
-      setAuthToken(null)
-      localStorage.removeItem('bearer')
-      localStorage.removeItem('accessToken')
-      localStorage.removeItem('isAuthenticated')
-      localStorage.removeItem('refreshToken')
-      await this.$gAuth.signOut()
+      let headers = { Authorization: "Bearer " + token };
+      await axios.delete("https://localhost:5001/api/Account/logout", {
+        headers,
+      });
+      setAuthToken(null);
+      localStorage.removeItem("bearer");
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("isAuthenticated");
+      localStorage.removeItem("refreshToken");
+      await this.$gAuth.signOut();
       //console.log("isAuthorized", this.Vue3GoogleOauth.isAuthorized);
-      localStorage.removeItem('user')
-      await this.$router.push({ path: '/' })
+      localStorage.removeItem("user");
+      await this.$router.push({ path: "/" });
       window.location.reload(true);
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
