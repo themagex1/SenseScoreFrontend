@@ -65,7 +65,7 @@ export default {
     axios
         .request({
           method: 'get',
-          baseURL: 'https://localhost:5001/api/Betting/balance',
+          baseURL: 'api/Betting/balance',
           headers: {
             Authorization: 'Bearer ' + bearer,
           },
@@ -86,7 +86,7 @@ export default {
       let token = localStorage.getItem('bearer')
 
       let headers = { 'Authorization': 'Bearer ' + token }
-      await axios.delete('https://localhost:5001/api/Account/logout', { headers })
+      await axios.delete('api/Account/logout', { headers })
       setAuthToken(null)
       localStorage.removeItem('bearer')
       localStorage.removeItem('accessToken')
