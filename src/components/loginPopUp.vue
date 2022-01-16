@@ -4,7 +4,7 @@
         label="LOGIN"
         color="light-blue-14"
         text-color="grey-9"
-        @click="this.$router.push({path: '/login'})"
+        @click="card = true"
         class="button__login"
     />
     <q-dialog
@@ -30,32 +30,37 @@
             <div class="description-login">
               <h2 class="login-h text-center text-grey-9">Log In</h2>
             </div>
-            <q-form class="q-gutter-md login-form">
-              <q-input
-                  standout
-                  v-model="email"
-                  label="Adres E-mail"
-                  type="email"
-                  bg-color="grey-9"
-                  label-color="light-blue-14"
-                  class="email-input"
-              />
-              <q-input
-                  class="pass-input"
-                  bg-color="grey-9"
-                  label-color="light-blue-14"
-                  standout="bg-grey-9 text-light-blue-14"
-                  v-model="password"
-                  label="Password"
-                  type="password"
-              />
-              <q-toggle
-                  class="acceptToggle"
-                  color="grey-9"
-                  v-model="accept"
-                  label="I accept the license and terms"
-                  keep-color
-              />
+            <q-card-section>
+              <q-form class="q-gutter-md login-form">
+                <q-input
+                    standout
+                    v-model="username"
+                    label="E-mail or username"
+                    type="text"
+                    name="email"
+                    bg-color="grey-9"
+                    label-color="light-blue-14"
+                    class="email-input"
+                />
+                <q-input
+                    class="pass-input"
+                    bg-color="grey-9"
+                    label-color="light-blue-14"
+                    standout="bg-grey-9 text-light-blue-14"
+                    v-model="password"
+                    label="Password"
+                    type="password"
+                />
+                <q-toggle
+                    class="acceptToggle"
+                    color="grey-9"
+                    v-model="accept"
+                    label="I accept the license and terms"
+                    keep-color
+                />
+              </q-form>
+            </q-card-section>
+            <q-card-actions>
               <div class="buttons">
                 <q-btn
                     label="LOGIN"
@@ -69,14 +74,19 @@
                     type="reset"
                     color="light-blue-14"
                     flat
+                    name="password"
                     class="q-ml-sm button__reset text-grey-9"
                     @click="onReset"
                 />
               </div>
-              <div class="repeat-pass-desc">
-                <passwordRecovery/>
-              </div>
-            </q-form>
+            </q-card-actions>
+
+                <div class="repeat-pass-desc">
+                  <passwordRecovery/>
+                </div>
+
+
+
           </div>
         </div>
 
@@ -94,7 +104,7 @@ import passwordRecovery from '@/components/passwordRecovery'
 export default {
   data () {
     return {
-      email: '',
+      username: '',
       password: '',
       accept: false,
       card: false
@@ -103,7 +113,21 @@ export default {
   name: 'loginPopUp',
   methods: {
     async doLogin () {
-      //
+      await this.$store.dispatch('auth/login', {
+        login: this.username,
+        passHash: this.password
+      })
+          .then(() => {
+            //
+          })
+      localStorage.getItem('isAuthenticated')
+      if(localStorage.getItem('isAuthenticated') === 'false'){
+        await this.$router.push({path: '/preferencesSports'})
+      }
+      else {
+        await this.$router.push({path: '/home'})
+      }
+
     },
     onReset () {
       this.accept = false

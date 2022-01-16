@@ -164,7 +164,9 @@ export default {
   },
   mounted () {
     this.cookiesPolicyAccepted = sessionStorage.getItem('cookiesPolicyAccepted') === 'true'
-  }
+
+  },
+
 }
 </script>
 

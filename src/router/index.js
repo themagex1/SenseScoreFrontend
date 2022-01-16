@@ -8,24 +8,12 @@ const routes = [
     component: () => import('../views/MainPage.vue')
   },
   {
-    path: '/login',
-    name: 'Login',
-
-    component: () => import('../views/Login')
-  },
-
-  {
     path: '/home',
     name: 'home',
 
     component: () => import('../views/home'),
   },
-  {
-    path: '/signup',
-    name: 'SignUp',
 
-    component: () => import('../views/SignUp'),
-  },
   {
     path: '/all-events',
     name: 'allEvents',

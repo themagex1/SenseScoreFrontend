@@ -96,6 +96,7 @@ export default {
       //console.log("isAuthorized", this.Vue3GoogleOauth.isAuthorized);
       localStorage.removeItem('user')
       await this.$router.push({ path: '/' })
+      window.location.reload(true);
     }
   }
 }
