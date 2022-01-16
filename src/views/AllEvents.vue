@@ -38,11 +38,15 @@
                   >
                     <q-item-section>
                       <q-item-label>{{ position.homeName }}</q-item-label>
-                      <q-item-label caption>Team1</q-item-label>
+                      <q-item-label caption style="color: #fff !important"
+                        >Team1</q-item-label
+                      >
                     </q-item-section>
                     <q-item-section>
                       <q-item-label>{{ position.awayName }}</q-item-label>
-                      <q-item-label caption>Team2</q-item-label>
+                      <q-item-label caption style="color: #fff !important"
+                        >Team2</q-item-label
+                      >
                     </q-item-section>
                     <q-item-section side>
                       <q-item-label
@@ -60,7 +64,9 @@
                           v-if="position.choice == '2'"
                           style="color: yellow"
                           >D</span
-                        >-{{ position.odds }}</q-item-label
+                        >-<span style="color: #fff !important">{{
+                          position.odds
+                        }}</span></q-item-label
                       >
                       <q-item-label style="color: #fff !important" caption
                         >Odd</q-item-label
@@ -79,7 +85,9 @@
                 <q-separator />
                 <q-item v-ripple>
                   <q-item-section>
-                    <q-item-label overline>To pay:</q-item-label>
+                    <q-item-label overline style="color: #fff !important"
+                      >To pay:</q-item-label
+                    >
                     <q-item-label
                       ><q-input
                         bg-color="yellow"
@@ -89,21 +97,27 @@
                     /></q-item-label>
                   </q-item-section>
                   <q-item-section style="text-align: right">
-                    <q-item-label overline>Course:</q-item-label>
+                    <q-item-label style="color: #fff !important" overline
+                      >Course:</q-item-label
+                    >
                     <q-item-label>{{ coupon.totalOdds }}</q-item-label>
                   </q-item-section>
                 </q-item>
                 <q-item v-ripple>
-                  <q-item-section v-if="text.length">
+                  <q-item-section
+                    style="color: #fff !important"
+                    v-if="text.length"
+                  >
                     Potential win: {{ roundDecimal }}
                   </q-item-section>
-                  <q-item-section v-else
+                  <q-item-section style="color: #fff !important" v-else
                     >Potential win: {{ roundDecimal }}
                   </q-item-section>
                 </q-item>
                 <q-item v-ripple>
                   <q-item-section
                     ><q-btn
+                      style="color: #fff !important"
                       @click="play()"
                       :disabled="testError"
                       label="PLAY"

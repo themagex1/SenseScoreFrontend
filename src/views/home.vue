@@ -83,7 +83,9 @@
                 <q-separator />
                 <q-item v-ripple>
                   <q-item-section>
-                    <q-item-label overline>To pay:</q-item-label>
+                    <q-item-label overline style="color: #fff !important"
+                      >To pay:</q-item-label
+                    >
                     <q-item-label
                       ><q-input
                         bg-color="yellow"
@@ -93,21 +95,30 @@
                     /></q-item-label>
                   </q-item-section>
                   <q-item-section style="text-align: right">
-                    <q-item-label overline>Course:</q-item-label>
+                    <q-item-label style="color: #fff !important" overline
+                      >Course:</q-item-label
+                    >
                     <q-item-label>{{ coupon.totalOdds }}</q-item-label>
                   </q-item-section>
                 </q-item>
                 <q-item v-ripple>
-                  <q-item-section v-if="text.length">
-                   Potential win: {{ roundDecimal }}
+                  <q-item-section
+                    style="color: #fff !important"
+                    v-if="text.length"
+                  >
+                    Potential win: {{ roundDecimal }}
                   </q-item-section>
-                  <q-item-section v-else>
-                   Potential win: {{ roundDecimal }}
+                  <q-item-section style="color: #fff !important" v-else
+                    >Potential win: {{ roundDecimal }}
                   </q-item-section>
                 </q-item>
                 <q-item v-ripple>
                   <q-item-section
-                    ><q-btn @click="play()" label="PLAY" />
+                    ><q-btn
+                      style="color: #fff !important"
+                      @click="play()"
+                      label="PLAY"
+                    />
                   </q-item-section>
                 </q-item>
                 <p v-if="success !== 'Success'" style="color: red">
@@ -1153,7 +1164,7 @@ import RoutingTabs from "@/components/RoutingTabs";
 
 const bearer = localStorage.getItem("bearer");
 
-let url = "api/sportdb/";
+let url = "https://localhost:5001/api/sportdb/";
 
 export default {
   name: "home",
@@ -1234,7 +1245,7 @@ export default {
   },
   computed: {
     roundDecimal: function () {
-      return (this.coupon[0].totalOdds * this.toInt()).toFixed(2);
+      return (this.countCourses() * this.toInt()).toFixed(2);
     },
   },
   methods: {
