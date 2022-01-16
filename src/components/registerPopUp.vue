@@ -3,7 +3,7 @@
     <q-btn outline
            label="REGISTER"
            text-color="light-blue-14"
-           @click="this.$router.push({path: '/signup'})"
+           @click="card = true"
            class="button__register"
     />
 
@@ -27,67 +27,81 @@
             <div class="column__2-title">
               <h2 class="column__2-title-header text-center text-grey-9">Register Now</h2>
             </div>
-            <q-form
-                @submit="doSignUp"
-                @reset="onReset"
-                class="q-gutter-md register__form"
-            >
-              <q-input
-                  standout
-                  v-model="username"
-                  label="Username"
-                  type="text"
-                  bg-color="grey-9"
-                  label-color="light-blue-14"
-                  class="register__form-input"
-              />
-              <q-input
-                  standout
-                  v-model="email"
-                  label="Adres E-mail"
-                  type="email"
-                  bg-color="grey-9"
-                  label-color="light-blue-14"
-                  class="register__form-input"
-              />
-              <q-input
-                  class="register__form-input"
-                  bg-color="grey-9"
-                  label-color="light-blue-14"
-                  standout="bg-grey-9 text-light-blue-14"
-                  v-model="password"
-                  label="Password"
-                  type="password"
-              />
-              <q-input
-                  class="register__form-input"
-                  bg-color="grey-9"
-                  label-color="light-blue-14"
-                  standout="bg-grey-9 text-light-blue-14"
-                  v-model="repeatPassword"
-                  label="Confirm password"
-                  type="password"
-              />
-              <q-toggle class="acceptToggle"
-                        color="grey-9"
-                        v-model="accept"
-                        label="I accept the license and terms"
-                        keep-color
-              />
-              <div class="form__button">
-                <q-btn label="REGISTER"
-                       color="grey-9"
-                       class="button__register-1 text-light-blue-14"
-                       @click="doSignUp"
-                       type="submit"
+            <q-card-section>
+              <q-form
+                  @submit="doSignUp"
+                  @reset="onReset"
+                  class="q-gutter-md register__form"
+              >
+                <q-input
+                    standout
+                    v-model="username"
+                    label="Username"
+                    type="text"
+                    name="login"
+                    bg-color="grey-9"
+                    label-color="light-blue-14"
+                    class="register__form-input"
+                    :rules="[rules.required]"
                 />
-                <q-btn label="RESET"
-                       type="reset"
-                       color="light-blue-14"
-                       flat class="q-ml-sm button__reset text-grey-9"
+                <q-input
+                    standout
+                    v-model="email"
+                    label="E-mail"
+                    name="email"
+                    bg-color="grey-9"
+                    label-color="light-blue-14"
+                    class="register__form-input"
+                    :rules="[rules.required, rules.email]"
                 />
-              </div>
-            </q-form>
+                <q-input
+                    class="register__form-input"
+                    bg-color="grey-9"
+                    label-color="light-blue-14"
+                    standout="bg-grey-9 text-light-blue-14"
+                    v-model="password"
+                    label="Password"
+                    type="password"
+                    name="password"
+                    :rules="[rules.required]"
+                />
+                <q-input
+                    class="register__form-input"
+                    bg-color="grey-9"
+                    label-color="light-blue-14"
+                    standout="bg-grey-9 text-light-blue-14"
+                    v-model="confirm_password"
+                    label="Confirm password"
+                    type="password"
+                    :rules="[rules.required]"
+                    :error="!valid()"
+                />
+                <q-toggle class="acceptToggle"
+                          color="grey-9"
+                          v-model="acceptTerms"
+                          label="I accept the license and terms"
+                          keep-color
+                />
+              </q-form>
+            </q-card-section>
+                <q-card-actions>
+                  <div class="form__button">
+                    <q-btn label="REGISTER"
+                           color="grey-9"
+                           class="button__register-1 text-light-blue-14"
+                           @click.prevent="doSignUp"
+
+                    />
+                    <q-btn label="RESET"
+                           type="reset"
+                           color="light-blue-14"
+                           flat class="q-ml-sm button__reset text-grey-9"
+                    />
+                  </div>
+                </q-card-actions>
+
+
+
 
           </div>
         </div>
@@ -107,13 +121,13 @@ import { ref } from 'vue'
 export default {
   name: 'registerPopUp',
   setup () {
-    const accept = ref(false)
+    const acceptTerms = ref(false)
 
     return {
       card: ref(false),
-      accept,
+      acceptTerms,
       onReset () {
-        accept.value = false
+        acceptTerms.value = false
 
       }
     }
@@ -123,28 +137,32 @@ export default {
       username: '',
       email: '',
       password: '',
-      repeatPassword: ''
+      confirm_password: '',
+      rules: {
+        required: value => !!value || 'Required',
+        email: value => {
+          const pattern = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
+          return pattern.test(value) || 'Invalid e-mail'
+        }
+      }
     }
   },
   methods: {
     async doSignUp () {
-      // try {
-      //   const result = await getAccountService().addAccount(this.email, this.username, this.password)
-      //   if(result) {
-      //     await getAuthService().logIn(this.email, this.password)
-      //     console.log('OK')
-      //     await this.$router.push({
-      //       name: 'home'
-      //     })
-      //   }
-      //   else {
-      //     //
-      //   }
-      // }
-      // catch (e) {
-      //   //do nothing
-      // }
+      if (this.valid) {
+        this.$store.dispatch('auth/register', {
+          username: this.username,
+          eMail: this.email,
+          passHash: this.password
+        }).then(() => {
+          this.$router.push({ path: '/' })
+        })
+
+      }
     },
+    valid(){
+      this.password === this.confirm_password
+    }
 
   }
 

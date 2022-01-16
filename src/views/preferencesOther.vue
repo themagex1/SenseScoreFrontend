@@ -274,6 +274,114 @@ export default {
             console.log(error);
           });
     },
+    postFavTeam(category, id) {
+      axios({
+        method: "post",
+        baseURL: "https://localhost:5001/" + "api/Account/favourite",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+        data: {
+          category: category,
+          id: id,
+        },
+      })
+          .then(() => {
+            axios
+                .request({
+                  method: "get",
+                  baseURL: url + `favourite/teams`,
+                  headers: {
+                    Authorization: "Bearer " + bearer,
+                  },
+                })
+                .then((response) => {
+                  this.favouriteTeams = response.data;
+                })
+                .catch((error) => {
+                  console.log(error);
+                  this.errored = true;
+                })
+                .finally(() => {
+                  this.loading = false;
+                });
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+    postFavAthlete(category, id) {
+      axios({
+        method: "post",
+        baseURL: "https://localhost:5001/" + "api/Account/favourite",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+        data: {
+          category: category,
+          id: id,
+        },
+      })
+          .then(() => {
+            axios
+                .request({
+                  method: "get",
+                  baseURL: url + `favourite/athletes`,
+                  headers: {
+                    Authorization: "Bearer " + bearer,
+                  },
+                })
+                .then((response) => {
+                  this.favouriteAthletes = response.data;
+                })
+                .catch((error) => {
+                  console.log(error);
+                  this.errored = true;
+                })
+                .finally(() => {
+                  this.loading = false;
+                });
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
+    postFavLeague(category, id) {
+      axios({
+        method: "post",
+        baseURL: "https://localhost:5001/" + "api/Account/favourite",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+        data: {
+          category: category,
+          id: id,
+        },
+      })
+          .then(() => {
+            axios
+                .request({
+                  method: "get",
+                  baseURL: url + `favourite/leagues`,
+                  headers: {
+                    Authorization: "Bearer " + bearer,
+                  },
+                })
+                .then((response) => {
+                  this.favouriteLeagues = response.data;
+                })
+                .catch((error) => {
+                  console.log(error);
+                  this.errored = true;
+                })
+                .finally(() => {
+                  this.loading = false;
+                });
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    },
     deleteFav(category, id) {
       this.removeFav(category, id);
       switch (category) {
@@ -303,61 +411,13 @@ export default {
     },
 
     addFavTeam(category, id) {
-      this.postFav(category, id);
-      axios
-          .request({
-            method: "get",
-            baseURL: url + `favourite/teams`,
-            headers: {
-              Authorization: "Bearer " + bearer,
-            },
-          })
-          .then((response) => {
-            this.favouriteTeams = response.data;
-          })
-          .catch((error) => {
-            console.log(error);
-            this.errored = true;
-          })
-          .finally(() => (this.loading = false));
+      this.postFavTeam(category, id);
     },
     addFavAthlete(category, id) {
-      this.postFav(category, id);
-      axios
-          .request({
-            method: "get",
-            baseURL: url + `favourite/athletes`,
-            headers: {
-              Authorization: "Bearer " + bearer,
-            },
-          })
-          .then((response) => {
-            this.favouriteAthletes = response.data;
-          })
-          .catch((error) => {
-            console.log(error);
-            this.errored = true;
-          })
-          .finally(() => (this.loading = false));
+      this.postFavAthlete(category, id);
     },
     addFavLeague(category, id) {
-      this.postFav(category, id);
-      axios
-          .request({
-            method: "get",
-            baseURL: url + `favourite/leagues`,
-            headers: {
-              Authorization: "Bearer " + bearer,
-            },
-          })
-          .then((response) => {
-            this.favouriteLeagues = response.data;
-          })
-          .catch((error) => {
-            console.log(error);
-            this.errored = true;
-          })
-          .finally(() => (this.loading = false));
+      this.postFavLeague(category, id);
     },
     searchTeams() {
       if(this.text === ''){

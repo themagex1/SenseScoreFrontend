@@ -16,13 +16,14 @@ const gauthOption = {
 setupInterceptors(store)
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/login', '/signup', '/', '/FAQ', 'contact', '/opinions']
+  const publicPages = ['/', '/FAQ', 'contact', '/opinions', '/about', '/contact']
   const authRequired = !publicPages.includes(to.path)
   const privates = publicPages.includes(to.path)
   const loggedIn = localStorage.getItem('accessToken')
 
   if (authRequired && !loggedIn) {
-    next('/login')
+    alert('You must sign in')
+    next('/')
   } else if (privates && loggedIn) {
     next('/home')
   } else {
