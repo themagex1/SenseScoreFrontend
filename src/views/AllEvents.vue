@@ -238,21 +238,33 @@
                               >{{ formatPrice(match.strTime) }}</q-item-label
                             >
                           </q-item-section>
-                          <q-item-section
-                            v-if="
-                              match?.homeOdds != 0 &&
-                              match?.awayOdds != 0 &&
-                              match?.drawOdds != 0 //&&
-                              // checkValidEventTime(match)
-                            "
-                            side
-                            top
-                          >
-                            <q-item-label
-                              caption
-                              style="color: #ffffff !important"
-                              >Courses [W1/D/W2]</q-item-label
-                            >
+                        </q-item>
+                        <q-item-label
+                          style="
+                            color: #fff !important;
+                            padding: 0 16px;
+                            font-size: 80%;
+                          "
+                          header
+                          v-if="
+                            match?.homeOdds != 0 &&
+                            match?.awayOdds != 0 &&
+                            match?.drawOdds != 0 //&&
+                            // checkValidEventTime(match)
+                          "
+                          >Courses [W1/D/W2]</q-item-label
+                        >
+
+                        <q-item
+                          class="mb-5"
+                          v-if="
+                            match?.homeOdds != 0 &&
+                            match?.awayOdds != 0 &&
+                            match?.drawOdds != 0 //&&
+                            // checkValidEventTime(match)
+                          "
+                        >
+                          <q-item-section side top>
                             <q-item-label
                               ><q-btn
                                 v-on:click.stop
@@ -997,6 +1009,11 @@ h2,
   color: #f9f871 !important;
   border-radius: 4px;
   border: 1px solid #ffffff;
+}
+
+.mb-5 {
+  margin-bottom: 5px !important;
+  border-bottom: 1px solid #616161;
 }
 
 .q-field--filled .q-field__control {
