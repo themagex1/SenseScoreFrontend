@@ -1,6 +1,6 @@
 import axios from 'axios'
 import TokenService from './token.service'
-const API_URL = 'https://localhost:5001/api/Account/'
+const API_URL = 'api/Account/'
 
 class AuthService {
   login ({ login, passHash }) {
