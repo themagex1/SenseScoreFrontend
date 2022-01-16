@@ -812,6 +812,7 @@ export default {
         for (let i = 0; i < this.coupon[0].positions.length; i++) {
           if (this.coupon[0].positions[i].eventID == eventId) {
             this.coupon[0].positions[i].odds = course;
+            this.coupon[0].positions[i].choice = choice;
           }
         }
       }
