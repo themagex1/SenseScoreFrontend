@@ -16,13 +16,13 @@
         <div class="row flex-center container">
           <div class="col column__loginPopup-1">
             <div class="column__loginPopup-description">
-              <h2 class="column__loginPopup-title" style="letter-spacing: 2px">
-                Welcome Back in Sense Score
+              <h2 class="column__loginPopup-title" style="letter-spacing: 3px">
+                Welcome Back to Sense Score
               </h2>
             </div>
             <div class="column__loginPopup-description_2">
               <div class="column__loginPopup-description_2-1">
-                Discover the world of sport and become the master of sport betting
+                Discover the world of sport and become the master of sport betting!
               </div>
             </div>
           </div>
@@ -59,6 +59,21 @@
                     keep-color
                 />
               </q-form>
+              <div class="errors">
+                <div v-if="usernameError" style="text-align: center" class="text-red-9">
+                  Username cannot be empty!
+                </div>
+                <div v-if="passwordError" style="text-align: center" class="text-red-9">
+                  Password must be contain at least six characters!
+                </div>
+                <div v-if="acceptError" style="text-align: center" class="text-red-9">
+                  You must accept the license and terms!
+                </div>
+                <div v-if="userError" style="text-align: center" class="text-red-9">
+                  This account doesn't exist!
+                </div>
+              </div>
+
             </q-card-section>
             <q-card-actions>
               <div class="buttons">
@@ -82,9 +97,9 @@
               </div>
             </q-card-actions>
 
-                <div class="repeat-pass-desc">
-                  <passwordRecovery/>
-                </div>
+            <div class="repeat-pass-desc">
+              <passwordRecovery/>
+            </div>
           </div>
         </div>
 
@@ -96,8 +111,8 @@
 
 <script>
 
-//import { getAuthService } from '@/services/authService'
 import passwordRecovery from '@/components/passwordRecovery'
+//import * as md5 from 'md5'
 
 export default {
   data () {
@@ -105,27 +120,70 @@ export default {
       username: '',
       password: '',
       accept: false,
-      card: false
+      card: false,
+      acceptError: false,
+      usernameError: false,
+      passwordError: false,
+      userError: false
     }
   },
   name: 'loginPopUp',
   methods: {
     async doLogin () {
-      await this.$store.dispatch('auth/login', {
-        login: this.username,
-        passHash: this.password
-      })
-          .then(() => {
-            //
-          })
-      localStorage.getItem('isAuthenticated')
-      if(localStorage.getItem('isAuthenticated') === 'false'){
-        await this.$router.push({path: '/preferencesSports'})
-      }
-      else {
-        await this.$router.push({path: '/home'})
+      let validPassword = this.validPassword()
+      let acceptTerm = this.acceptTerms()
+      let validLogin = this.validLogin()
+      if (validPassword && acceptTerm && validLogin) {
+        await this.$store.dispatch('auth/login', {
+          login: this.username,
+          passHash: this.password
+        })
+            .then(() => {
+              localStorage.getItem('isAuthenticated')
+              if (localStorage.getItem('isAuthenticated') === 'false') {
+                this.$router.push({ path: '/preferencesSports' })
+              } else {
+                this.$router.push({ path: '/home' })
+              }
+            })
+            .catch(() => {
+              this.userError = true
+            })
+
+      } else {
+        console.log('Login error')
       }
 
+    },
+    validLogin () {
+      if (this.username.length === 0) {
+        this.usernameError = true
+        return false
+      } else {
+        this.usernameError = false
+        return true
+      }
+
+    },
+    validPassword () {
+      if (this.password.length < 6) {
+        this.passwordError = true
+        return false
+      } else {
+        this.passwordError = false
+        return true
+      }
+
+    },
+
+    acceptTerms () {
+      if (this.accept === false) {
+        this.acceptError = true
+        return false
+      } else {
+        this.acceptError = false
+        return true
+      }
     },
     onReset () {
       this.accept = false
@@ -213,6 +271,7 @@ export default {
 .buttons {
   text-align: center;
   font-family: "News of the World";
+
   .button__login-1,
   .button__reset {
     font-size: 23px;
@@ -228,7 +287,7 @@ export default {
 }
 
 @media (max-width: $phone-max-width) {
-  .container{
+  .container {
     flex-direction: column;
     margin-top: -30px;
   }
@@ -243,6 +302,7 @@ export default {
   }
 
 }
+
 @media (max-width: 500px) {
   .container {
     margin-top: -30px;
@@ -263,6 +323,7 @@ export default {
     font-size: 20px;
   }
 }
+
 @media (max-width: 375px) {
   .container {
     margin-top: 60px;

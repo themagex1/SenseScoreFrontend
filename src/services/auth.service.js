@@ -1,5 +1,6 @@
 import axios from 'axios'
 import TokenService from './token.service'
+import * as sha256 from 'sha256'
 const API_URL = 'api/Account/'
 
 class AuthService {
@@ -7,7 +8,7 @@ class AuthService {
     return axios
       .post(API_URL + 'login', {
         login: login,
-        passHash: passHash
+        passHash: sha256(passHash)
       })
       .then(response => {
         if (response.data.access_token && response.data.refresh_token) {
