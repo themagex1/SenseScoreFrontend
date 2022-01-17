@@ -94,6 +94,7 @@
                     class="q-ml-sm button__reset text-grey-9"
                     @click="onReset"
                 />
+                <Spinner v-if="isLoading"/>
               </div>
             </q-card-actions>
 
@@ -112,6 +113,7 @@
 <script>
 
 import passwordRecovery from '@/components/passwordRecovery'
+import Spinner from '@/components/Spinner'
 //import * as md5 from 'md5'
 
 export default {
@@ -124,7 +126,8 @@ export default {
       acceptError: false,
       usernameError: false,
       passwordError: false,
-      userError: false
+      userError: false,
+      isLoading: false
     }
   },
   name: 'loginPopUp',
@@ -134,6 +137,7 @@ export default {
       let acceptTerm = this.acceptTerms()
       let validLogin = this.validLogin()
       if (validPassword && acceptTerm && validLogin) {
+        this.isLoading = true
         await this.$store.dispatch('auth/login', {
           login: this.username,
           passHash: this.password
@@ -148,6 +152,7 @@ export default {
             })
             .catch(() => {
               this.userError = true
+              this.isLoading = false
             })
 
       } else {
@@ -192,6 +197,7 @@ export default {
     }
   },
   components: {
+    Spinner,
     passwordRecovery
   }
 }
@@ -228,6 +234,7 @@ export default {
   font-size: 85px;
   color: $grey-9;
   text-align: center;
+
 }
 
 .column__loginPopup-description_2-1 {

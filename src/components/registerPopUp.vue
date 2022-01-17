@@ -110,13 +110,13 @@
                        color="grey-9"
                        class="button__register-1 text-light-blue-14"
                        @click.prevent="doSignUp"
-
                 />
                 <q-btn label="RESET"
                        type="reset"
                        color="light-blue-14"
                        flat class="q-ml-sm button__reset text-grey-9"
                 />
+                <Spinner v-if="isLoading"/>
               </div>
             </q-card-actions>
           </div>
@@ -131,9 +131,11 @@
 <script>
 import { ref } from 'vue'
 import * as sha256 from 'sha256'
+import Spinner from '@/components/Spinner'
 
 export default {
   name: 'registerPopUp',
+  components: { Spinner },
   setup () {
     const accept = ref(false)
 
@@ -157,7 +159,8 @@ export default {
       passwordError: false,
       confirmError: false,
       emailError: false,
-      userError: false
+      userError: false,
+      isLoading: false
     }
   },
   methods: {
@@ -168,6 +171,7 @@ export default {
       let _acceptTerms = this.acceptTerms()
       let _validPassword = this.validPassword()
       if (_validMatch && _validEmail && _acceptTerms && _validPassword && _validLogin) {
+        this.isLoading = true
         this.$store.dispatch('auth/register', {
           username: this.username,
           eMail: this.email,
@@ -177,6 +181,7 @@ export default {
         })
             .catch(() => {
               this.userError = true
+              this.isLoading = false
             })
 
       } else {
@@ -240,13 +245,6 @@ export default {
 <style scoped lang="scss">
 @import "src/quasar.variables";
 
-.button__register {
-  font-size: 1.5vw;
-  width: 11vw;
-  font-family: "News of the World";
-  color: $grey-9;
-}
-
 .column__1-title {
   font-family: "News of the World";
   font-style: italic;
@@ -267,18 +265,20 @@ export default {
 }
 
 .column__1-title {
-  margin: 4vw 2vw;
+  margin-left: 2vw;
+  margin-right: 2vw;
 }
 
 .column__1-description {
-  margin: 0 2vw;
+  margin-right: 2vw;
+  margin-left: 2vw;
 }
 
 .column__1-title-header {
   font-family: "News of the World";
   font-style: italic;
   font-weight: bold;
-  font-size: 5vw;
+  font-size: 85px;
   color: $grey-9;
   text-align: center;
 }
@@ -286,14 +286,14 @@ export default {
 .column__1-description-text {
   font-family: "News of the World";
   font-weight: inherit;
-  font-size: 1.2vw;
+  font-size: 30px;
   color: $grey-9;
 }
 
 .column__2-title-header {
   font-family: "News of the World";
   font-weight: bold;
-  font-size: 4vw;
+  font-size: 60px;
 }
 
 .register__form {
@@ -305,14 +305,14 @@ export default {
   margin-left: auto;
   margin-right: auto;
   font-family: "News of the World";
-  font-size: 1.3vw;
+  font-size: 25px;
 }
 
 .acceptToggle, .form__button {
   margin-left: auto;
   margin-right: auto;
   font-family: "News of the World";
-  font-size: 1.1vw;
+  font-size: 23px;
   color: $grey-9;
 }
 
@@ -321,8 +321,8 @@ export default {
 }
 
 .button__register-1, .button__reset {
-  font-size: 1.2vw;
-  width: 6vw;
+  font-size: 25px;
+  width: 120px;
 }
 
 .button__register {
@@ -331,4 +331,22 @@ export default {
   font-family: "News of the World";
   color: $grey-9;
 }
+
+@media (max-width: $phone-max-width) {
+  .column__1-title-header{
+    font-size: 60px;
+  }
+  .container {
+    flex-direction: column;
+    margin-top: 200px;
+  }
+
+}
+@media (max-width: 345px) {
+  .container {
+    margin-top: 400px;
+  }
+}
+
+
 </style>

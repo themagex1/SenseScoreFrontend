@@ -181,7 +181,7 @@ export default {
   max-width: 600px;
   margin: 40px auto;
   font-family: "News of the World", serif;
-  font-size: 20px;
+  font-size: 25px;
 }
 
 .title {
