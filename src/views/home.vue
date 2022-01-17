@@ -163,7 +163,7 @@
             >
             </q-select>
           </div-filters>
-          <q-card class="bg-grey-14">
+          <q-card class="bg-grey-9" style="position:inherit;">
             <q-tabs
               v-model="tab"
               dense
@@ -1162,7 +1162,7 @@ import RoutingTabs from "@/components/RoutingTabs";
 
 const bearer = localStorage.getItem("bearer");
 
-let url = "https://localhost:5001/api/sportdb/";
+let url = "api/sportdb/";
 
 export default {
   name: "home",

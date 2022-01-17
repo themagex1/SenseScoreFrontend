@@ -198,7 +198,7 @@
               </template>
             </q-input>
           </div-filters>
-          <q-card class="bg-grey-9">
+          <q-card class="bg-grey-9" style="position:inherit;">
             <q-tab-panels v-model="tabCourses" animated class="bg-grey-9">
               <q-tab-panel name="courses">
                 <div class="q-pa-md" style="max-width: 850px">
