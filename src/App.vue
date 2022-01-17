@@ -65,4 +65,9 @@ export default {
     }
   }
 }
+@font-face {
+  font-family: "News of the World";
+  src: local("News of the World"),
+  url(./assets/fonts/news-of-the-world.regular.ttf) format("truetype");
+}
 </style>
