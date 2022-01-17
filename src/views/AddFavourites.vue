@@ -179,7 +179,7 @@
               >Leagues</q-item-label
             >
             <div
-              v-if="filteredLeagues.length == 0"
+              v-if="searchResult == null && filteredLeagues.length == 0"
               style="color: #ffeb3b; margin-left: 115px"
             >
               No results...
