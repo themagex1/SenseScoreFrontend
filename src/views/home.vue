@@ -1041,7 +1041,7 @@
                       </q-tab-panel>
 
                       <q-tab-panel style="padding: 16px 0px" name="details">
-                        <div v-if="eventDetails.length">
+                        <div v-if="eventDetails">
                           <div
                             class="text-h5 q-mb-md text-center"
                             style="color: black !important"
@@ -1087,9 +1087,8 @@
                     <q-item-section> {{ event.strEvent }}</q-item-section>
                     <q-item-section> {{ event.dateEvent }}</q-item-section>
                     <q-item-section>
-                      {{ event.intAwayScore }}-{{
-                        event.intHomeScore
-                      }}</q-item-section
+                      {{ event.intHomeScore }} -
+                      {{ event.intAwayScore }}</q-item-section
                     >
                   </q-item>
                   <q-separator />
@@ -1101,9 +1100,8 @@
                     <q-item-section> {{ event.strEvent }}</q-item-section>
                     <q-item-section> {{ event.dateEvent }}</q-item-section>
                     <q-item-section>
-                      {{ event.intAwayScore }}-{{
-                        event.intHomeScore
-                      }}</q-item-section
+                      {{ event.intHomeScore }} -
+                      {{ event.intAwayScore }}</q-item-section
                     >
                   </q-item>
                 </div>

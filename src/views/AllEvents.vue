@@ -596,9 +596,8 @@
                     <q-item-section> {{ event.strEvent }}</q-item-section>
                     <q-item-section> {{ event.dateEvent }}</q-item-section>
                     <q-item-section>
-                      {{ event.intAwayScore }}-{{
-                        event.intHomeScore
-                      }}</q-item-section
+                      {{ event.intHomeScore }} -
+                      {{ event.intAwayScore }}</q-item-section
                     >
                   </q-item>
                   <q-separator />
@@ -610,9 +609,8 @@
                     <q-item-section> {{ event.strEvent }}</q-item-section>
                     <q-item-section> {{ event.dateEvent }}</q-item-section>
                     <q-item-section>
-                      {{ event.intAwayScore }}-{{
-                        event.intHomeScore
-                      }}</q-item-section
+                      {{ event.intHomeScore }} -
+                      {{ event.intAwayScore }}</q-item-section
                     >
                   </q-item>
                 </div>
@@ -624,7 +622,7 @@
               </q-tab-panel>
 
               <q-tab-panel name="table">
-                <div v-if="rowsTable.length">
+                <div v-if="rowsTable.length != 0">
                   <q-table
                     title="Table"
                     :rows="rowsTable"

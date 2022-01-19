@@ -2,7 +2,13 @@
   <q-header elevated class="bg-light-blue-14">
     <q-toolbar style="gap: 20px">
       <q-toolbar-title>
-        <img alt="App logo" src="@/assets/logo.png" />
+        <img
+          alt="App logo"
+          src="@/assets/logo.png"
+          @click="$router.push({ path: '/home' })"
+          style="cursor: pointer"
+          class="logo-image"
+        />
       </q-toolbar-title>
 
       <div>
