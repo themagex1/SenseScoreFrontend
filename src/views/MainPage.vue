@@ -139,10 +139,13 @@ export default {
         )
             .then(fetchHelper.handleErrors)
             .then((res) => res.json())
+        localStorage.setItem('googleID', id_token)
         localStorage.setItem('bearer', response.access_token)
         localStorage.setItem('user', googleUser.zu.qf)
         localStorage.setItem('accessToken', response.access_token)
+        localStorage.setItem('accountFlag', '1')
         setAuthToken(response.access_token)
+        localStorage.setItem('refreshToken', response.refresh_token)
         if(!response.initialized)
         {
           await this.$router.push({

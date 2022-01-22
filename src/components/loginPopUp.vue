@@ -70,7 +70,7 @@
                   You must accept the license and terms!
                 </div>
                 <div v-if="userError" style="text-align: center" class="text-red-9">
-                  This account doesn't exist!
+                  {{error}}
                 </div>
               </div>
 
@@ -127,7 +127,8 @@ export default {
       usernameError: false,
       passwordError: false,
       userError: false,
-      isLoading: false
+      isLoading: false,
+      error: ''
     }
   },
   name: 'loginPopUp',
@@ -144,15 +145,17 @@ export default {
         })
             .then(() => {
               localStorage.getItem('isAuthenticated')
+              localStorage.setItem('accountFlag', '0')
               if (localStorage.getItem('isAuthenticated') === 'false') {
                 this.$router.push({ path: '/preferencesSports' })
               } else {
                 this.$router.push({ path: '/home' })
               }
             })
-            .catch(() => {
+            .catch((error) => {
               this.userError = true
               this.isLoading = false
+              this.error = error.response.data
             })
 
       } else {

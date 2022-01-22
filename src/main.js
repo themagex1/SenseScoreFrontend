@@ -25,7 +25,6 @@ router.beforeEach((to, from, next) => {
   const loggedIn = localStorage.getItem('accessToken')
 
   if (authRequired && !loggedIn) {
-    alert('You must sign in')
     next('/')
   } else if (privates && loggedIn) {
     next('/home')

@@ -13,11 +13,11 @@
 
       <div>
         <p
-          class="text-weight-bold"
-          icon-right="people"
-          color="grey-9"
-          flat
-          no-caps
+            class="text-weight-bold"
+            icon-right="people"
+            color="grey-9"
+            flat
+            no-caps
         >
           Saldo:
         </p>
@@ -25,11 +25,11 @@
       </div>
       <div>
         <p
-          class="text-weight-bold"
-          icon-right="people"
-          color="grey-9"
-          flat
-          no-caps
+            class="text-weight-bold"
+            icon-right="people"
+            color="grey-9"
+            flat
+            no-caps
         >
           Logged as
         </p>
@@ -37,12 +37,12 @@
       </div>
 
       <q-btn
-        label="Log out"
-        color="grey-9"
-        text-color="light-blue-14"
-        class="text-weight-bold"
-        style="letter-spacing: 0.1vh"
-        @click="logOut"
+          label="Log out"
+          color="grey-9"
+          text-color="light-blue-14"
+          class="text-weight-bold"
+          style="letter-spacing: 0.1vh"
+          @click="logOut"
       >
       </q-btn>
     </q-toolbar>
@@ -50,25 +50,24 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import axiosR from '../services/api'
-import { setAuthToken } from "@/services/sessionProps";
-
-const bearer = localStorage.getItem("bearer");
-const user = localStorage.getItem("user");
+import { ref } from 'vue'
+import { setAuthToken } from '@/services/sessionProps'
+import axiosR from "../services/api";
+const bearer = localStorage.getItem('bearer')
+const user = localStorage.getItem('user')
 
 export default {
-  name: "home-page-header",
-  setup() {
+  name: 'home-page-header',
+  setup () {
     return {
       value: ref(true),
-    };
+    }
   },
-  data() {
+  data () {
     return {
-      balance: "",
+      balance: '',
       username: user,
-    };
+    }
   },
   mounted() {
     axiosR
@@ -90,8 +89,8 @@ export default {
   },
 
   methods: {
-    async logOut() {
-      let token = localStorage.getItem("bearer");
+    async logOut () {
+      let token = localStorage.getItem('bearer')
 
       let headers = { Authorization: "Bearer " + token };
       await axiosR.delete("api/Account/logout", { headers });
@@ -102,12 +101,13 @@ export default {
       localStorage.removeItem("refreshToken");
       await this.$gAuth.signOut();
       //console.log("isAuthorized", this.Vue3GoogleOauth.isAuthorized);
-      localStorage.removeItem("user");
-      await this.$router.push({ path: "/" });
-      window.location.reload(true);
+      localStorage.removeItem('user')
+      localStorage.removeItem('googleID')
+      await this.$router.go()
+      //window.location.reload(true)
     },
   },
-};
+}
 </script>
 
 <style scoped>

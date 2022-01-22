@@ -99,7 +99,7 @@
                   Passwords must match!
                 </div>
                 <div v-if="userError" style="text-align: center" class="text-red-9">
-                  This account already exists!
+                  {{error}}
                 </div>
               </div>
 
@@ -160,7 +160,8 @@ export default {
       confirmError: false,
       emailError: false,
       userError: false,
-      isLoading: false
+      isLoading: false,
+      error: ''
     }
   },
   methods: {
@@ -179,9 +180,10 @@ export default {
         }).then(() => {
           this.card = false
         })
-            .catch(() => {
+            .catch((error) => {
               this.userError = true
               this.isLoading = false
+              this.error = error.response.data
             })
 
       } else {
