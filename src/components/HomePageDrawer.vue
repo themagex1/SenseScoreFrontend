@@ -8,10 +8,7 @@
         label="Settings"
         icon="settings"
         style="width: 100%"
-        @click="
-          prompt = true;
-          test();
-        "
+        @click="prompt = true"
       />
     </div>
     <div class="q-pa-md">
@@ -169,23 +166,24 @@
       </q-list>
     </div>
     <q-dialog v-model="prompt" persistent>
-      <q-card style="min-width: 350px">
-        <q-card-section>
-          <div class="text-h6">Password</div>
+      <q-card class="my-card" style="min-width: 500px">
+        <q-card-section class="bg-primary text-white">
+          <div class="text-h6">Account management</div>
         </q-card-section>
 
+        <q-separator />
         <q-card-section class="q-pt-none">
-          <q-input
-            dense
-            v-model="password"
-            autofocus
-            @keyup.enter="prompt = false"
-          />
+          <q-input v-model="login" label="Login" />
+          <q-input v-model="password" type="password" label="Password" />
         </q-card-section>
 
-        <q-card-actions align="right" class="text-primary">
-          <q-btn flat label="Cancel" v-close-popup />
-          <q-btn flat label="Ok" v-close-popup />
+        <q-card-section>
+          <q-btn>Change password</q-btn>
+          <q-btn @click="deleteAccount(login, password)">Delete account</q-btn>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn flat v-close-popup>Cancel</q-btn>
+          <q-btn flat v-close-popup>Ok</q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -194,9 +192,12 @@
 
 <script>
 import { ref } from "vue";
-import axiosR from "../services/api";
+import axios from "axios";
+import * as sha256 from "sha256";
+import { TokenService } from "../services/token.service";
 
 const bearer = localStorage.getItem("bearer");
+const login = localStorage.getItem("user", login);
 let url = "api/";
 
 export default {
@@ -215,16 +216,38 @@ export default {
       favouriteTeams: [],
       prompt: ref(false),
       password: ref(""),
+      login: ref(""),
       value: ref(true),
     };
   },
   methods: {
-    test() {
-      console.log("!");
+    logout() {
+      TokenService.removeUser();
+    },
+    deleteAccount(login, pass) {
+      let self = this;
+      axios({
+        method: "delete",
+        baseURL: "api/Account/account",
+        headers: {
+          Authorization: "Bearer " + bearer,
+        },
+        data: {
+          login: login,
+          passHash: sha256(pass),
+        },
+      })
+        .then((response) => {
+          console.log(response);
+          self.$router.push("/home");
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
   },
   mounted() {
-    axiosR
+    axios
       .request({
         method: "get",
         baseURL: url + "SportDB/favourite/teams",
@@ -240,7 +263,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loading = false));
-    axiosR
+    axios
       .request({
         method: "get",
         baseURL: url + "SportDB/favourite/sports",
@@ -256,7 +279,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loading = false));
-    axiosR
+    axios
       .request({
         method: "get",
         baseURL: url + "SportDB/favourite/leagues",
@@ -272,7 +295,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loading = false));
-    axiosR
+    axios
       .request({
         method: "get",
         baseURL: url + "SportDB/favourite/athletes",
