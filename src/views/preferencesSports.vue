@@ -56,7 +56,7 @@
 import { ref } from 'vue'
 import HomePageHeader from '@/components/HomePageHeader'
 
-import axios from 'axios'
+import axiosR from '../services/api'
 
 let url = 'api/SportDB/'
 const bearer = localStorage.getItem('bearer')
@@ -94,7 +94,7 @@ export default {
     },
 
     removeFav (category, id) {
-      axios({
+      axiosR({
         method: 'delete',
         baseURL: 'api/Account/favourite',
         headers: {
@@ -123,7 +123,7 @@ export default {
       }
     },
     postFav (category, id) {
-      axios({
+      axiosR({
         method: 'post',
         baseURL: 'api/Account/favourite',
         headers: {
@@ -155,7 +155,7 @@ export default {
     },
     addFavSport (category, id) {
       this.postFav(category, id)
-      axios
+      axiosR
           .request({
             method: 'get',
             baseURL: url + `favourite/sports`,
@@ -179,7 +179,7 @@ export default {
     }
   },
   mounted () {
-    axios
+    axiosR
         .get(url + 'sports')
         .then(
             (response) =>
@@ -193,7 +193,7 @@ export default {
         })
         .finally(() => (this.loading = false))
 
-    axios
+    axiosR
         .request({
           method: 'get',
           baseURL: url + 'favourite/sports',

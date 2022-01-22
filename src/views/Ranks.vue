@@ -49,7 +49,7 @@
 </template>
 <script>
 import { ref } from "vue";
-import axios from "axios";
+import axiosR from '../services/api'
 import HomePageHeader from "@/components/HomePageHeader";
 import HomePageDrawer from "@/components/HomePageDrawer";
 import RoutingTabs from "@/components/RoutingTabs";
@@ -136,29 +136,29 @@ export default {
   },
   methods: {},
   mounted() {
-    const requestOne = axios.request({
+    const requestOne = axiosR.request({
       method: "get",
       baseURL: url + "Rank/all",
       headers: {
         Authorization: "Bearer " + bearer,
       },
     });
-    const requestTwo = axios.request({
+    const requestTwo = axiosR.request({
       method: "get",
       baseURL: url + "Rank/balance",
       headers: {
         Authorization: "Bearer " + bearer,
       },
     });
-    const requestThree = axios.request({
+    const requestThree = axiosR.request({
       method: "get",
       baseURL: url + "Rank/recent",
       headers: {
         Authorization: "Bearer " + bearer,
       },
     });
-    axios.all([requestOne, requestTwo, requestThree]).then(
-      axios.spread((...responses) => {
+    axiosR.all([requestOne, requestTwo, requestThree]).then(
+      axiosR.spread((...responses) => {
         const responseOne = responses[0].data;
         const responseTwo = responses[1].data;
         const responseThree = responses[2].data;

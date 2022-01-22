@@ -96,7 +96,7 @@
 </template>
 <script>
 import { ref } from "vue";
-import axios from "axios";
+import axiosR from '../services/api'
 import HomePageHeader from "@/components/HomePageHeader";
 import HomePageDrawer from "@/components/HomePageDrawer";
 import RoutingTabs from "@/components/RoutingTabs";
@@ -140,7 +140,7 @@ export default {
     },
   },
   mounted() {
-    axios
+    axiosR
       .request({
         method: "get",
         baseURL: url + "Betting/tickets",

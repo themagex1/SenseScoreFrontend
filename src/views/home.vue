@@ -1157,12 +1157,11 @@
 
 <script>
 import { ref } from "vue";
-import axiosR from "../services/setupInterceptors";
+import axiosR from "../services/api.js";
 import HomePageHeader from "@/components/HomePageHeader";
 import HomePageDrawer from "@/components/HomePageDrawer";
 import RoutingTabs from "@/components/RoutingTabs";
 
-const bearer = localStorage.getItem("bearer");
 
 let url = "api/sportdb/";
 
@@ -1263,9 +1262,6 @@ export default {
       axiosR({
         method: "post",
         baseURL: "api/" + "Betting/tickets",
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
         data: this.coupon[0],
       })
         .then(function (response) {
@@ -1577,11 +1573,9 @@ export default {
       .request({
         method: "get",
         baseURL: url + "favourite/teams/lastmatches",
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
       })
       .then((response) => {
+        console.log(response)
         this.lastMatches = response.data;
         this.filteredLastMatches = this.lastMatches;
       })
@@ -1594,9 +1588,6 @@ export default {
       .request({
         method: "get",
         baseURL: url + "favourite/athletes/lastmatches",
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
       })
       .then((response) => {
         this.lastAthleteMatches = response.data;
@@ -1611,9 +1602,6 @@ export default {
       .request({
         method: "get",
         baseURL: url + "favourite/athletes/nextmatches",
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
       })
       .then((response) => {
         this.nextAthleteMatches = response.data;
@@ -1628,9 +1616,6 @@ export default {
       .request({
         method: "get",
         baseURL: url + "favourite/leagues/lastmatches",
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
       })
       .then((response) => {
         this.lastLeagueMatches = response.data;
@@ -1645,9 +1630,6 @@ export default {
       .request({
         method: "get",
         baseURL: url + "favourite/leagues/nextmatches",
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
       })
       .then((response) => {
         this.nextLeagueMatches = response.data;
@@ -1662,9 +1644,6 @@ export default {
       .request({
         method: "get",
         baseURL: url + "favourite/athletes/nextmatches",
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
       })
       .then((response) => {
         this.nextAthleteMatches = response.data;
@@ -1678,9 +1657,6 @@ export default {
       .request({
         method: "get",
         baseURL: url + "favourite/teams/nextmatches",
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
       })
       .then((response) => {
         this.nextMatches = response.data;
@@ -1695,9 +1671,6 @@ export default {
       .request({
         method: "get",
         baseURL: url + "favourite/leagues",
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
       })
       .then((response) => {
         response.data.forEach((element) => {
@@ -1708,9 +1681,6 @@ export default {
       .request({
         method: "get",
         baseURL: url + "favourite/sports",
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
       })
       .then((response) => {
         response.data.forEach((element) => {
@@ -1721,9 +1691,6 @@ export default {
       .request({
         method: "get",
         baseURL: url + `favourite/teams/livematches`,
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
       })
       .then((response) => {
         this.liveMatches = response.data;
@@ -1738,9 +1705,6 @@ export default {
       .request({
         method: "get",
         baseURL: url + `favourite/leagues/livematches`,
-        headers: {
-          Authorization: "Bearer " + bearer,
-        },
       })
       .then((response) => {
         this.liveLeagueMatches = response.data;

@@ -1,10 +1,10 @@
-import axios from 'axios'
+import axiosR from '../services/api'
 import TokenService from './token.service'
 const API_URL = 'api/Account/'
 
 class AuthService {
   login ({ login, passHash }) {
-    return axios
+    return axiosR
       .post(API_URL + 'login', {
         login: login,
         passHash: passHash
@@ -26,7 +26,7 @@ class AuthService {
   }
 
   register ({ username, eMail, passHash }) {
-    return axios.post(API_URL + 'register', {
+    return axiosR.post(API_URL + 'register', {
       username: username,
       eMail: eMail,
       passHash: passHash

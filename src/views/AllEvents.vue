@@ -666,7 +666,7 @@
 
 <script>
 import { ref } from "vue";
-import axios from "axios";
+import axiosR from '../services/api'
 import HomePageHeader from "@/components/HomePageHeader";
 import HomePageDrawer from "@/components/HomePageDrawer";
 import RoutingTabs from "@/components/RoutingTabs";
@@ -756,7 +756,7 @@ export default {
       this.coupon[0].totalOdds = this.countCourses();
       this.coupon[0].bid = this.toInt();
 
-      axios({
+      axiosR({
         method: "post",
         baseURL: "api/" + "Betting/tickets",
         headers: {
@@ -820,15 +820,15 @@ export default {
       }
     },
     live(id, team1Id, team2Id, idLeague, strSeason) {
-      const requestOne = axios.get(url + `matches/lastbyteam/${team1Id}`);
-      const requestTwo = axios.get(url + `matchstats/${id}`);
-      const requestThree = axios.get(url + `matchlineup/${id}`);
-      const requestFour = axios.get(url + `table/${idLeague}/${strSeason}`);
-      const requestFive = axios.get(url + `matches/lastbyteam/${team2Id}`);
-      axios
+      const requestOne = axiosR.get(url + `matches/lastbyteam/${team1Id}`);
+      const requestTwo = axiosR.get(url + `matchstats/${id}`);
+      const requestThree = axiosR.get(url + `matchlineup/${id}`);
+      const requestFour = axiosR.get(url + `table/${idLeague}/${strSeason}`);
+      const requestFive = axiosR.get(url + `matches/lastbyteam/${team2Id}`);
+      axiosR
         .all([requestOne, requestTwo, requestThree, requestFour, requestFive])
         .then(
-          axios.spread((...responses) => {
+          axiosR.spread((...responses) => {
             const responseOne = responses[0].data;
             const responseTwo = responses[1].data;
             const responseThree = responses[2].data;
@@ -843,16 +843,16 @@ export default {
         );
     },
     test(id, homeTeam, awayTeam) {
-      axios
+      axiosR
         .get(url + `matches/lastbyteam/${homeTeam}`)
         .then((response) => (this.eventLast1Matches = response.data));
-      axios
+      axiosR
         .get(url + `matchstats/${id}`)
         .then((response) => (this.eventDetails = response.data));
-      axios
+      axiosR
         .get(url + `matches/lastbyteam/${awayTeam}`)
         .then((response) => (this.eventLast2Matches = response.data));
-      axios
+      axiosR
         .get(url + `matchlineup/${id}`)
         .then((response) => (this.eventLineups = response.data));
     },
@@ -860,7 +860,7 @@ export default {
       return value.slice(0, 5);
     },
     onLiveSportChange() {
-      return axios
+      return axiosR
         .get(url + `livematches/`, {
           params: { s: this.modelLiveSport },
         })
@@ -876,7 +876,7 @@ export default {
     onLiveLeagueChange() {
       console.log(this.modelLiveLeague);
       if (this.modelLiveLeague != null)
-        return axios
+        return axiosR
           .get(url + `livematches/`, {
             params: { s: this.modelLiveSport, l: this.modelLiveLeague.id },
           })
@@ -889,7 +889,7 @@ export default {
           })
           .finally(() => (this.loadingLiveMatches = false));
       else
-        return axios
+        return axiosR
           .get(url + `livematches/`, {
             params: { s: this.modelLiveSport },
           })
@@ -903,7 +903,7 @@ export default {
           .finally(() => (this.loadingLiveMatches = false));
     },
     onSportChange() {
-      return axios
+      return axiosR
         .get(url + `matches/${this.date}/`, {
           params: { s: this.modelDaySport },
         })
@@ -917,7 +917,7 @@ export default {
         .finally(() => (this.loadingDateMatches = false));
     },
     onLeagueChange() {
-      return axios
+      return axiosR
         .get(url + `matches/${this.date}/`, {
           params: { s: this.modelDaySport, l: this.modelDayLeague },
         })
@@ -940,7 +940,7 @@ export default {
       return fullDate;
     },
     getDateEvents() {
-      return axios
+      return axiosR
         .get(url + `matches/${this.date}/`, {
           params: { s: this.modelDaySport, l: this.modelDayLeague },
         })
@@ -1007,7 +1007,7 @@ export default {
     },
   },
   mounted() {
-    axios
+    axiosR
       .get(url + `matchlineup/1154128`)
       .then((response) => {
         this.eventLineups = response.data;
@@ -1020,7 +1020,7 @@ export default {
       .finally(() => {
         this.loadingDateMatches = false;
       });
-    axios
+    axiosR
       .get(url + `matches/${this.date}`)
       .then((response) => {
         this.todayMatches = response.data;
@@ -1031,7 +1031,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loadingDateMatches = false));
-    axios
+    axiosR
       .get(url + "livematches")
       .then((response) => {
         this.liveMatches = response.data;
@@ -1042,7 +1042,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loadingLiveMatches = false));
-    axios
+    axiosR
       .get(url + "leagues")
       .then((response) => (this.leagues = response.data))
       .catch((error) => {
@@ -1050,7 +1050,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loading = false));
-    axios.get(url + "leagues").then((response) => {
+    axiosR.get(url + "leagues").then((response) => {
       response.data.forEach((element) => {
         this.filteredLeagues.push({
           label: element.strLeague,
@@ -1059,7 +1059,7 @@ export default {
         });
       });
     });
-    axios
+    axiosR
       .get(url + "sports")
       .then((response) => (this.sports = response.data))
       .catch((error) => {
@@ -1067,7 +1067,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loading = false));
-    axios.get(url + "sports").then((response) => {
+    axiosR.get(url + "sports").then((response) => {
       response.data.forEach((element) => {
         this.filteredSports.push(element.strSport);
       });

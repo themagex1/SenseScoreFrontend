@@ -1,6 +1,7 @@
 import AuthService from '../services/auth.service';
 
 const user = localStorage.getItem('accessToken')
+
 const initialState = user
   ? { status: { loggedIn: true }, user }
   : { status: { loggedIn: false }, user: null };

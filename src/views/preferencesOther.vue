@@ -193,7 +193,7 @@
 import { ref } from "vue";
 import HomePageHeader from "@/components/HomePageHeader";
 
-import axios from "axios";
+import axiosR from '../services/api'
 
 let url = "api/SportDB/";
 const bearer = localStorage.getItem("bearer");
@@ -241,7 +241,7 @@ export default {
       return result;
     },
     removeFav(category, id) {
-      axios({
+      axiosR({
         method: "delete",
         baseURL: "api/Account/favourite",
         headers: {
@@ -279,7 +279,7 @@ export default {
       }
     },
     postFav(category, id) {
-      axios({
+      axiosR({
         method: "post",
         baseURL: "api/Account/favourite",
         headers: {
@@ -298,7 +298,7 @@ export default {
         });
     },
     postFavTeam(category, id) {
-      axios({
+      axiosR({
         method: "post",
         baseURL: "api/Account/favourite",
         headers: {
@@ -310,7 +310,7 @@ export default {
         },
       })
         .then(() => {
-          axios
+          axiosR
             .request({
               method: "get",
               baseURL: url + `favourite/teams`,
@@ -334,7 +334,7 @@ export default {
         });
     },
     postFavAthlete(category, id) {
-      axios({
+      axiosR({
         method: "post",
         baseURL: "api/Account/favourite",
         headers: {
@@ -346,7 +346,7 @@ export default {
         },
       })
         .then(() => {
-          axios
+          axiosR
             .request({
               method: "get",
               baseURL: url + `favourite/athletes`,
@@ -370,7 +370,7 @@ export default {
         });
     },
     postFavLeague(category, id) {
-      axios({
+      axiosR({
         method: "post",
         baseURL: "api/Account/favourite",
         headers: {
@@ -382,7 +382,7 @@ export default {
         },
       })
         .then(() => {
-          axios
+          axiosR
             .request({
               method: "get",
               baseURL: url + `favourite/leagues`,
@@ -446,7 +446,7 @@ export default {
         this.ifText = false;
       } else {
         this.ifText = true;
-        return axios
+        return axiosR
           .get(url + `search/teams/${this.text}`)
           .then((response) => (this.searchResult = response.data))
           .catch((error) => {
@@ -461,7 +461,7 @@ export default {
         this.ifText = false;
       } else {
         this.ifText = true;
-        return axios
+        return axiosR
           .get(url + `search/players/${this.text}`)
           .then((response) => (this.searchPlayerResult = response.data))
           .catch((error) => {
@@ -489,7 +489,7 @@ export default {
     },
   },
   mounted() {
-    axios
+    axiosR
       .request({
         method: "get",
         baseURL: url + "favourite/teams",
@@ -506,7 +506,7 @@ export default {
       })
       .finally(() => (this.loading = false));
 
-    axios
+    axiosR
       .request({
         method: "get",
         baseURL: url + "favourite/leagues",
@@ -522,7 +522,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loading = false));
-    axios
+    axiosR
       .request({
         method: "get",
         baseURL: url + "favourite/athletes",
@@ -538,7 +538,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loading = false));
-    axios
+    axiosR
       .get(url + "leagues")
       .then((response) => {
         this.leagues = response.data;

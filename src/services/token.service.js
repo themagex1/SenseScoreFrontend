@@ -10,9 +10,15 @@ class TokenService {
   }
 
   updateLocalAccessToken (token) {
-    let user = localStorage.getItem('accessToken')
-    user.accessToken = token
-    localStorage.setItem('accessToken', user)
+    //let user = localStorage.getItem('accessToken')
+    //user.accessToken = token
+    localStorage.setItem('accessToken', token)
+  }
+
+  updateLocalRefreshToken (token) {
+    //let user = localStorage.getItem('refreshToken')
+    //user.refreshToken = token
+    localStorage.setItem('refreshToken', token)
   }
 
   getUser () {

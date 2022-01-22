@@ -169,7 +169,7 @@
 
 <script>
 import { ref } from "vue";
-import axios from "axios";
+import axiosR from "../services/api";
 
 const bearer = localStorage.getItem("bearer");
 let url = "api/";
@@ -192,7 +192,7 @@ export default {
     };
   },
   mounted() {
-    axios
+    axiosR
       .request({
         method: "get",
         baseURL: url + "SportDB/favourite/teams",
@@ -208,7 +208,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loading = false));
-    axios
+    axiosR
       .request({
         method: "get",
         baseURL: url + "SportDB/favourite/sports",
@@ -224,7 +224,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loading = false));
-    axios
+    axiosR
       .request({
         method: "get",
         baseURL: url + "SportDB/favourite/leagues",
@@ -240,7 +240,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loading = false));
-    axios
+    axiosR
       .request({
         method: "get",
         baseURL: url + "SportDB/favourite/athletes",

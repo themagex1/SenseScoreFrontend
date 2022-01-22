@@ -45,7 +45,7 @@
 
 <script>
 import { ref } from "vue";
-import axios from "axios";
+import axiosR from '../services/api'
 import { setAuthToken } from "@/services/sessionProps";
 
 const bearer = localStorage.getItem("bearer");
@@ -65,7 +65,7 @@ export default {
     };
   },
   mounted() {
-    axios
+    axiosR
       .request({
         method: "get",
         baseURL: "api/Betting/balance",
@@ -88,7 +88,7 @@ export default {
       let token = localStorage.getItem("bearer");
 
       let headers = { Authorization: "Bearer " + token };
-      await axios.delete("api/Account/logout", { headers });
+      await axiosR.delete("api/Account/logout", { headers });
       setAuthToken(null);
       localStorage.removeItem("bearer");
       localStorage.removeItem("accessToken");
