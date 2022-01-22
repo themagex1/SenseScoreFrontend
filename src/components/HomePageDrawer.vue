@@ -192,7 +192,7 @@
 
 <script>
 import { ref } from "vue";
-import axios from "axios";
+import axiosR from "../services/api";
 import * as sha256 from "sha256";
 import { TokenService } from "../services/token.service";
 
@@ -226,7 +226,7 @@ export default {
     },
     deleteAccount(login, pass) {
       let self = this;
-      axios({
+      axiosR({
         method: "delete",
         baseURL: "api/Account/account",
         headers: {
@@ -247,7 +247,7 @@ export default {
     },
   },
   mounted() {
-    axios
+    axiosR
       .request({
         method: "get",
         baseURL: url + "SportDB/favourite/teams",
@@ -263,7 +263,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loading = false));
-    axios
+    axiosR
       .request({
         method: "get",
         baseURL: url + "SportDB/favourite/sports",
@@ -279,7 +279,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loading = false));
-    axios
+    axiosR
       .request({
         method: "get",
         baseURL: url + "SportDB/favourite/leagues",
@@ -295,7 +295,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loading = false));
-    axios
+    axiosR
       .request({
         method: "get",
         baseURL: url + "SportDB/favourite/athletes",
