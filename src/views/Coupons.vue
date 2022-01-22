@@ -18,17 +18,19 @@
           <q-btn
             outline
             color="yellow"
-            label="Only closed tickets"
+            label="Only closed coupons"
             @click="filterClosedTickets()"
           />
           <q-btn
             outline
             color="yellow"
-            label="Only won tickets"
+            label="Only won coupons"
             @click="filterTickets()"
           />
         </div>
-        <div v-if="!tickets.length">No coupons</div>
+        <div v-if="!filteredTickets.length" style="color: yellow">
+          No coupons
+        </div>
         <q-list
           v-else
           v-for="(ticket, ticketid) in filteredTickets"
@@ -39,7 +41,7 @@
           <div class="q-pl-md won" v-if="ticket.won && ticket.isClosed">
             WON
           </div>
-          <div class="q-pl-md lost" v-if="ticket.lost && ticket.isClosed">
+          <div class="q-pl-md lost" v-if="!ticket.won && ticket.isClosed">
             LOST
           </div>
           <q-item>
@@ -130,10 +132,14 @@ export default {
       );
     },
     filterTickets() {
-      this.filteredTickets = this.tickets.filter((x) => x.won == "true");
+      this.filteredTickets = this.tickets.filter((value) => {
+        return value.won == true;
+      });
     },
     filterClosedTickets() {
-      this.filteredTickets = this.tickets.filter((x) => x.isClosed == "true");
+      this.filteredTickets = this.tickets.filter((value) => {
+        return value.isClosed == true;
+      });
     },
     allTickets() {
       this.filteredTickets = this.tickets;

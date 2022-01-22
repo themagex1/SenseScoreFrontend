@@ -22,9 +22,8 @@
           </div>
 
           <div class="description__left text-light-blue-14">
-            Sense Score jest serwisem w którym możesz zarządzać swoimi
-            ulubionymi zespołami sportowymi oraz zagrać w wirtualną grę
-            bukmacherską.
+            Sense Score is a sport service where you can manage your favourite sport teams, leagues or athletes.
+            Also try our virtual betting game.
           </div>
         </div>
         <div class="col self-center column-2">
@@ -73,10 +72,10 @@
         <q-toolbar style="">
           <div class="footer__box self-center">
             <div class="footer__box-text text-center">
-              <span class="text-weight-bold"> Ważna informacja!</span>
-              Ta strona korzysta z plików cookies do przechowywania informacji
-              na Twoim komputerze. Aby uzyskać szczegółowe informacje na temat
-              blokowania plików cookies, zapoznaj się z polityką cookies
+              <span class="text-weight-bold"> Important notice!</span>
+              This webpage uses cookies to store data on your computer. To gain detailed information about block
+              cookies, check out cookie policy. These choices will be signaled to our partners and will not affect
+              browsing data.
             </div>
           </div>
           <q-space/>
@@ -182,7 +181,7 @@ export default {
   max-width: 600px;
   margin: 40px auto;
   font-family: "News of the World", serif;
-  font-size: 20px;
+  font-size: 25px;
 }
 
 .title {

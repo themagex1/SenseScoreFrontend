@@ -8,6 +8,10 @@
         label="Settings"
         icon="settings"
         style="width: 100%"
+        @click="
+          prompt = true;
+          test();
+        "
       />
     </div>
     <div class="q-pa-md">
@@ -164,6 +168,27 @@
         </q-expansion-item>
       </q-list>
     </div>
+    <q-dialog v-model="prompt" persistent>
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">Password</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <q-input
+            dense
+            v-model="password"
+            autofocus
+            @keyup.enter="prompt = false"
+          />
+        </q-card-section>
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="Cancel" v-close-popup />
+          <q-btn flat label="Ok" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-drawer>
 </template>
 
@@ -188,8 +213,15 @@ export default {
       favouriteAthletes: [],
       favouriteLeagues: [],
       favouriteTeams: [],
+      prompt: ref(false),
+      password: ref(""),
       value: ref(true),
     };
+  },
+  methods: {
+    test() {
+      console.log("!");
+    },
   },
   mounted() {
     axiosR

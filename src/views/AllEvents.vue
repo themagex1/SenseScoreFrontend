@@ -198,7 +198,7 @@
               </template>
             </q-input>
           </div-filters>
-          <q-card class="bg-grey-9">
+          <q-card class="bg-grey-9" style="position:inherit;">
             <q-tab-panels v-model="tabCourses" animated class="bg-grey-9">
               <q-tab-panel name="courses">
                 <div class="q-pa-md" style="max-width: 850px">
@@ -514,11 +514,11 @@
                       transition-next="slide-up"
                     >
                       <q-tab-panel name="squad">
-                        <div v-if="eventLineups !== null">
+                        <div v-if="eventLineups.length">
                           <q-list
                             v-for="event in eventLineups"
                             :key="event.idEvent"
-                            style="float: left"
+                            style="float: left; width: 170px"
                           >
                             <p
                               style="
@@ -550,7 +550,7 @@
                       </q-tab-panel>
 
                       <q-tab-panel name="details">
-                        <div v-if="eventDetails !== null">
+                        <div v-if="eventDetails.length">
                           <div
                             class="text-h5 q-mb-md text-center"
                             style="color: black !important"
@@ -586,9 +586,7 @@
 
               <q-tab-panel name="h2h">
                 <div
-                  v-if="
-                    eventLast1Matches !== null && eventLast2Matches !== null
-                  "
+                  v-if="eventLast1Matches.length && eventLast2Matches.length"
                 >
                   <q-item
                     style="color: black !important"
@@ -598,9 +596,8 @@
                     <q-item-section> {{ event.strEvent }}</q-item-section>
                     <q-item-section> {{ event.dateEvent }}</q-item-section>
                     <q-item-section>
-                      {{ event.intAwayScore }}-{{
-                        event.intHomeScore
-                      }}</q-item-section
+                      {{ event.intHomeScore }} -
+                      {{ event.intAwayScore }}</q-item-section
                     >
                   </q-item>
                   <q-separator />
@@ -612,9 +609,8 @@
                     <q-item-section> {{ event.strEvent }}</q-item-section>
                     <q-item-section> {{ event.dateEvent }}</q-item-section>
                     <q-item-section>
-                      {{ event.intAwayScore }}-{{
-                        event.intHomeScore
-                      }}</q-item-section
+                      {{ event.intHomeScore }} -
+                      {{ event.intAwayScore }}</q-item-section
                     >
                   </q-item>
                 </div>
@@ -626,7 +622,7 @@
               </q-tab-panel>
 
               <q-tab-panel name="table">
-                <div v-if="rowsTable !== null">
+                <div v-if="rowsTable.length != 0">
                   <q-table
                     title="Table"
                     :rows="rowsTable"
@@ -666,7 +662,7 @@
 
 <script>
 import { ref } from "vue";
-import axiosR from '../services/api'
+import axios from "axios";
 import HomePageHeader from "@/components/HomePageHeader";
 import HomePageDrawer from "@/components/HomePageDrawer";
 import RoutingTabs from "@/components/RoutingTabs";
@@ -756,7 +752,7 @@ export default {
       this.coupon[0].totalOdds = this.countCourses();
       this.coupon[0].bid = this.toInt();
 
-      axiosR({
+      axios({
         method: "post",
         baseURL: "api/" + "Betting/tickets",
         headers: {
@@ -820,15 +816,15 @@ export default {
       }
     },
     live(id, team1Id, team2Id, idLeague, strSeason) {
-      const requestOne = axiosR.get(url + `matches/lastbyteam/${team1Id}`);
-      const requestTwo = axiosR.get(url + `matchstats/${id}`);
-      const requestThree = axiosR.get(url + `matchlineup/${id}`);
-      const requestFour = axiosR.get(url + `table/${idLeague}/${strSeason}`);
-      const requestFive = axiosR.get(url + `matches/lastbyteam/${team2Id}`);
-      axiosR
+      const requestOne = axios.get(url + `matches/lastbyteam/${team1Id}`);
+      const requestTwo = axios.get(url + `matchstats/${id}`);
+      const requestThree = axios.get(url + `matchlineup/${id}`);
+      const requestFour = axios.get(url + `table/${idLeague}/${strSeason}`);
+      const requestFive = axios.get(url + `matches/lastbyteam/${team2Id}`);
+      axios
         .all([requestOne, requestTwo, requestThree, requestFour, requestFive])
         .then(
-          axiosR.spread((...responses) => {
+          axios.spread((...responses) => {
             const responseOne = responses[0].data;
             const responseTwo = responses[1].data;
             const responseThree = responses[2].data;
@@ -843,16 +839,16 @@ export default {
         );
     },
     test(id, homeTeam, awayTeam) {
-      axiosR
+      axios
         .get(url + `matches/lastbyteam/${homeTeam}`)
         .then((response) => (this.eventLast1Matches = response.data));
-      axiosR
+      axios
         .get(url + `matchstats/${id}`)
         .then((response) => (this.eventDetails = response.data));
-      axiosR
+      axios
         .get(url + `matches/lastbyteam/${awayTeam}`)
         .then((response) => (this.eventLast2Matches = response.data));
-      axiosR
+      axios
         .get(url + `matchlineup/${id}`)
         .then((response) => (this.eventLineups = response.data));
     },
@@ -860,7 +856,7 @@ export default {
       return value.slice(0, 5);
     },
     onLiveSportChange() {
-      return axiosR
+      return axios
         .get(url + `livematches/`, {
           params: { s: this.modelLiveSport },
         })
@@ -874,9 +870,8 @@ export default {
         .finally(() => (this.loadingLiveMatches = false));
     },
     onLiveLeagueChange() {
-      console.log(this.modelLiveLeague);
       if (this.modelLiveLeague != null)
-        return axiosR
+        return axios
           .get(url + `livematches/`, {
             params: { s: this.modelLiveSport, l: this.modelLiveLeague.id },
           })
@@ -889,7 +884,7 @@ export default {
           })
           .finally(() => (this.loadingLiveMatches = false));
       else
-        return axiosR
+        return axios
           .get(url + `livematches/`, {
             params: { s: this.modelLiveSport },
           })
@@ -903,7 +898,7 @@ export default {
           .finally(() => (this.loadingLiveMatches = false));
     },
     onSportChange() {
-      return axiosR
+      return axios
         .get(url + `matches/${this.date}/`, {
           params: { s: this.modelDaySport },
         })
@@ -917,18 +912,32 @@ export default {
         .finally(() => (this.loadingDateMatches = false));
     },
     onLeagueChange() {
-      return axiosR
-        .get(url + `matches/${this.date}/`, {
-          params: { s: this.modelDaySport, l: this.modelDayLeague },
-        })
-        .then((response) => {
-          this.filteredDayMatches = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-          this.errored = true;
-        })
-        .finally(() => (this.loadingDateMatches = false));
+      if (this.modelDayLeague != null)
+        return axios
+          .get(url + `matches/${this.date}/`, {
+            params: { s: this.modelDaySport, l: this.modelDayLeague.value },
+          })
+          .then((response) => {
+            this.filteredDayMatches = response.data;
+          })
+          .catch((error) => {
+            console.log(error);
+            this.errored = true;
+          })
+          .finally(() => (this.loadingDateMatches = false));
+      else
+        return axios
+          .get(url + `matches/${this.date}/`, {
+            params: { s: this.modelDaySport },
+          })
+          .then((response) => {
+            this.filteredDayMatches = response.data;
+          })
+          .catch((error) => {
+            console.log(error);
+            this.errored = true;
+          })
+          .finally(() => (this.loadingDateMatches = false));
     },
 
     currentDate() {
@@ -940,7 +949,7 @@ export default {
       return fullDate;
     },
     getDateEvents() {
-      return axiosR
+      return axios
         .get(url + `matches/${this.date}/`, {
           params: { s: this.modelDaySport, l: this.modelDayLeague },
         })
@@ -1007,7 +1016,7 @@ export default {
     },
   },
   mounted() {
-    axiosR
+    axios
       .get(url + `matchlineup/1154128`)
       .then((response) => {
         this.eventLineups = response.data;
@@ -1020,7 +1029,7 @@ export default {
       .finally(() => {
         this.loadingDateMatches = false;
       });
-    axiosR
+    axios
       .get(url + `matches/${this.date}`)
       .then((response) => {
         this.todayMatches = response.data;
@@ -1031,7 +1040,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loadingDateMatches = false));
-    axiosR
+    axios
       .get(url + "livematches")
       .then((response) => {
         this.liveMatches = response.data;
@@ -1042,7 +1051,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loadingLiveMatches = false));
-    axiosR
+    axios
       .get(url + "leagues")
       .then((response) => (this.leagues = response.data))
       .catch((error) => {
@@ -1050,7 +1059,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loading = false));
-    axiosR.get(url + "leagues").then((response) => {
+    axios.get(url + "leagues").then((response) => {
       response.data.forEach((element) => {
         this.filteredLeagues.push({
           label: element.strLeague,
@@ -1059,7 +1068,7 @@ export default {
         });
       });
     });
-    axiosR
+    axios
       .get(url + "sports")
       .then((response) => (this.sports = response.data))
       .catch((error) => {
@@ -1067,7 +1076,7 @@ export default {
         this.errored = true;
       })
       .finally(() => (this.loading = false));
-    axiosR.get(url + "sports").then((response) => {
+    axios.get(url + "sports").then((response) => {
       response.data.forEach((element) => {
         this.filteredSports.push(element.strSport);
       });

@@ -1,70 +1,53 @@
-import axiosR from "./api";
+import axiosInstance from "./api";
 import TokenService from "./token.service";
 
 const setup = (store) => {
-    axiosR.interceptors.request.use(
-        (config) => {
-            const token = TokenService.getLocalAccessToken();
-            if (token) {
-                config.headers["Authorization"] = 'Bearer ' + token;  // for Spring Boot back-end
+  axiosInstance.interceptors.request.use(
+    (config) => {
+      const token = TokenService.getLocalAccessToken();
+      if (token) {
+        config.headers["Authorization"] = 'Bearer ' + token;  // for Spring Boot back-end
 
-            }
-            return config;
-        },
-        (error) => {
-            return Promise.reject(error);
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+
+  axiosInstance.interceptors.response.use(
+    (res) => {
+      return res;
+    },
+    async (err) => {
+      const originalConfig = err.config;
+
+      if (originalConfig.url !== "Account/login" && err.response) {
+        // Access Token was expired
+        if (err.response.status === 401 && !originalConfig._retry) {
+          originalConfig._retry = true;
+
+          try {
+            const rs = await axiosInstance.post("Account/refresh", {
+              refresh_token: TokenService.getLocalRefreshToken(),
+            });
+
+            const { accessToken } = rs.data;
+
+            store.dispatch('auth/refreshToken', accessToken);
+            TokenService.updateLocalAccessToken(accessToken);
+
+            return axiosInstance(originalConfig);
+          } catch (_error) {
+            return Promise.reject(_error);
+          }
         }
-    );
+      }
 
-    axiosR.interceptors.response.use(
-        (res) => {
-            return res;
-        },
-        async (err) => {
-            const originalConfig = err.config;
-
-            if (originalConfig.url !== "api/Account/login" && err.response) {
-                // Access Token was expired
-                if (err.response.status === 401 && !originalConfig._retry) {
-                    originalConfig._retry = true;
-                    console.log(store.state);
-                    if (!store.state.isRefreshing) {
-                        store.dispatch('setIsRefreshing', true);
-                        try {
-                            const rs = await axiosR.post("api/Account/refresh", {
-                                refresh_token: TokenService.getLocalRefreshToken(),
-                            });
-
-                            const {accessToken} = rs.data;
-
-                            store.dispatch('auth/refreshToken', accessToken);
-                            TokenService.updateLocalAccessToken(rs.data.access_token);
-                            TokenService.updateLocalRefreshToken(rs.data.refresh_token);
-                            console.log('token up');
-                            store.dispatch('setIsRefreshing', false);
-                            return axiosR(originalConfig);
-                        } catch (_error) {
-                            console.log('error');
-                            console.log(_error);
-                            console.log(originalConfig);
-                            store.dispatch('setIsRefreshing', false);
-                            return Promise.reject(_error);
-                        }
-                    }
-                    else {
-                        const intervalId = setInterval(() => {
-                            if (!store.state.isRefreshing) {
-                                clearInterval(intervalId);
-                                return axiosR(originalConfig);
-                            }
-                        }, 100);
-                    }
-                }
-            }
-
-            return Promise.reject(err);
-        }
-    );
+      return Promise.reject(err);
+    }
+  );
 };
 
 export default setup;
