@@ -34,7 +34,7 @@
           <q-table
             :rows="rowsPointsRecentTable"
             :columns="pointsRecentColumns"
-            title="Recent"
+            title="Last week"
             hide-bottom
             virtual-scroll
             card-class="bg-grey-8 text-amber-5"
@@ -49,7 +49,7 @@
 </template>
 <script>
 import { ref } from "vue";
-import axiosR from '../services/api'
+import axiosR from "../services/api";
 import HomePageHeader from "@/components/HomePageHeader";
 import HomePageDrawer from "@/components/HomePageDrawer";
 import RoutingTabs from "@/components/RoutingTabs";
