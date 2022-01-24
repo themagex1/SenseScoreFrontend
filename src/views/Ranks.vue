@@ -50,6 +50,7 @@
 <script>
 import { ref } from "vue";
 import axiosR from "../services/api";
+import axios from "axios";
 import HomePageHeader from "@/components/HomePageHeader";
 import HomePageDrawer from "@/components/HomePageDrawer";
 import RoutingTabs from "@/components/RoutingTabs";
@@ -157,8 +158,8 @@ export default {
         Authorization: "Bearer " + bearer,
       },
     });
-    axiosR.all([requestOne, requestTwo, requestThree]).then(
-      axiosR.spread((...responses) => {
+    axios.all([requestOne, requestTwo, requestThree]).then(
+      axios.spread((...responses) => {
         const responseOne = responses[0].data;
         const responseTwo = responses[1].data;
         const responseThree = responses[2].data;

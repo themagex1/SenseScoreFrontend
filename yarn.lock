@@ -1439,6 +1439,11 @@
   optionalDependencies:
     prettier "^1.18.2"
 
+"@vue/devtools-api@^6.0.0-beta.11":
+  version "6.0.0-beta.21.1"
+  resolved "https://registry.yarnpkg.com/@vue/devtools-api/-/devtools-api-6.0.0-beta.21.1.tgz#f1410f53c42aa67fa3b01ca7bdba891f69d7bc97"
+  integrity sha512-FqC4s3pm35qGVeXRGOjTsRzlkJjrBLriDS9YXbflHLsfA9FrcKzIyWnLXoNm+/7930E8rRakXuAc2QkC50swAw==
+
 "@vue/devtools-api@^6.0.0-beta.18":
   version "6.0.0-beta.19"
   resolved "https://registry.yarnpkg.com/@vue/devtools-api/-/devtools-api-6.0.0-beta.19.tgz#f8e88059daa424515992426a0c7ea5cde07e99bf"
@@ -2787,12 +2792,22 @@ content-type@~1.0.4:
   resolved "https://registry.yarnpkg.com/content-type/-/content-type-1.0.4.tgz#e138cc75e040c727b1966fe5e5f8c9aee256fe3b"
   integrity sha512-hIP3EEPs8tB9AT1L+NUqtwOAps4mk2Zob89MWXMHjHWg9milF/j4osnnQLXBCBFBk/tvIG/tUc9mOUJiPBhPXA==
 
+convert-hex@~0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/convert-hex/-/convert-hex-0.1.0.tgz#08c04568922c27776b8a2e81a95d393362ea0b65"
+  integrity sha1-CMBFaJIsJ3drii6BqV05M2LqC2U=
+
 convert-source-map@^1.7.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-1.8.0.tgz#f3373c32d21b4d780dd8004514684fb791ca4369"
   integrity sha512-+OQdjP49zViI/6i7nIJpA8rAl4sV/JdPfU9nZs3VqOwGIgizICvuN2ru6fMd+4llL0tar18UYJXfZ/TWtmhUjA==
   dependencies:
     safe-buffer "~5.1.1"
+
+convert-string@~0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/convert-string/-/convert-string-0.1.0.tgz#79ce41a9bb0d03bcf72cdc6a8f3c56fbbc64410a"
+  integrity sha1-ec5BqbsNA7z3LNxqjzxW+7xkQQo=
 
 cookie-signature@1.0.6:
   version "1.0.6"
@@ -7551,6 +7566,14 @@ sha.js@^2.4.0, sha.js@^2.4.8:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
 
+sha256@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/sha256/-/sha256-0.2.0.tgz#73a0b418daab7035bff86e8491e363412fc2ab05"
+  integrity sha1-c6C0GNqrcDW/+G6EkeNjQS/CqwU=
+  dependencies:
+    convert-hex "~0.1.0"
+    convert-string "~0.1.0"
+
 shallow-clone@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/shallow-clone/-/shallow-clone-3.0.1.tgz#8f2981ad92531f55035b01fb230769a40e02efa3"
@@ -8635,10 +8658,12 @@ vue@^3.0.0:
     "@vue/server-renderer" "3.2.20"
     "@vue/shared" "3.2.20"
 
-vuex@^3.6.2:
-  version "3.6.2"
-  resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.6.2.tgz#236bc086a870c3ae79946f107f16de59d5895e71"
-  integrity sha512-ETW44IqCgBpVomy520DT5jf8n0zoCac+sxWnn+hMe/CzaSejb/eVw2YToiXYX+Ex/AuHHia28vWTq4goAexFbw==
+vuex@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/vuex/-/vuex-4.0.2.tgz#f896dbd5bf2a0e963f00c67e9b610de749ccacc9"
+  integrity sha512-M6r8uxELjZIK8kTKDGgZTYX/ahzblnzC4isU1tpmEuOIIKmV+TRdc+H4s8ds2NuZ7wpUTdGRzJRtoj+lI+pc0Q==
+  dependencies:
+    "@vue/devtools-api" "^6.0.0-beta.11"
 
 watchpack-chokidar2@^2.0.1:
   version "2.0.1"
