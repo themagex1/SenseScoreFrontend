@@ -1157,7 +1157,7 @@ import axiosR from "../services/api.js";
 import HomePageHeader from "@/components/HomePageHeader";
 import HomePageDrawer from "@/components/HomePageDrawer";
 import RoutingTabs from "@/components/RoutingTabs";
-
+import axios from "axios";
 
 let url = "api/sportdb/";
 
@@ -1321,10 +1321,10 @@ export default {
       const requestThree = axiosR.get(url + `matchlineup/${id}`);
       const requestFour = axiosR.get(url + `table/${idLeague}/${strSeason}`);
       const requestFive = axiosR.get(url + `matches/lastbyteam/${team2Id}`);
-      axiosR
+      axios
         .all([requestOne, requestTwo, requestThree, requestFour, requestFive])
         .then(
-            axiosR.spread((...responses) => {
+            axios.spread((...responses) => {
             const responseOne = responses[0].data;
             const responseTwo = responses[1].data;
             const responseThree = responses[2].data;
